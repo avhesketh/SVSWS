@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575571355389.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2045650657",
+    "id" : "DAC75BDD",
+    "lastKnownWriteTime" : 1575578357,
+    "last_content_update" : 1575578357496,
+    "path" : "~/Documents/UBC/R_projects/natgeo/nmds.R",
+    "project_path" : "nmds.R",
+    "properties" : {
+        "cursorPosition" : "39,0",
+        "scrollLine" : "26",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
