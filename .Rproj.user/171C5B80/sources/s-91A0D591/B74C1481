@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575076742128.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2813382823",
+    "id" : "B74C1481",
+    "lastKnownWriteTime" : 1575515308,
+    "last_content_update" : 1575515308711,
+    "path" : "~/Documents/UBC/R_projects/natgeo/tides.R",
+    "project_path" : "tides.R",
+    "properties" : {
+        "cursorPosition" : "180,0",
+        "scrollLine" : "165",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

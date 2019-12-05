@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575217446443.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EA36332C",
+    "lastKnownWriteTime" : 1575419124,
+    "last_content_update" : 1575419124694,
+    "path" : "~/Documents/UBC/R_projects/natgeo/species_models.R",
+    "project_path" : "species_models.R",
+    "properties" : {
+        "cursorPosition" : "272,19",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

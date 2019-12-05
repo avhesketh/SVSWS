@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1557519626327.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "91501C40",
+    "lastKnownWriteTime" : 1575501603,
+    "last_content_update" : 1575501603083,
+    "path" : "~/Documents/UBC/R_projects/natgeo/ibutton.R",
+    "project_path" : "ibutton.R",
+    "properties" : {
+        "cursorPosition" : "159,79",
+        "scrollLine" : "146",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
