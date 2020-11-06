@@ -1,0 +1,101 @@
+original_block,original_no,original_angle,original_herb_trt,original_shore_level,new_block,new_no,new_angle,new_compass,new_shore_level,colour_y1,colour_y2,survived
+B,1,13,"lsc, lpd",2.404,A,1,11,98,2.155,black,white,y
+B,2,14,"lsc, ld",2.404,A,2,12,102,2.155,white,white,y
+B,3,14,"lsi, ld",2.404,A,3,14,108,2.155,black,black,y
+B,4,28,lsc,2.404,A,4,23,95,2.155,black,black,y
+B,5,24,ld,2.404,A,5,25,85,2.155,black,white,y
+B,6,23,"lsi, ld",2.404,A,6,24,89,2.155,black,white,y
+B,7,23,lpd,2.404,A,7,23,89,2.155,white,white,y
+B,8,28,"lsc, lsi, ld, lpd",2.404,A,8,28,89,2.155,white,black,y
+B,9,21,lsc,2.404,A,9,22,85,2.155,white,white,y
+B,10,24,lsi,2.404,A,10,22,80,2.155,black,white,y
+B,11,23,ld,2.404,A,11,23,80,2.155,white,black,y
+B,12,26,lsi,2.404,A,12,24,82,2.155,white,black,y
+B,17,34,"lsc, ld",2.404,A,13,24,106,2.155,white,black,y
+B,18,29,"lsi, lpd",2.404,A,14,26,95,2.155,black,black,y
+B,19,32,lpd,2.404,A,15,32,103,2.155,black,black,y
+B,20,33,"lsi, lpd",2.404,A,16,34,90,2.155,white,white,y
+E,14,16,ld,2.18,B,1,17,75,2.543,black,white,y
+E,10,12,lsc,2.18,B,2,18,79,2.543,black,black,y
+E,18,7,"lsc, lsi, ld, lpd",2.18,B,3,17,85,2.543,white,black,y
+E,19,7,lsi,2.18,B,4,21,81,2.543,white,white,y
+E,13,17,NA,2.18,B,5,25,78,2.543,white,white,y
+E,20,5,"lsc, ld",2.18,B,6,19,58,2.543,black,white,y
+E,1,11,"lsc, lpd",2.18,B,7,10,75,2.543,black,black,y
+E,2,1,lpd,2.18,B,8,16,73,2.543,black,white,y
+E,11,9,ld,2.18,B,9,18,74,2.543,white,black,y
+E,12,12,"lsi, lpd",2.18,B,10,17,75,2.543,black,NA,NA
+E,3,8,"lsc, ld",2.18,B,11,14,67,2.543,white,NA,NA
+E,16,14,"lsi, ld",2.18,B,12,14,61,2.543,black,black,y
+E,15,16,lsc,2.18,B,13,12,60,2.543,white,white,y
+E,6,12,"lsc, lsi, ld, lpd",2.18,B,14,7,58,2.543,black,black,y
+E,17,8,"lsc, lpd",2.18,B,15,13,56,2.543,black,black,y
+E,7,16,lsi,2.18,B,16,13,60,2.543,white,black,y
+E,8,12,NA,2.18,C,1,17,65,2.551,black,black,y
+E,5,9,"lsi, lpd",2.18,C,2,13,68,2.551,white,NA,y
+E,9,11,"lsi, ld",2.18,C,3,13,60,2.551,white,white,y
+C,7,19,"lsc, ld",2.105,C,4,11,55,2.551,black,white,y
+E,4,6,lpd,2.18,C,5,11,51,2.551,white,black,y
+C,4,18,"lsc, lpd",2.105,C,6,15,44,2.551,black,black,y
+D,8,29,lsc,2.256,C,7,13,75,2.551,black,white,y
+D,6,20,lpd,2.256,C,8,19,67,2.551,black,white,y
+C,6,15,"lsi, ld",2.105,C,9,18,65,2.551,white,white,y
+B,14,14,"lsc, lsi, ld, lpd",2.404,C,10,16,66,2.551,black,black,y
+B,13,16,NA,2.404,C,11,14,70,2.551,black,black,y
+A,18,29,"lsi, lpd",2.382,C,12,9,65,2.551,black,black,y
+D,19,28,lsc,2.256,C,13,17,55,2.551,white,white,y
+A,19,15,"lsc, lpd",2.382,C,14,15,67,2.551,white,black,y
+A,3,32,lsc,2.382,C,15,17,55,2.551,white,white,y
+C,5,20,NA,2.105,C,16,13,60,2.551,white,black,y
+A,1,16,"lsi, ld",2.382,D,1,20,55,2.383,white,white,y
+A,2,23,NA,2.382,D,2,13,52,2.383,white,white,y
+A,4,32,"lsc, lpd",2.382,D,3,25,55,2.383,black,NA,NA
+A,5,34,lpd,2.382,D,4,18,51,2.383,white,black,y
+A,6,23,ld,2.382,D,5,25,42,2.383,white,white,y
+A,7,23,"lsi, lpd",2.382,D,6,22,70,2.383,white,white,y
+A,8,18,"lsc, lsi, ld, lpd",2.382,D,7,19,67,2.383,black,black,y
+A,9,17,"lsi, ld",2.382,D,8,11,73,2.383,black,black,y
+A,10,18,NA,2.382,D,9,19,74,2.383,black,white,y
+A,11,20,lsi,2.382,D,10,15,77,2.383,white,white,y
+A,12,17,"lsc, lsi, ld, lpd",2.382,D,11,19,77,2.383,white,black,y
+A,13,23,ld,2.382,D,12,10,77,2.383,black,white,y
+A,14,19,"lsc, ld",2.382,D,13,17,76,2.383,white,black,y
+A,15,19,lsc,2.382,D,14,23,50,2.383,black,white,y
+A,16,28,"lsc, ld",2.382,D,15,17,35,2.383,black,white,y
+A,17,36,lsi,2.382,D,16,13,50,2.383,black,black,y
+C,1,14,"lsi, ld",2.105,E,1,13,107,2.242,black,NA,NA
+C,2,12,lpd,2.105,E,2,17,88,2.242,white,NA,NA
+C,3,16,ld,2.105,E,3,19,114,2.242,black,NA,NA
+C,8,16,NA,2.105,E,4,16,125,2.242,black,white,y
+C,9,20,"lsc, ld",2.105,E,5,18,115,2.242,white,NA,NA
+C,10,20,lpd,2.105,E,6,18,103,2.242,black,black,y
+C,11,16,lsc,2.105,E,7,20,98,2.242,black,white,y
+C,12,11,"lsc, lsi, ld, lpd",2.105,E,8,21,88,2.242,white,white,y
+C,13,10,ld,2.105,E,9,14,110,2.242,white,white,y
+C,14,9,"lsc, lpd",2.105,E,10,16,113,2.242,white,white,y
+C,15,11,"lsi, lpd",2.105,E,11,14,115,2.242,black,white,y
+C,16,13,lsi,2.105,E,12,13,100,2.242,white,black,y
+C,17,14,"lsi, lpd",2.105,E,13,13,95,2.242,white,black,y
+C,18,18,lsc,2.105,E,14,18,85,2.242,white,black,y
+C,19,15,"lsc, lsi, ld, lpd",2.105,E,15,20,85,2.242,black,black,y
+C,20,15,lsi,2.105,E,16,22,97,2.242,black,black,y
+D,1,15,lsi,2.256,F,1,15,112,2.148,black,black,y
+D,2,16,"lsc, ld",2.256,F,2,15,115,2.148,black,black,y
+D,3,19,ld,2.256,F,3,18,125,2.148,white,black,y
+D,4,11,"lsc, lsi, ld, lpd",2.256,F,4,16,122,2.148,white,white,y
+D,5,19,ld,2.256,F,5,19,118,2.148,black,white,y
+D,7,20,"lsc, lpd",2.256,F,6,18,115,2.148,black,white,y
+D,9,22,NA,2.256,F,7,23,110,2.148,white,black,NA
+D,10,22,"lsi, ld",2.256,F,8,22,115,2.148,black,black,y
+D,11,24,"lsc, lpd",2.256,F,9,24,105,2.148,white,NA,NA
+D,12,26,NA,2.256,F,10,27,122,2.148,black,white,y
+D,13,25,"lsi, lpd",2.256,F,11,25,117,2.148,white,white,y
+D,14,25,"lsc, ld",2.256,F,12,27,115,2.148,white,white,y
+D,15,30,"lsc, lsi, ld, lpd",2.256,F,13,30,125,2.148,black,black,y
+D,16,23,lsi,2.256,F,14,22,125,2.148,white,black,NA
+D,17,29,lpd,2.256,F,15,28,125,2.148,white,black,y
+D,18,24,"lsi, lpd",2.256,F,16,26,115,2.148,black,black,y
+A,20,10,lpd,2.382,NA,NA,NA,NA,NA,black,NA,NA
+B,15,15,"lsc, lpd",2.404,NA,NA,NA,NA,NA,white,NA,NA
+B,16,11,NA,2.404,NA,NA,NA,NA,NA,white,NA,NA
+D,20,28,"lsi, ld",2.256,NA,NA,NA,NA,NA,white,NA,NA
