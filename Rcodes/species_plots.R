@@ -1,55 +1,51 @@
 ## plotting patterns in counts
 
-balanus <- read_csv("balanus.csv")
-
-balanus_plot <- balanus %>% 
+balanus_plot <- read_csv("./clean_data/SVSHW_survey_clean.csv") %>% 
+  filter(date == "2019-10-20" & species == "balanus") %>% 
   select(-date) %>% 
-  group_by(colour, timediff) %>% 
+  mutate(trty1 = substring(treatment, 1, 1)) %>% 
+  group_by(trty1) %>% 
   summarize(av_count = mean(count), se_count = sd(count)/sqrt(length(count))) %>% 
-  mutate(exp_time = exp(-1/timediff))
+  rename(Treatment = trty1)
 
-balanus_time <- ggplot(aes(x = exp_time, y = av_count, colour = colour), 
+balanus_time <- ggplot(aes(x = Treatment, y = av_count, fill = Treatment), 
                        data = balanus_plot) +
-  geom_point(size = 2.7) +
+  geom_bar(stat = "identity", position = "dodge") +
   theme_classic() +
-  scale_colour_manual(values = c("grey80", "grey20")) +
+  scale_fill_manual(values = c("blue", "red")) +
   geom_errorbar(aes(ymax = av_count + se_count, ymin = av_count - se_count),
-                width = 0.01) +
-  xlab("exp(-1/Time since experiment start (weeks))") +
-  ylab(expression("Mean number of"~ italic(B. ~glandula))) +
-  labs(colour = "Temperature") +
+                width = 0.3, position = "dodge") +
+  xlab("Treatment") +
+  ylab(expression("Mean abundance of"~ italic(B. ~glandula))) +
   theme(axis.title = element_text(size = 16)) +
   theme(legend.text = element_text(size = 14)) +
   theme(axis.text = element_text(size = 14)) +
   theme(legend.title = element_text(size = 16))
 balanus_time
-?scale_colour_manual
+
 # need to change dates to be equal (surveys on same date)
 
-ulothrix <- read_csv("ulothrix.csv")
-
-ulo_plot <- ulothrix %>% 
-  dplyr::select(-X1, -X1_1, -date) %>% 
-  group_by(colour, timediff) %>% 
-  summarize(av_cover = mean(percent_cover), 
+ulo_plot <- read_csv("./clean_data/SVSHW_survey_clean.csv") %>% 
+  filter(date == "2019-10-20" & species == "ulothrix") %>% 
+  mutate(trty1 = substring(treatment, 1, 1)) %>% 
+  group_by(trty1) %>% 
+  summarize(av_cover = mean(percent_cover, na.rm = TRUE), 
             se_cover = sd(percent_cover)/sqrt(length(percent_cover))) %>% 
-  mutate(exp_time = exp(-1/timediff))
+  rename(Treatment = trty1)
 
-ulo_time <- ggplot(aes(x = timediff, y = av_cover, colour = colour), 
+ulo_time <- ggplot(aes(x = Treatment, y = av_cover, fill = Treatment), 
                        data = ulo_plot) +
-  geom_point(size = 2.7) +
+  geom_bar(stat = "identity", position = "dodge") +
   theme_classic() +
-  scale_colour_manual(values = c("grey80", "grey20")) +
+  scale_fill_manual(values = c("blue","red")) +
   geom_errorbar(aes(ymax = av_cover + se_cover, ymin = av_cover - se_cover),
                 width = 0.7) +
-  xlab("Time since experiment start (weeks)") +
+  xlab("Treatment") +
   ylab(expression("Mean cover of"~ italic(Ulothrix ~sp.)~ "(%)")) +
-  labs(colour = "Temperature") +
   theme(axis.title = element_text(size = 16)) +
   theme(legend.text = element_text(size = 14)) +
   theme(axis.text = element_text(size = 14)) +
-  theme(legend.title = element_text(size = 16)) +
-  geom_smooth(aes(y = pred, x = timediff), data = ulothrix)
+  theme(legend.title = element_text(size = 16)) 
 ulo_time
 
 

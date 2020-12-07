@@ -1,12 +1,11 @@
-### May 2019 
-# script to read in ibutton data
+# script to read in and clean ibutton data
 
-library(tidyverse)
-library(lubridate)
+pkgs <- c("tidyverse","lubridate")
+lapply(pkgs, library, character.only = TRUE)
 
 # now figure out where the files are and their names
 
-setwd("./ibuttons")
+setwd("./raw_data/temperature")
 
 file_names <- list.files()
 
@@ -22,214 +21,142 @@ for (i in 1:length(file_names)){
 
 ibuttons$`Date/Time` <- as.character(ibuttons$`Date/Time`)
 
-ibutton_dates <- ibuttons %>%
-  separate("Date/Time", into = c("date", "time", "am"), sep = " ") %>% 
-  unite(time_12hr, time, am, sep = " ")
+ibutton_separate <- ibuttons %>%
+  mutate(date_time = round(strptime(`Date/Time`, format = "%d/%m/%y %I:%M:%S %p"), units = "hours")) %>% 
+  select(-Unit, -`Date/Time`) %>% 
+  # separate out file information into useful columns
+  separate(info, into = c("project","block","number","X", "collect"), sep = "_") %>% 
+  select(-project, -X) %>% 
+  rename(temp = Value) %>% 
+  mutate(number = as.numeric(number),
+         # clean up to create a collection date column
+         collect_date = str_remove_all(collect, ".csv")) %>% 
+  select(-collect) %>% 
+  mutate(collect_date = as.Date(collect_date, format = "%Y%m%d"))
 
-# get dates and times in useful formats and then rejoin
+setwd("../../")
 
-ibutton_dates$date <- as.Date(ibutton_dates$date, format = "%d/%m/%y")
+# this file has info about where tiles were during settlement vs. during the experiment
+block_design <- read_csv("./raw_data/design/SVSHW_tilesetup.csv")
 
-ibutton_dates$time_24hr <- format(strptime(ibutton_dates$time_12hr, "%I:%M:%S %p"),  format="%H:%M:%S")
+# ibuttons have incorrect data for the October 2019 collection after 3 AM, 
+# and the January 2020 collection after 11 PM - need to filter these outs
 
-# extract block and tile info from file name
-ibutton_data <- ibutton_dates %>% 
-  select(-2, -3) %>% 
-  unite(date_time, date, time_24hr, sep = " ") %>% 
-  separate(info, into = c("tileno","timestamp"), sep = "_") 
-
-# and now split up the block and tile number
-ibutton_data <- ibutton_data %>% 
-  mutate(block = substr(ibutton_data$tileno, 1, 1),
-         number = substr(ibutton_data$tileno, 2, length(ibutton_data$tileno))) %>% 
-  rename(temp = Value)
-
-ibutton_data <- ibutton_data %>% 
-  dplyr::select(-tileno, -timestamp)
-
-# convert the double-digit integers (e.g. 01) to regular numbers
-# for rock temperature, preserve that identifier
-for (i in 1:length(ibutton_data$number)){
-  if (is.na(ibutton_data$number[i])) {
-    ibutton_data$number[i] = "rock"
-  }
-}
-
-# now add in the colour of the tile
-
-# this file has info about when tiles got moved and tile colours
-block_design <- read_csv("../moving_guide.csv")
-
-# remove the chunk of time when ibuttons were all being replaced
-ibutton_data_remove <- ibutton_data %>% 
-  filter(date_time >= "2019-06-05 12:00:00" &  
-           date_time <= "2019-06-06 18:00:00")
-
-ibutton_useful <- ibutton_data %>% 
-  anti_join(ibutton_data_remove)
-
-# separate out rock and tile temperature records
-ibutton_tiles <- ibutton_useful %>% 
-  filter(number != "rock" & number != "Rock")
-
-ibutton_rocks <- ibutton_useful %>%
-  filter(number == "rock" | number == "Rock") %>% 
-  mutate(colour = "rock", number = "rock")
-
-write.csv(ibutton_tiles, "ibuttons_raw.csv")
-write.csv(ibutton_rocks, "rock_ibuttons_raw.csv")
+ibutton_filter <- ibutton_separate %>% 
+  mutate(remove = ifelse((collect_date == "2019-10-18" & date_time > "2019-10-18 3:00:00")|
+                           (collect_date == "2020-03-14" & date_time < "2020-01-22 20:00:00"),
+                         TRUE, FALSE)) %>% 
+  filter(remove == FALSE) %>% 
+  select(-remove)
 
 # and now divide data into before tile move and after to 
 # properly assign tile numbers to ibuttons for tiles that were renamed
-ibutton_premove <- ibutton_tiles %>% 
-  filter(date_time < "2019-06-05 12:00:00")
 
-ibutton_postmove <- ibutton_tiles %>% 
-  filter(date_time > "2019-06-06 18:00:00")
+ibutton_tiles <- ibutton_filter %>% 
+  mutate(original_no = ifelse(collect_date <= "2019-06-06", number, NA),
+         original_block = ifelse(collect_date <= "2019-06-06", block, NA),
+         new_no = ifelse(collect_date > "2019-06-06", number, NA),
+         new_block = ifelse(collect_date > "2019-06-06", block, NA))
 
-# need to get block and tile number into one column to allow comparison
-# to block design guide
-ibutton_joint <- ibutton_premove %>% 
-  unite(b_no, c(block, number), sep = "_", remove = TRUE)
+ibutton_originals <- ibutton_tiles %>% 
+  filter(is.na(new_no)) %>% 
+  select(-new_no, -new_block) %>% 
+  full_join(block_design)
 
-joint_legend <- block_design %>% 
-  unite(b_no_original, c(original_block, original_no), sep = "_", remove = TRUE) %>% 
-  unite(b_no_new, c(new_block, new_no), sep = "_", remove = TRUE)
+ibutton_position <- ibutton_tiles %>% 
+  filter(is.na(original_no)) %>% 
+  select(-original_no, -original_block) %>% 
+  full_join(block_design) %>%
+  full_join(ibutton_originals) %>% 
+  mutate(remove = ifelse(is.na(date_time), TRUE, FALSE)) %>% 
+  filter(remove == FALSE) %>% 
+  select(-remove) %>% 
+  unite(trt, c(colour_y1, colour_y2), sep = "_", remove = FALSE) %>% 
+  mutate(trt = ifelse(number == 0, "rock", trt))
+  
+ibutton_y1 <- ibutton_position %>% 
+  filter(date_time < "2020-04-03 17:00:00") %>% 
+  mutate(current_trt = ifelse(trt == "rock", trt, colour_y1))
 
-# now compare each entry against block design guide. if a tile
-# was moved, then replace the old tile number/block with the 
-# one after the move
-for (i in 1:length(ibutton_joint$b_no)){
-  for (j in 1:length(joint_legend$b_no_original)){
-    if (ibutton_joint$b_no[i] == joint_legend$b_no_original[j]){
-      ibutton_joint$b_no[i] = joint_legend$b_no_new[j]
-    }
-  }
-}
+ibutton_clean <- ibutton_position %>% 
+  filter(date_time >= "2020-04-03 17:00:00") %>% 
+  mutate(current_trt = ifelse(trt == "rock", trt, colour_y2)) %>% 
+  full_join(ibutton_y1)
 
-# and now get columns separate again
-ibutton_pre <- ibutton_joint %>% 
-  separate(b_no, into = c("block", "number"), sep = "_", remove = TRUE)
+#write_csv(ibutton_clean, "./clean_data/SVSHW_temp_clean.csv")
 
-block_design_new <- block_design %>% 
-  select(-original_block, -original_no) %>% 
-  rename(block = new_block, number = new_no)
+#looking at the differences in tile temperatures
 
-ibutton_pre$number <- as.numeric(ibutton_pre$number)
-ibutton_pre <- na.omit(ibutton_pre)
+temp_summary <- ibutton_clean %>% 
+  group_by(current_trt, date_time) %>% 
+  summarise(mean_temp = mean(temp, na.rm = TRUE)) %>% 
+  rename(Treatment = current_trt) %>% 
+  mutate(Treatment = str_replace_all(Treatment, c("black" = "warm", "white"="ambient")))
+  
+trt_temps <- ggplot(aes(y = mean_temp, x = date_time, colour = Treatment), data = temp_summary) +
+  geom_line() +
+  facet_wrap(~Treatment) +
+  theme_classic() +
+  labs(x = "Time", y = "Average hourly temperature (˚C)") +
+  scale_colour_manual(values = c("steelblue","grey30","indianred3")) +
+  theme(axis.title = element_text(size = 16),
+        axis.text = element_text(size = 14),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        strip.text = element_text(size = 14))
+trt_temps
 
-ibutton_premove <- ibutton_pre %>% 
-  full_join(block_design_new)
+# need to isolate when tiles are out of the water
 
-ibutton_postmove$number <- as.numeric(ibutton_postmove$number)
+tides <- read_csv("./raw_data/SVSHW_tides.csv", col_names = FALSE) %>% 
+  separate(X1, into = c("date","X","time", "tz", "tide_height"), sep = " ") %>% 
+  select(-X, -tz) %>% 
+  unite(date_time, c(date, time), sep = " ") %>% 
+  mutate(date_time = as.POSIXct(date_time))
 
-# join data together!
-ibutton_postmove <- ibutton_postmove %>% 
-  full_join(block_design_new)
+ibutton_rocks <- ibutton_clean %>% 
+  filter(current_trt == "rock")
 
-ibuttons_all <- ibutton_premove %>% 
-  rbind(ibutton_postmove) %>% 
-  rbind(ibutton_rocks) %>% 
-  na.omit()
-write.csv(ibuttons_all, "../clean_data.csv")
+above_water <- ibutton_clean %>% 
+  full_join(tides) %>% 
+  filter(ifelse(collect_date <= "2019-06-06", tide_height < original_shore_level,
+                tide_height < new_shore_level)) %>% 
+  full_join(ibutton_rocks) %>% 
+  mutate(date = strptime(date_time, format = "%Y-%m-%d")) 
 
-# now let's plot it
-library(tidyverse)
-cd_ibutton <- read_csv("clean_data.csv")
+# summary stats
 
-glimpse(cd_ibutton)
+max_daily <- above_water %>% 
+  group_by(current_trt, date, block, number) %>% 
+  summarize(mdt = max(temp)) %>% 
+  mutate(date = as.factor(date))
 
-rocks <- cd_ibutton %>% 
-  filter(colour == "rock") %>% 
-  select(-1, -5, -6)
-glimpse(rocks)
+mod.amdt <- lmer(mdt ~ current_trt + (1|date) + (1|block), 
+                 data = max_daily)
 
-write_csv(rocks, "rock_temp_summer19.csv")
+plot(mod.amdt)
+summary(mod.amdt)
+Anova(mod.amdt)
 
-# create summary dataframe of maximum daily temperature
-# and mean daily temperature for each treatment over time
+average_max_daily <- max_daily %>% 
+  group_by(current_trt, date, block) %>% 
+  summarize(amdt = mean(mdt), se_amdt = sd(mdt)/sqrt(length(mdt))) %>% 
+  mutate(date = as.Date(date)) %>% 
+  rename("Treatment" = current_trt) %>% 
+  mutate(Treatment = str_replace_all(Treatment, c("white" = "ambient",
+                                                  "black" = "warm")),
+         Treatment = factor(Treatment, levels = c("rock","ambient","warm")))
 
-# mean daily
-ibuttons_mean <- ibuttons_all %>% 
-  separate(date_time, c("date", "time"), sep = " ") %>% 
-  group_by(colour, date, block) %>% 
-  summarize(mean_temp = mean(temp), se_temp = sd(temp)/sqrt(length(temp)))
+amd_plot <- ggplot(aes(x = date, y = amdt, colour = Treatment), data = average_max_daily) +
+  geom_line() +
+  labs(x = "Date", y = "Average maximum aerial temperature (˚C)") +
+  theme_bw() + 
+  scale_colour_manual(values = c("grey30","steelblue","indianred3")) +
+  theme(axis.title = element_text(size = 16),
+        axis.text = element_text(size = 14),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        strip.text = element_text(size = 14)) +
+  facet_wrap(~Treatment)
 
-# max daily
-ibuttons_max_tiles <- ibuttons_all %>% 
-  separate(date_time, c("date", "time"), sep = " ") %>% 
-  group_by(colour, date, block, number) %>% 
-  summarize(max_temp = max(temp))
-
-ibuttons_max_trts <- ibuttons_max_tiles %>% 
-  group_by(colour, date, block) %>% 
-  summarize(mdm = mean(max_temp), se_mdm = sd(max_temp)/sqrt(length(max_temp)))
-
-# plots
-# first, mean
-
-ibuttons_mean$date <- as.Date(ibuttons_mean$date)
-
-temp_time <- ggplot(aes(x = date, y = mean_temp, colour = colour), data = ibuttons_mean) +
-  geom_point(size = 0.5) +
-  geom_line()
-temp_time
-
-# calculating means - strangely, black tiles = white = rock
-# could it be that it's only relevant for low tides? if so, can I isolate
-# low tide temps?
-
-grand_mean <- ibuttons_mean %>% 
-  group_by(colour) %>% 
-  summarize(overall_mean = mean(mean_temp))
-
-grand_mdm <- ibuttons_max_trts %>% 
-  group_by(colour) %>% 
-  summarize(overall_mean = mean(mdm))
-
-# ibuttons summer data only
-
-ibuttons_summer <- ibuttons_all %>% 
-  separate(date_time, c("date", "time"), sep = " ") %>% 
-  filter(date < "2019-09-01" & date > "2019-06-01")
-
-mean_summer <- ibuttons_summer %>% 
-  group_by(colour) %>% 
-  summarize(overall_mean = mean(temp))
-
-max_summer <- ibuttons_summer %>% 
-  group_by(colour, block, number, date) %>% 
-  summarize(max_temp = max(temp)) %>% 
-  group_by(colour) %>% 
-  summarize(mdm = mean(max_temp))
-
-# ok, so the difference does hold during the summer, but black tiles apparently
-# more similar to rock temp?
-
-mean_summ <- ibuttons_summer %>% 
-  group_by(colour, date, block) %>% 
-  summarize(mean_temp = mean(temp))
-
-ibuttons_summer$date <- as.Date(ibuttons_summer$date)
-
-temp_time <- ggplot(aes(x = date, y = mean_temp, colour = colour), data = mean_summ) +
-  geom_point(size = 0.5) +
-  geom_line()
-temp_time
-
-mdm_summ <- ibuttons_summer %>% 
-  group_by(colour, date, block, number) %>% 
-  summarize(max_daily = max(temp))
-
-mdm_summ <- mdm_summ %>% 
-  group_by(colour, date, block) %>% 
-  summarize(mdm = mean(max_daily),
-            se_mdm = sd(max_daily)/sqrt(length(mdm_summ$max_daily))) #%>% 
- # filter(colour != "rock")
-
-mdm_time <- ggplot(aes(x=date,y=mdm,colour=colour), data = mdm_summ)+
-  geom_line(se = TRUE)
-mdm_time
-
-
-
+amd_plot
