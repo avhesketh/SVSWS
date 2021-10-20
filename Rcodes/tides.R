@@ -2,34 +2,21 @@
 library(tidyverse)
 library(lubridate)
 
-setwd("~/Documents/UBC/R_projects/natgeo")
-
 # read in data from DFO hourly tides at Fulford
-
-tides <- read_csv("tide_data_fulford.csv", col_names = FALSE) %>% 
+tides <- read_csv("./raw_data/design/SVSHW_tides.csv", col_names = FALSE) %>% 
   separate(X1, c("date","blank", "time", "time_zone", "tide_level"), sep = "([\\  \\ ])") %>% 
-  select(-blank) #%>% 
-  #unite(date_time, c(date, time), sep = " ") 
-
-tides$tide_level <- as.numeric(tides$tide_level)
-tides$date <- as.Date(tides$date)
-
-# before plotting convert to POSIXct format to preserve date and time info as a continuous variable
-#tides$date_time <- as.POSIXct(tides$date_time)
-
-tide_plot <- ggplot(aes(x = date_time, y = tide_level), data = tides) +
-  geom_line()
-tide_plot
+  select(-blank) %>% 
+  unite(date_time, c(date, time), sep = " ") %>% 
+  mutate(date_time = ymd_hm(date_time), as.numeric(tide_level)) %>% 
+  mutate(date = date(date_time), time = time(date_time))
 
 # try to filter all the data for individuals blocks for when tiles are actually out of water
 
 # break up tide level data into before and after move chunks
 tides_pre <- tides %>% 
-  filter(date < "2019-06-05") %>% 
-  unite(date_time, c(date, time), sep = " ")
+  filter(date < "2019-06-05")
 tides_post <- tides %>% 
-  filter(date >= "2019-06-06") %>% 
-  unite(date_time, c(date, time), sep = " ")
+  filter(date >= "2019-06-06")
 
 # create list of dataframes with irrelevant tide data filtered out
 tile_height <- read_csv("tile_shorelevel.csv")

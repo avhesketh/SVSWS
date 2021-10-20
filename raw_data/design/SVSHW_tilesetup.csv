@@ -99,3 +99,14 @@ A,20,10,lpd,2.382,NA,NA,NA,NA,NA,black,NA,NA,W
 B,15,15,"lsc, lpd",2.404,NA,NA,NA,NA,NA,white,NA,NA,A
 B,16,11,NA,2.404,NA,NA,NA,NA,NA,white,NA,NA,A
 D,20,28,"lsi, ld",2.256,NA,NA,NA,NA,NA,white,NA,NA,A
+A,0,,,2.382,,,,,,,,,rock
+B,0,,,2.404,,,,,,,,,rock
+C,0,,,2.105,,,,,,,,,rock
+D,0,,,2.256,,,,,,,,,rock
+E,0,,,2.18,,,,,,,,,rock
+,,,,,A,0,,,2.155,,,,rock
+,,,,,B,0,,,2.543,,,,rock
+,,,,,C,0,,,2.551,,,,rock
+,,,,,D,0,,,2.383,,,,rock
+,,,,,E,0,,,2.242,,,,rock
+,,,,,F,0,,,2.148,,,,rock
