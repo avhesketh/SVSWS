@@ -9,8 +9,6 @@ surveys <- read_csv("./raw_data/tile_surveys/SVSHW_surveys.csv") %>%
 
 block_design <- read_csv("./raw_data/design/SVSHW_tilesetup.csv")
 
-sum(pansy)
-
 # need to first assign treatments to each tile, but need to take into account when they got moved
 
 survey_postmove <- surveys %>% 
@@ -40,48 +38,51 @@ surveys_clean <- surveys_tiles %>%
                                          "2019-07-03" = "2019-07-04",
                                          "2019-07-17" = "2019-07-18", 
                                          "2019-07-30" = "2019-07-31",
-                                         "2019-10-18" = "2019-10-20")),
-          treatment = ifelse(colour_y1 == "white" & colour_y2 == "black", "AW",
-                            ifelse(colour_y1 == "white" & colour_y2 == "white", "AA",
-                                   ifelse(colour_y1 == "black" & colour_y2 == "white", "WA",
-                                          ifelse(colour_y1 == "black" & colour_y2 == "black", "WW", NA))))) %>% 
+                                         "2019-10-18" = "2019-10-20"))) %>% 
   filter(treatment %in% c("WW","AW","WA","AA")) %>% 
-  select(1:6,8,10,23)
+  select(1:6, treatment) %>% 
+  separate(treatment, into = c("trt_y1", "trt_y2"), sep = 1, remove = FALSE)
 
 #write_csv(surveys_clean, "./clean_data/SVSHW_survey_clean.csv")
 
 # barnacle recruitment 2020
 
-recruitment <- read_csv("./raw_data/tile_surveys/SVSHW_bncle_recruit.csv") %>% 
-  mutate(treatment = ifelse(trt == "A" & consecutive == "N", "AW",
-                            ifelse(trt == "A" & consecutive == "Y", "AA",
-                                  ifelse(trt == "W" & consecutive == "N", "WA", "WW")))) 
+recruitment <- read_csv("./raw_data/tile_surveys/SVSHW_bncle_recruit.csv")
+
+recruitment_trt <- read_csv("./raw_data/design/SVSHW_tilesetup.csv") %>% 
+  select(6:14) %>% 
+  rename(block = new_block, number = new_no) %>% 
+  full_join(recruitment)
 
 # destructive sampling sept 2020
 
-samples_2020 <- read_csv("./raw_data/final_samples/SVSHW_infaunal_sept2020.csv") %>% 
-  select(-X5)
+samples_postsummer <- read_csv("./raw_data/final_samples/SVSHW_20200914_infauna.csv") %>% 
+  mutate(date = as.Date("2020-09-14"))
+  
+samples_postwinter <- read_csv("./raw_data/final_samples/SVSHW_20210224_infauna.csv") %>% 
+  mutate(date = as.Date("2021-02-24"))
 
-block_design_sep2020 <- read_csv("./raw_data/design/SVSHW_tilesetup.csv") %>% 
-  mutate(treatment = ifelse(colour_y1 == "white" & colour_y2 == "black", "AW",
-                            ifelse(colour_y1 == "white" & colour_y2 == "white", "AA",
-                                    ifelse(colour_y1 == "black" & colour_y2 == "white", "WA", "WW")))) %>% 
-  select(-original_no, -original_block, -original_shore_level, -original_angle,-original_herb_trt, -colour_y1, -colour_y2, -survived) %>% 
+all_samples <- samples_postsummer %>% 
+  full_join(samples_postwinter)
+
+sample_trts <- read_csv("./raw_data/design/SVSHW_tilesetup.csv") %>% 
+  select(6:14) %>% 
   rename(number = new_no, block = new_block, angle = new_angle, aspect = new_compass, shore_level = new_shore_level) %>% 
+  na.omit() %>% 
+  full_join(all_samples) %>% 
+  select(-notes) %>% 
   na.omit()
 
 samples_clean <- samples_2020 %>% 
   left_join(block_design_sep2020)
 
-write_csv(samples_clean, "./clean_data/SVSHW_infauna_20200914.csv")
+write_csv(samples_clean, "./clean_data/SVSHW_infauna.csv")
 
 ######## modeling stuff
 
 balanus_y1 <- read_csv("./clean_data/SVSHW_survey_clean.csv") %>% 
   filter(species == "balanus" & date <= "2020-03-15") %>% 
-  mutate(trty1 = substring(treatment, 1, 1),
-         trty2 = substring(treatment, 2, 2),
-         timesincestart = difftime(date, min(date), units = c("weeks")),
+  mutate(timesincestart = difftime(date, min(date), units = c("weeks")),
          remove = ifelse(count == "NA", TRUE, FALSE), 
          count = as.integer(count)) %>% 
   filter(remove == FALSE) %>% 

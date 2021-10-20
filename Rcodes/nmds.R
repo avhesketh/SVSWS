@@ -229,12 +229,11 @@ infauna_only <- infauna_sept20 %>%
   pivot_wider(id_cols = c(block, number, treatment), names_from = taxon, values_from = abund,
             values_fill = list(abund =0)) %>% 
   mutate(amphipoda = amphipoda_1 + amphipoda_2,
-         polychaeta = polychaeta_1 + polychaeta_2 +sabellidae,
+         polychaeta = polychaeta_1 + polychaeta_2 + sabellidae + syllidae,
          nemertea = nemertean_1 + emplectonema_gracile) %>% 
   select(-c(amphipoda_1, amphipoda_2, polychaeta_1,polychaeta_2,
             nemertean_1, emplectonema_gracile, insecta_2, insecta,
-            limpet_recruit, copepoda, worm_thing, sabellidae,
-            onchidoris_bliamellata))
+            limpet_recruit, copepoda, worm_thing, sabellidae))
 
 infauna_factors <- infauna_only %>% 
   select(block, number, treatment) %>% 
