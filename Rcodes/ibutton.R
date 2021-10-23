@@ -159,6 +159,8 @@ average_max_daily <- max_daily %>%
          current_trt = factor(current_trt, levels = c("rock","cool","warm")),
          date = as.Date(date))
 
+write_csv(average_max_daily, "./plotting_df/average_max_daily.csv")
+
 amd_plot <- ggplot(aes(x = date, y = amdt, colour = current_trt), 
                    data = average_max_daily %>% filter(current_trt %in% c("warm", "cool"))) +
   geom_line() +
@@ -171,13 +173,12 @@ amd_plot <- ggplot(aes(x = date, y = amdt, colour = current_trt),
         legend.text = element_text(size = 14),
         strip.text = element_text(size = 14)) +
   facet_wrap(~current_trt) +
-  geom_rect(aes(xmin = as.Date("2019-10-15"), xmax = as.Date("2020-03-15"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
-  geom_rect(aes(xmin = as.Date("2020-10-15"), xmax = as.Date("2021-02-24"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  geom_rect(aes(xmin = as.Date("2019-10-15"), xmax = as.Date("2020-02-27"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  geom_rect(aes(xmin = as.Date("2020-10-18"), xmax = as.Date("2021-02-24"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
   ylim(c(0,45))
 
 amd_plot
 
-?geom_
 amd_plot <- ggplot(aes(x = Treatment, y = amdt, colour = Treatment), data = average_max_daily) +
   geom_point() +
   geom_errorbar(aes(ymax = amdt + se_amdt, ymin = amdt - se_amdt)) +
@@ -187,31 +188,31 @@ amd_plot
 # only when tides are daytime...
 
 ibutton_day <- above_water %>% 
-  filter((date < "2019-09-15" | date >= "2020-04-15" & date <= "2020-09-15") == TRUE) %>% 
-  group_by(current_trt, date, block, number) %>% 
+  filter((date < "2019-10-15" | date >= "2020-02-27" & date <= "2020-10-18") == TRUE) %>% 
+  group_by(current_trt, date, block) %>% 
   summarize(mdt = max(temp, na.rm = T))
 
 av_mdt <- ibutton_day %>% group_by(current_trt) %>% summarize(av_mdt = mean(mdt),
-                                                                             se_mdt = sd(mdt)/sqrt(length(mdt)))
+                                                                             se_mdt = sd(mdt)/sqrt(length(mdt))) %>% 
+  mutate(current_trt = case_when(current_trt == "black" ~ "warm",
+                                 current_trt == "white" ~ "cool", 
+                                 current_trt == "rock" ~ "rock")) %>% 
+  mutate(current_trt = factor(current_trt, levels = c("cool", "rock", "warm")))
+
+write_csv(av_mdt, "./plotting_df/average_mdt_trt.csv")
 
 mdt_plot <- ggplot(aes(x = current_trt, y = av_mdt, col = current_trt),
                    data = av_mdt) +
-  geom_point() +
-  geom_errorbar(aes(ymax = av_mdt + se_mdt, ymin = av_mdt - se_mdt)) +
-  theme_bw()
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymax = av_mdt + se_mdt, ymin = av_mdt - se_mdt), width = 0.2) +
+  theme_bw() +
+  scale_color_manual(values = c("cadetblue4","grey30", "firebrick4")) +
+  labs(y = "Mean maximum daily temperature (ºC)", x = "Temperature treatment") +
+  theme(legend.position = "none", axis.title = element_text(size = 12), axis.text = element_text(size = 10))
 mdt_plot
 
-model.temp <- lmer(mdt ~ current_trt + (1|block) + 
-                    (1|date), data = only_2020)
-summary(model.temp)
-Anova(model.temp)
+# model
 
-
-lineplot_mdt <- ggplot(aes(x = as.Date(date), color = current_trt, y = mdt), data = ibutton_day) +
-  geom_line() + 
-  facet_wrap(~current_trt)
-lineplot_mdt
-
-only_2020 <- ibutton_day %>% filter(date > "2020-01-01")
-
-
+model.avmdt <- glmmTMB(mdt ~ current_trt + (1|date) + (1|block), data = ibutton_day)
+summary(model.avmdt)
+Anova(model.avmdt)

@@ -66,7 +66,7 @@ The upper intertidal zone at this site is dominated by acorn barnacles (*Balanus
 
 #### Experimental design
 
-Measurements in this experiment were made at the level of individual tiles deployed in the intertidal zone (Fig. 2). These tiles were manufactured as in previous studies employing the same passive warming method @kordas2015. In short, tiles consisted of two units made from high-density polyethylene (HDPE) plastic, a lower unit composed of thicker white HDPE (9.5 mm) anchoring the tile to the underlying bedrock, and an upper unit made of thinner HDPE (6.4 mm) that was either white (cool temperature treatment) or black (warm temperature treatment). A thin layer of Sea Goin' poxy putty was spread in the central 6.9 x 6.9 cm area of the top unit to generate a settlement surface. To enhance fine-scale heterogeneity of the surface, finely ground epsom salts were pressed into the putty as it dried, and dissolved with water after drying to leave behind fine pock marks. When tile colour was altered for a subset of tiles during the second year of the study, this was accomplished using heavy-duty tape, either white or black in colour (Gorilla Tape), with adhesion enhanced by the application of super glue.
+Measurements in this experiment were made at the level of individual tiles deployed in the intertidal zone (Fig. 2). These tiles were manufactured as in previous studies employing the same passive warming method (@kordas2015). In short, tiles consisted of two units made from high-density polyethylene (HDPE) plastic, a lower unit composed of thicker white HDPE (9.5 mm) anchoring the tile to the underlying bedrock, and an upper unit made of thinner HDPE (6.4 mm) that was either white (cool temperature treatment) or black (warm temperature treatment). A thin layer of Sea Goin' poxy putty was spread in the central 6.9 x 6.9 cm area of the top unit to generate a settlement surface. To enhance fine-scale heterogeneity of the surface, finely ground epsom salts were pressed into the putty as it dried, and dissolved with water after drying to leave behind fine pock marks. When tile colour was altered for a subset of tiles during the second year of the study, this was accomplished using heavy-duty tape, either white or black in colour (Gorilla Tape), with adhesion enhanced by the application of super glue.
 
 <br/>
 
@@ -123,11 +123,11 @@ Infauna were sampled to record the diversity of meiofauna in September 2020 (aft
 
 <br/>
 
-#### Data analysis
+#### Statistical analysis
 
 All analyses were performed in R version 4.1.1. Different response variables were analyzed using various modeling techniques, with a significance threshold of p = 0.05:
 
--   Maximum daily summertime air temperatures were analyzed with a Type II ANOVA.
+-   Maximum daily summertime low tide temperatures were analyzed with a Type II ANOVA through the car package, version 3.0.11. The model for temperature was built using the glmmTMB package, version 1.1.2.2, with random intercepts for both measurement date and the experiment block (for the final study design).
 
 -   Community data, both from visual surveys and infaunal assemblage sampling, were analyzed using the *vegan* package, version 2.5.7. In these cases, non-metric multidimensional scaling (nMDS) plots were constructed and PERMANOVA and PERMDSIP analyses were run using Bray-Curtis similarity matrices with 9999 unrestricted permutations and a type III sum of squares. For these models, with fixed effects for the temperature treatment in year one, the temperature treatment in year two, and their interaction, and a random effect of final experimental block.
 
@@ -141,7 +141,7 @@ All analyses were performed in R version 4.1.1. Different response variables wer
 
 #### Temperature treatments
 
-Temperature data generally indicate that the treatments functioned as intended.
+Temperature data generally indicate that the the passive temperature treatments functioned as intended (Fig. 5 & 6).
 
 ```{r, echo = F, results = T, message= F, fig.align='center'}
 
@@ -154,21 +154,46 @@ average_max_daily <- read_csv("./plotting_df/average_max_daily.csv")
 amd_plot <- ggplot(aes(x = date, y = amdt, colour = current_trt), 
                    data = average_max_daily %>% filter(current_trt %in% c("warm", "cool"))) +
   geom_line() +
-  labs(x = "Date", y = "Average maximum aerial temperature (˚C)", colour = "Treatment") +
+  labs(x = "Date", y = "Maximum daily temperature (˚C)", colour = "Treatment") +
   theme_bw() + 
   scale_colour_manual(values = c("cadetblue","firebrick4")) +
-  theme(axis.title = element_text(size = 16),
-        axis.text = element_text(size = 14),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 14),
-        strip.text = element_text(size = 14)) +
+  theme(axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        strip.text = element_text(size = 10)) +
   facet_wrap(~current_trt) +
-  geom_rect(aes(xmin = as.Date("2019-10-15"), xmax = as.Date("2020-03-15"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
-  geom_rect(aes(xmin = as.Date("2020-10-15"), xmax = as.Date("2021-02-24"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  geom_rect(aes(xmin = as.Date("2019-10-15"), xmax = as.Date("2020-02-27"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  geom_rect(aes(xmin = as.Date("2020-10-18"), xmax = as.Date("2021-02-24"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
   ylim(c(0,45))
 
 amd_plot
 ```
+
+**Figure 5.** Temperature traces for experimental tiles over time showing their maximum measured temperature during the low tide period when tiles were emersed. The greyed-out boxes indicate the winter period when low tides occur predominately at night, negating any effect of tile colour on degree of warming.
+
+<br/>
+
+When the maximum daily temperatures during summer low tides were averaged, we found that the warm temperature treatment (black tiles = 26.55 ± 0.51 ºC, mean ± SE) was hotter than both the rock temperature (24.47 ± 0.06 ºC) and the cool temperature treatment (white tiles = 24.64 ± 0.06 ºC). These differences drove a significant effect of treatment on maximum daily temperature (Type II ANOVA, *χ*^2^ = 1530, df = 2, p \< 0.001).
+
+<br/>
+
+```{r, echo = F, results = T, message= F, fig.align='center'}
+
+av_mdt <- read_csv("./plotting_df/average_mdt_trt.csv")
+
+mdt_plot <- ggplot(aes(x = current_trt, y = av_mdt, col = current_trt),
+                   data = av_mdt) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymax = av_mdt + se_mdt, ymin = av_mdt - se_mdt), width = 0.2) +
+  theme_bw() +
+  scale_color_manual(values = c("cadetblue4","grey30", "firebrick4")) +
+  labs(y = "Mean maximum daily temperature (ºC)", x = "Temperature treatment") +
+  theme(legend.position = "none", axis.title = element_text(size = 12), axis.text = element_text(size = 10))
+mdt_plot
+```
+
+**Figure 6**. Differences in mean daily maximum temperature across treatments for experimental tiles (white = cool, black = warm) compared to the prevailing rock temperature for summertime low tides only. Error bars indicate standard error about the mean.
 
 <br/>
 
@@ -182,7 +207,7 @@ amd_plot
 
 #### Barnacle abundance & recruitment
 
-## Preliminary summary
+## Preliminary conclusions
 
 ...
 
