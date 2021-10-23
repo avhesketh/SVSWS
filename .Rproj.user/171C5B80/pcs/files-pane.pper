@@ -1,9 +1,9 @@
 {
-    "path" : "~/Documents/UBC/R_projects/thesis_chapters/SVSHW_2020/Rcodes",
-    "sortOrder" : [
+    "path": "~/Documents/UBC/R_projects/thesis_chapters/SBHW_2021",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }

@@ -1,10 +1,9 @@
 pkgs <- c("tidyverse", "vegan", "pair")
 lapply(pkgs, library, character.only = TRUE)
 
-
 # need to get community data in useful format
 surveys <- read_csv("./clean_data/SVSHW_survey_clean.csv")
-infauna_sept20 <- read_csv("./clean_data/SVSHW_infauna_20200914.csv")
+infauna_sept20 <- read_csv("./raw_data/final_samples/SVSHW_20200914_infauna.csv")
 
 
 # just pick out end of summer 2019 and end of summer 2020
@@ -15,10 +14,7 @@ comm_oct19 <- surveys %>%
   mutate(abund = as.numeric(str_remove_all(abund, "NA"))) %>% 
   select(-date) %>% 
   pivot_wider(id_cols = c(block, number, treatment), names_from = species, values_from = abund,
-              values_fill = list(abund = 0)) %>% 
-  select(-mytilus, -number) %>% 
-  mutate(annelida = ifelse(is.na(annelida), 0, annelida)) %>% 
-  mutate(ulva = ifelse(is.na(ulva), 0, ulva))
+              values_fill = list(abund = 0))
 
 
 comm_oct_factors <- comm_oct19 %>% 
@@ -32,7 +28,8 @@ comm_matrix_oct19 <- comm_oct19 %>%
   
 # convert to matrix
 comm_matrix_oct19 <- as.matrix(comm_matrix_oct19)
-
+which(is.na(comm_matrix_oct19))
+comm_matrix_oct19[1044] <- 0
 # ready to analyze
 comm_oct <- metaMDS(comm_matrix_oct19, k = 2, try = 400)
 

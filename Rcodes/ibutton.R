@@ -102,23 +102,24 @@ ibutton_clean <- ibutton_clean %>% select(-cols_to_remove) %>% filter(is.na(temp
 temp_summary <- ibutton_clean %>% 
   group_by(current_trt, date_time) %>% 
   summarise(mean_temp = mean(temp, na.rm = TRUE)) %>% 
-  rename(Treatment = current_trt) %>% 
-  mutate(Treatment = str_replace_all(Treatment, c("black" = "warm", "white"="ambient")))
-  
-trt_temps <- ggplot(aes(y = mean_temp, x = date_time, colour = Treatment), data = temp_summary) +
+  mutate(current_trt = str_replace_all(current_trt, c("black" = "warm", "white"="cool")))
+
+
+trt_temps <- ggplot(aes(y = mean_temp, x = date_time, colour = current_trt), 
+                    data = temp_summary %>% filter(current_trt %in% c("warm", "cool"))) +
   geom_line() +
-  facet_wrap(~Treatment) +
-  theme_classic() +
-  labs(x = "Time", y = "Average hourly temperature (˚C)") +
-  scale_colour_manual(values = c("steelblue","grey30","indianred3")) +
+  facet_wrap(~current_trt) +
+  theme_bw() +
+  labs(x = "Time", y = "Average hourly temperature (˚C)", colour = "Treatment") +
+  scale_colour_manual(values = c("cadetblue","firebrick4")) +
   theme(axis.title = element_text(size = 16),
         axis.text = element_text(size = 14),
         legend.title = element_text(size = 16),
         legend.text = element_text(size = 14),
         strip.text = element_text(size = 14)) +
-  geom_abline(intercept = 40, slope = 0, lty = "dashed")
-trt_temps
+  ylim(c(-5,40))
 
+View(temp_summary)
 # need to isolate when tiles are out of the water
 
 tides <- read_csv("./raw_data/design/SVSHW_tides.csv", col_names = FALSE) %>% 
@@ -151,28 +152,32 @@ summary(mod.amdt)
 Anova(mod.amdt)
 
 average_max_daily <- max_daily %>% 
-  group_by(current_trt) %>% 
+  group_by(current_trt, date) %>% 
   summarize(amdt = mean(mdt, na.rm=T), se_amdt = sd(mdt,na.rm = T)/sqrt(length(mdt))) %>% 
   #mutate(date = as.Date(date)) %>% 
-  rename("Treatment" = current_trt) %>% 
-  mutate(Treatment = str_replace_all(Treatment, c("white" = "ambient",
-                                                  "black" = "warm")),
-         Treatment = factor(Treatment, levels = c("rock","ambient","warm")))
+  mutate(current_trt = str_replace_all(current_trt, c("black" = "warm", "white"="cool")),
+         current_trt = factor(current_trt, levels = c("rock","cool","warm")),
+         date = as.Date(date))
 
-amd_plot <- ggplot(aes(x = date, y = amdt, colour = Treatment), data = average_max_daily) +
+amd_plot <- ggplot(aes(x = date, y = amdt, colour = current_trt), 
+                   data = average_max_daily %>% filter(current_trt %in% c("warm", "cool"))) +
   geom_line() +
-  labs(x = "Date", y = "Average maximum aerial temperature (˚C)") +
+  labs(x = "Date", y = "Average maximum aerial temperature (˚C)", colour = "Treatment") +
   theme_bw() + 
-  scale_colour_manual(values = c("grey30","steelblue","indianred3")) +
+  scale_colour_manual(values = c("cadetblue","firebrick4")) +
   theme(axis.title = element_text(size = 16),
         axis.text = element_text(size = 14),
         legend.title = element_text(size = 16),
         legend.text = element_text(size = 14),
         strip.text = element_text(size = 14)) +
-  facet_wrap(~Treatment)
+  facet_wrap(~current_trt) +
+  geom_rect(aes(xmin = as.Date("2019-10-15"), xmax = as.Date("2020-03-15"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  geom_rect(aes(xmin = as.Date("2020-10-15"), xmax = as.Date("2021-02-24"), ymin = 0, ymax = 45), colour = "grey90", fill = "grey90", alpha = 0.02) +
+  ylim(c(0,45))
+
 amd_plot
 
-
+?geom_
 amd_plot <- ggplot(aes(x = Treatment, y = amdt, colour = Treatment), data = average_max_daily) +
   geom_point() +
   geom_errorbar(aes(ymax = amdt + se_amdt, ymin = amdt - se_amdt)) +
@@ -195,3 +200,18 @@ mdt_plot <- ggplot(aes(x = current_trt, y = av_mdt, col = current_trt),
   geom_errorbar(aes(ymax = av_mdt + se_mdt, ymin = av_mdt - se_mdt)) +
   theme_bw()
 mdt_plot
+
+model.temp <- lmer(mdt ~ current_trt + (1|block) + 
+                    (1|date), data = only_2020)
+summary(model.temp)
+Anova(model.temp)
+
+
+lineplot_mdt <- ggplot(aes(x = as.Date(date), color = current_trt, y = mdt), data = ibutton_day) +
+  geom_line() + 
+  facet_wrap(~current_trt)
+lineplot_mdt
+
+only_2020 <- ibutton_day %>% filter(date > "2020-01-01")
+
+

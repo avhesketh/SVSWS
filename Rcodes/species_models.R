@@ -4,8 +4,7 @@ lapply(pkgs, library, character.only = TRUE)
 
 # read in dataframes
 
-surveys <- read_csv("./raw_data/tile_surveys/SVSHW_surveys.csv") %>% 
-  select(-X8) 
+surveys <- read_csv("./raw_data/tile_surveys/SVSHW_surveys.csv")
 
 block_design <- read_csv("./raw_data/design/SVSHW_tilesetup.csv")
 
