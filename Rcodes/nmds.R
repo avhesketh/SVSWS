@@ -262,3 +262,4 @@ dist.inf <- vegdist(infauna_matrix, method = "bray")
 disp.inf <- betadisper(dist.inf, type = "centroid", group = comm_sept_factors_2$treatment)
 anova(disp.inf)
 TukeyHSD(disp.inf)
+
