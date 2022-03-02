@@ -9,107 +9,61 @@ library(glmmTMB)
 library(car)
 library(DHARMa)
 
-recruitment <- read_csv("./raw_data/tile_surveys/SVSHW_bncle_recruit.csv") %>% 
-  mutate(treatment = ifelse(trt == "A" & consecutive == "N", "AW",
-                            ifelse(trt == "A" & consecutive == "Y", "AA",
-                                   ifelse(trt == "W" & consecutive == "N", "WA", "WW")))) 
+recruitment <- read_csv("./raw_data/tile_surveys/SVSHW_bncle_recruit.csv") %>%
+  rename(new_block = block, new_no = number) %>% 
+  left_join(block_design) %>% 
+  mutate(species = if_else(species == "balanus", "Balanus glandula", "Chthamalus dalli")) %>% 
+  select(new_block, new_no, tile_id, date, species, size, count, treatment) %>% 
+  left_join(survey_join) 
+
 
 # negative binomial for a first approximation
 # 
 # but let's plot it first!
 
-bal_rec <- recruitment %>% 
-  filter(species == "balanus" & size == "recruit")
+barnacle_summary <- recruitment %>% group_by(species, size,treatment, survey_no) %>% 
+  summarize(mean_abund = mean(count), se_abund = std.error(count))
 
-bal_adult <- recruitment %>% 
-  filter(species == "balanus" & size == "adult")
+time_continuous <- barnacle_summary %>% left_join(survey_join) %>% 
+  mutate(timesincestart = difftime(date, ymd("2019-04-12"), units = c("weeks"))) %>% 
+  group_by(survey_no) %>% mutate(timesincestart = max(timesincestart)) %>% ungroup() %>% unique()
 
-chtham_rec <- recruitment %>% 
-  filter(species == "chthamalus" & size == "recruit")
-
-chtham_adult <- recruitment %>% 
-  filter(species == "chthamalus" & size == "adult")
-
-barn_summ <- recruitment %>% 
-  group_by(treatment, species, size) %>% 
-  summarize(mean_abund = mean(count), se_abund = se(count))
-barn_summ
-barn_summ$treatment <- factor(barn_summ$treatment, levels = c("AA","WA","AW","WW"))
-?as.factor
-bal_fig <- ggplot(aes(x = trt, y = mean_abund, fill = treatment), data = barn_summ) +
-  facet_grid(species ~ size) +
+barn_fig <- ggplot(aes(x = timesincestart, y = mean_abund, col = treatment), data = time_continuous) +
+  facet_grid(species~size) +
   theme_bw() +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_point() +
+  geom_line() +
   geom_errorbar(aes(ymax = mean_abund + se_abund, ymin = mean_abund - se_abund), 
-                position = position_dodge(width = 0.9),
-                width = 0.5) +
-  ylab("Abundance") +
-  xlab("Temperature treatment") +
-  theme(plot.title = element_text(hjust = 0.5, size = 16)) +
-  theme(axis.title = element_text(size = 16)) +
-  theme(axis.text = element_text(size = 12)) +
-  theme(axis.text.x = element_blank()) +
-  theme(strip.text = element_text(size = 14)) +
-  theme(legend.title = element_text(size = 14)) +
-  theme(legend.text = element_text(size = 12)) +
-  scale_fill_manual(values = c("blue","purple","orange","red"))
-bal_fig
+                width = 1) +
+  labs(y = "Mean abundance", x = "Time since experiment start (weeks)", col = "Treatment") +
+  scale_color_manual(values = c("blue","purple","orange","darkred"))
+barn_fig
 
+## recruits only
 
-chtham_fig <- ggplot(aes(x = trt, y = mean_abund, fill = consecutive), data = chtham_summ) +
-  geom_bar(stat = "identity", position = "dodge") +
-  geom_errorbar(aes(ymax = mean_abund + se_abund, ymin = mean_abund - se_abund), 
-                position = position_dodge(width = 0.9),
-                width = 0.5) +
-  facet_wrap(~size) +
-  theme_classic() +
-  ggtitle("Size class") +
-  ylab("Abundance") +
-  xlab("Temperature treatment") +
-  theme(plot.title = element_text(hjust = 0.5, size = 16)) +
-  theme(axis.title = element_text(size = 16)) +
-  theme(axis.text = element_text(size = 12)) +
-  theme(strip.text = element_text(size = 14)) +
-  theme(legend.title = element_text(size = 14)) +
-  theme(legend.text = element_text(size = 12)) +
-  scale_fill_manual(values = c("grey30", "grey70"))
-chtham_fig
+recruitment_only <- recruitment %>% filter(size == "recruit" & survey_no == min(survey_no,na.rm=T))
 
-# now for a model
+#write_csv(recruitment_only, "./plotting_df/recruitment.csv")
 
-brec.glmm.1 <- glmmTMB(count ~ treatment
-                      + (1 | block), data = bal_rec,
-                      dispformula = ~block,
-                      family = nbinom1())
-dh.brec.1 <- simulateResiduals(brec.glmm.1)
-plot(dh.brec.1)
+only_rec <- ggplot(aes(x = species, y = count, col = treatment), data = recruitment_only) +
+  geom_boxplot() +
+  labs(y = "Barnacle abundance", x = "Temperature treatment", col = "Treatment") +
+  scale_color_manual(values = c("blue","purple","orange","darkred")) +
+  theme_classic()
+only_rec
 
-summary(brec.glmm.1)
-Anova(brec.glmm.1)
+# now for models
 
-bad.glmm.1 <- glmmTMB(count ~ treatment
-                      + (1 | block), data = bal_adult,
-                      family = nbinom1())
-dh.bad.1 <- plot(simulateResiduals(bad.glmm.1))
+model_df <- recruitment_only %>% mutate(trt_y1 = substr(treatment ,1,1), trt_y2 = substr(treatment, 2,2))
 
-summary(bad.glmm.1)
-Anova(bad.glmm.1)
+bal.rec <- glmmTMB(count ~ trt_y1*trt_y2 + (1|new_block), family = nbinom1(), data = model_df %>% filter(species == "Balanus glandula"))
+chtham.rec <- glmmTMB(count ~ trt_y1*trt_y2 + (1|new_block), family = nbinom1(), data = model_df %>% filter(species == "Chthamalus dalli"))
 
+plot(simulateResiduals(bal.rec))
+summary(bal.rec)
+Anova(bal.rec, type = 3)
 
-crec.glmm.1 <- glmmTMB(count ~ treatment
-                       + (1 | block), data = chtham_rec,
-                       family = nbinom1())
-dh.crec.1 <- simulateResiduals(crec.glmm.1)
-plot(dh.crec.1)
-
-summary(crec.glmm.1)
-Anova(crec.glmm.1)
-
-cad.glmm.1 <- glmmTMB(count ~ treatment
-                        + (1 | block), data = chtham_adult,
-                      family = nbinom1())
-dh.cad.1 <- simulateResiduals(cad.glmm.1)
-plot(dh.cad.1)
-
-summary(cad.glmm.1)
-Anova(cad.glmm.1)
+plot(simulateResiduals(chtham.rec))
+summary(chtham.rec)
+Anova(chtham.rec)
+                   

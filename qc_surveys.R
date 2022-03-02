@@ -1,11 +1,11 @@
 ## QC the raw data
+library(assertr)
+library(tidyverse)
 
 survey_data <- read_csv("./raw_data/tile_surveys/SVSHW_surveys.csv",
                         col_types = c("D","f","f","c","n","n","c","?")) %>% 
   mutate(species = str_replace_all(species, c("Lottia_sp" = "Lottia_sp_recruits", "scunge" = "Scunge"))) %>% 
   select(-8)
-
-library(assertr)
 
 id <- c("i","i","a","i", "i", "i", "i", "i", "i", "i", "a", 
         "a","i","i","i","i","i","i", "a","a","i","a","a","a","a", "a")
@@ -14,8 +14,6 @@ classify_sp <- cbind(sp_list, id)
 
 invert_list <- classify_sp %>% filter(id == "i")
 alga_list <- classify_sp %>% filter(id == "a")
-
-str(survey_data)
 
 survey_data %>% filter(species %in% invert_list$species) %>% verify(is.na(percent_cover)) %>% verify(count >= 0)
 
@@ -29,18 +27,19 @@ survey_data_alga <- survey_data_qc %>% filter(species %in% alga_list$species)
 survey_data_alga %>% verify(percent_cover >= 0)
 
 survey_data_qc2 <- survey_data_qc %>% mutate(percent_cover = if_else(species %in% alga_list$species & (is.na(count) == F), 
-                                                                    count, percent_cover)) %>% 
-  mutate(remove = if_else(species %in% alga_list$species & is.na(percent_cover), T, F)) %>% filter(remove == F) %>% 
-           select(-remove)
+                                                                    count, percent_cover)) %>%
+  mutate(count = case_when(species %in% alga_list$species & (is.na(count) == F) ~ NA_real_,
+                            TRUE ~ count)) %>% 
+  mutate(remove = if_else(species %in% alga_list$species & is.na(percent_cover), T, F)) %>% 
+  filter(remove == F) %>% select(-remove)
 
 survey_data_alga <- survey_data_qc2 %>% filter(species %in% alga_list$species) 
 
 survey_data_alga %>% verify(percent_cover >= 0)
 
-## cleaned up! now need to get everything on the same page with tile numbers
-
 # links overall unique tile ID to block and number within block
 block_design <- read_csv("./raw_data/design/SVSHW_tilesetup.csv")
+
 
 # filter out surveys after tiles were moved around
 survey_postmove <- survey_data_qc2 %>% 
@@ -52,7 +51,7 @@ survey_postmove <- survey_data_qc2 %>%
          shore_level = new_shore_level,
          block = new_block) %>% 
   select(-new_no, -survived, -original_no, -original_shore_level,
-         -original_angle, -colour_y1, -colour_y2, -notes, -original_block)
+         -original_angle, -colour_y1, -colour_y2, -original_block)
 
 survey_premove <- survey_data_qc2 %>% 
   filter(date <= "2019-06-06") %>% 
@@ -63,9 +62,7 @@ survey_premove <- survey_data_qc2 %>%
          shore_level = original_shore_level,
          block = original_block) %>% 
   select(-original_no, -survived, -new_no, -new_shore_level,
-         -new_angle, -colour_y1, -colour_y2, -notes, -new_block)
-
-survey_all <- survey_postmove %>% full_join(survey_premove)
+         -new_angle, -colour_y1, -colour_y2,  -new_block)
 
 surveys_clean <- survey_all %>%
   separate(treatment, into = c("trt_y1", "trt_y2"), sep = 1, remove = FALSE)
@@ -80,7 +77,31 @@ survey_join <- cbind(survey_list, survey_no)
 
 surveys_clean2 <- surveys_clean %>% left_join(survey_join)
 
-write_csv(surveys_clean2, "./clean_data/SVSHW_survey_clean.csv")
+tile_info <- surveys_clean2 %>% select(tile_id, survey_no, block, 
+                                       original_herb_trt, angle, 
+                                       new_compass,shore_level,treatment,
+                                       trt_y1, trt_y2, notes) %>% 
+  unique()
+
+tile_data <- surveys_clean2 %>% select(tile_id, survey_no, species, count, percent_cover)
+
+# complete zeroes
+
+count_data <- tile_data %>% 
+  select(-percent_cover) %>% 
+  na.omit %>% 
+  complete(nesting(tile_id, survey_no), species, fill = list(count = 0))
+
+cover_data <- tile_data %>% 
+  select(-count) %>% 
+  na.omit() %>% 
+  complete(nesting(tile_id, survey_no), species, fill = list(percent_cover = 0))
+
+all_data <- count_data %>% full_join(cover_data) %>% left_join(tile_info)
+
+##  now need to complete data with zeroes where appropriate
+
+write_csv(all_data, "./clean_data/SVSHW_survey_clean.csv")
 
 ## clean infaunal data
 

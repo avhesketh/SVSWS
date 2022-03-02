@@ -84,18 +84,26 @@ sites <- gsub("WW", 6, sites, fixed = T)
 sites <- gsub("C", 1, sites, fixed = T)
 sites <- gsub("W", 2, sites, fixed = T)
 
+#sites <- sites %>% as.data.frame(sites) %>% rename(site_codes = 1)
+#write_csv(sites, "./plotting_df/cta_sites.csv")
+
 # Create survey vector
 surveys <- survey_data_spread_smush$survey_no
+
+#surveys <- surveys %>% as.data.frame %>% rename(survey_codes = 1)
+#write_csv(surveys, "./plotting_df/cta_surveys.csv")
 
 # Create matrix for metaMDS
 cta_matrix <- survey_data_spread_smush %>% select( -treatment, -survey_no) %>% as.matrix()
 
+#write_csv(cta_matrix, "./plotting_df/cta_matrix.csv")
+
 # Get distances in nMDS
-test <- metaMDS(cta_matrix, distance = "bray", k = 2, try = 9999)
+cta_bray <- metaMDS(cta_matrix, distance = "bray", k = 2, try = 9999)
 
 # Generate plot!
-oct_ord <- ordiplot(test, type = "none")
-trajectoryPlot(test$points, sites, surveys, traj.colors = c("cornflowerblue","tomato3","blue","purple","orange","firebrick4"), lwd = 2)
+cta_ord <- ordiplot(cta_bray, type = "none")
+trajectoryPlot(cta_bray$points, sites, surveys, traj.colors = c("cornflowerblue","tomato3","blue","purple","orange","firebrick4"), lwd = 2)
 legend("right", col = c("cornflowerblue","tomato3","blue","purple","orange","darkred"), legend = c("C","W","CC", "CW", "WC", "WW"), 
        bty = "n", lty = 1, lwd = 2)
 points(x = c(0.923626972905131, 1.73887140611446), y = c(0.820536487858217, 0.911956147070956), pch = 4, lwd = 2)
@@ -103,7 +111,7 @@ points(x = c(-1.15486748997812, -0.576866176698416, -0.441740711707467, -0.01654
        y = c(0.320257210181677, 0.213559718152996, 0.284303427786167, -0.0123149647880705), pch = 8, lwd = 2)
 points(x = c(-0.532798093768667, -0.877810259215775, -0.42835246500082848, -0.258833574482709),
        y = c(0.683368742327626, 0.262911229829701, 0.502851592978135, -1.32146970349316), pch = 0, lwd = 2)
-orditorp(oct_ord,display="species",col="grey30", cex = 0.8)
+orditorp(cta_ord,display="species",col="grey30", cex = 0.8)
 
 
 ### Delving into infaunal data
@@ -125,8 +133,11 @@ treatments_fall <- as.data.frame(infauna_fall$treatment) %>% rename(treatment = 
 treatments_spring <- as.data.frame(infauna_spring$treatment) %>% rename(treatment = 1) %>% 
   mutate(trt_y1 = substr(treatment, 1,1), trt_y2 = substr(treatment,2,2))
 
-infauna_fall_matrix <- infauna_fall %>% select(-block, -treatment) %>% as.matrix
-infauna_spring_matrix <- infauna_spring %>% select(-block, -treatment) %>% as.matrix
+infauna_fall_matrix <- infauna_fall %>% select(-block, -treatment) #%>% as.matrix
+infauna_spring_matrix <- infauna_spring %>% select(-block, -treatment) #%>% as.matrix
+
+#write_csv(infauna_fall_matrix, "./plotting_df/infauna_fall_matrix.csv")
+#write_csv(infauna_spring_matrix, "./plotting_df/infauna_spring_matrix.csv")
 
 #1: fall 2020 nMDS
 
