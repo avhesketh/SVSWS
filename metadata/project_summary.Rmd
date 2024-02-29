@@ -1,0 +1,106 @@
+---
+title: "Single vs. successive hot summers in a high intertidal barnacle bed community"
+author: "A.V. Hesketh, S.M. Emry, C.A. Konecny, C.D.G. Harley"
+date: "29/02/2024"
+output:
+  html_document: default
+  pdf_document: default
+bibliography: references.bib
+---
+
+## Questions
+
+This experiment set out to test how temperature shapes the composition of intertidal barnacle bed communities, asking the question: how do single vs. successive hot summers affect this same community?
+
+## Hypotheses
+
+1.  Barnacle bed communities that are exposed to hotter temperatures during summer, even for a single year, will have lower diversity (species richness, Shannon-Weiner diversity, evenness, beta diversity) than those that are exposed to ambient/cooler conditions during the same period.
+
+2.  There will be an interactive effect between the temperature treatments of the first and second summer on the same response metrics. Previously 'cool' communities, since they have more established, larger barnacle beds with a more diverse array of microhabitats and thermal refugia, will be less perturbed by warming than previously 'warm' communities that have less structurally complex biogenic habitat. 
+
+## Materials & Methods
+
+#### Site description
+
+This experiment was completed at Ruckle Provincial Park on the southeast-facing, semi-exposed sandstone shore of Salt Spring Island, located in British Columbia within the Salish Sea. Relative to the rest of the southern Gulf Islands, this site receives more substantial wave exposure and cooler, saltier water, being positioned more towards the Strait of Juan de Fuca and away from the Fraser River plume. Thus, the intertidal community at this site is substantially more diverse than neighbouring islands. However, like the rest of the Gulf Islands, this island's intertidal zone is a "hot spot" in the region due to its mid-day summer low tides coupled with relatively clear, sunny weather during the summer.
+
+The upper intertidal zone at this site is dominated by acorn barnacles (*Balanus glandula* and *Chthamalus dalli*), with sporadic beds of the perennial brown alga *Fucus distichus* and patches of the crustose phase of *Mastocarpus* sp.. Ephemeral algae can be found primarily in the winter when temperatures less stressful, namely the green ephemeral species *Ulothrix* sp. and *Ulva* sp., the red alga *Pyropia* sp., and the brown alga *Petalonia fascia*. Herbivores are relatively plentiful at this shore level, though some more thermally sensitive species migrate down shore with the onset of summer temperatures (Hesketh, personal observation). These include the littorine snails *Littorina scutulata* and *L. sitkana* and the limpets *Lottia paradigitalis* and congeners *L. digitalis*, *L. pelta*, and *L. scutum*.
+
+<br/>
+
+#### Experimental design
+
+Measurements in this experiment were made at the level of individual tiles deployed in the intertidal zone (Fig. 1). These tiles were manufactured as in previous studies employing the same passive warming method (@kordas2015). In short, tiles consisted of two units made from high-density polyethylene (HDPE) plastic, a lower unit composed of thicker white HDPE (9.5 mm) anchoring the tile to the underlying bedrock, and an upper unit made of thinner HDPE (6.4 mm) that was either white (cool temperature treatment) or black (warm temperature treatment). A thin layer of Sea Goin' poxy putty (Permalite Plastics) was spread in the central 6.9 x 6.9 cm area of the top unit to generate a settlement surface. To enhance the fine-scale heterogeneity of the surface, finely ground epsom salts were pressed into the putty as it dried, and dissolved with water after drying to leave behind fine pock marks. When tile colour was altered for a subset of tiles during the second year of the study, this was accomplished using heavy-duty tape, either white or black in colour (Gorilla Tape), with adhesion enhanced by the application of super glue.
+
+<br/>
+
+<center>
+
+![](photos/tiles_april2020.png){width="400"}
+
+</center>
+
+**Figure 1.** Experimental tiles deployed at Ruckle Provincial Park, Salt Spring Island, pictured one year after their initial installation on shore. Recruitment and growth of algae and barnacles is evident in the central settlement area of each tile, while the outer black or white area of each tile serves to passively generate the warm and cool treatments used during this experiment, respectively.
+
+<br/>
+
+The experiment followed a stratified random design, which went through several iterations as the original herbivore manipulation changed in response to methodological complications, and then again after the final question changed.
+
+1.  **Original herbivory x warming design (March - June 2019):** In this design, we had five blocks of 20 tiles each, half of which were white and half of which were black. Copper fences were installed along the perimeter of each tile (0.511 mm thick, 3.8 cm high above the level of the tile). Each of these ten tiles had a different herbivore treatment applied: no herbivores, *L. paradigitalis* alone, *L. digitalis* alone, *L. scutulata* alone, *L. sitkana* alone, each two-way combination of herbivores, and all herbivores. Prior to treatments, we dissected a number of individuals of each species to determine the species-specific relationship between wet and dry tissue weight for each. Thus, when applying herbivores to the tiles, we attempted to standardize wet weight to \~120 mg of dry tissue weight per tile. Thus, there was one replicate of each treatment per tile, n=5 across all blocks.
+2.  **Updated herbivory x warming design (June 2019 - August 2019):** For this design, tiles were moved to new locations to avoid log damage, log-damaged tiles were removed, and littorine snails were removed from the herbivore treatment pool since they were dislodged or appeared in treatments randomly due to wave action. This resulted in a new design of six experimental blocks with 16 tiles each, eight of which were black and eight of which were white. Only limpets were used in the herbivory treatments (Fig. 2), of which there were eight: no herbivores, *L. paradigitalis* alone, *L. digitalis* alone, *L. scutum* alone, each of the three two-species combinations of these, and all species. Thus, there was again a sample size of five per treatment, one replicate per block.
+
+<br/>
+
+<center>
+
+![](photos/herbs_july2020.jpeg){width="425"}
+
+</center>
+
+**Figure 2.** Stage 2 of experimental herbivore additions. Pictured here: *L. digitalis* (large, ribbed limpet) and *L. paradigitalis* (small limpets) added to a cool treatment tile in July 2019.
+
+<br/>
+
+3.  **Final design (August 2019-February 2021):** While the limpet manipulation worked reasonably well for *L. paradigitalis*, the other two limpet species more often than not died within two weeks of being added to tiles, presumably due to heat stress (Hesketh, personal observation). What limpets of these species did survive were often found at the edges of the tile units, or wedged in the crack between the tile and copper fence, signaling that their grazing activity on the tile may be minimal. Thus, at this point the copper fences were removed from all tiles, and herbivores of all species were allowed to access and leave tiles freely. In April 2020, the colour of half of these tiles were changed (white -\> black or black -\> white), while half were left unaltered (Fig. 3). This resulted in four treatments (cool-cool: CC; warm-warm: WW; cool-warm: CW; and warm-cool: WC) with a final sample size of 20 tiles per treatment (four per experimental block, five blocks). Some tiles were lost from this intended final number due to log damage and wave dislodgement. Final sample sizes are reported in the results section.
+
+<br/>
+
+<center>
+
+![](photos/tiletape_april2020.jpeg){width="425"}
+
+</center>
+
+**Figure 3.** Stage 3 of the experimental design, when the decision was made to alter temperature for a subset of experimental tiles using heavy-duty tape. Pictured here: cool temperature tiles that were left unaltered between experiment years (CC treatment, left) and previously warm temperature tiles covered with heavy-duty white tape (WC treatment, right). Differences in barnacle cover after the first year are quite evident in this photograph.
+
+<br/>
+
+Temperature was monitored in each experimental temperature treatment using iButton temperature loggers (Maxim Integrated) embedded between the upper and lower units of tiles.
+
+<br/>
+
+#### Diversity surveys
+
+Visual surveys were performed at monthly intervals during summer and every two months during winter from April 2019 (one month after experiment installation) to February 2021. During these, each species was identified and enumerated --- in the case of invertebrates --- or their percent cover measured --- in the case of algae. Organisms were identified down to species, or in cases where this was unclear (i.e. for amphipod and isopod crustaceans), coarser taxonomic measures were instead employed. Sessile species were only measured within the central 6 x 6 cm area with the aid of a small wire quadrat, while mobile species were enumerated on the entire upper face of the tile.
+
+Epifauna were sampled to record the diversity of meiofauna in September 2020 (after summer heat stress) and in February 2021 (to allow for winter recovery). Barnacles and associated fauna were scraped from experimental tile's settlement area and identified to species (where possible) and counted under a dissecting microscope.
+
+<br/>
+
+## Some conclusions
+
+1.  Temperatures differed between experimental treatments, consistent with past experiments using this methodology. Bedrock temperature was high (analogous to the warm treatment) in the first year, but low (analogous to the cool treatment) in the second year. We think this is because of the fences used in the summer of year one, which would have shaded the tiles but not the loggers on bedrock.
+2.  *B. glandula*, the dominant acorn barnacle at this shore level, was less abundant when temperatures were hotter. A lag effect of first-year temperature on the abundance of *B. glandula* was evident probably because barnacle recruitment is gregarious and thus higher where adult barnacles are abundant (previously cool tiles). Only the recruitment of *C. dalli*, which is known to be more heat-tolerant, was suppressed by hot temperatures.
+3. Grazers were less abundant where it was warmer, and carryover effects were prevalent in the second year of the experiment. This could be because because high temperatures suppressed their presence and activity, but is more likely because barnacles can provide refugia (particularly for littorines) and facilitate their food supply.
+4. Alpha diversity (Shannon diversity, richness) was lower where temperatures were higher, and there were carryover effects on invertebrate Shannon diversity, which was probably mediated by barnacles (see above).
+5. Temperatures drove substantial differences in community composition between treatments when looking at the epifauna community. At the end of the study, the CC treatment was substantially different from all others, and the WC had diverged from the WW treatment, even after just one year of recovery from heat stress. This indicates that persistent warming has a cumulative effect on changing community structures.
+6. The story of algal cover is more complicated -- opportunistic Ulothrix sp. seems to thrive in warm conditions and compete with barnacles for space. Where barnacles established, other ephemeral algae grew attached to barnacle tests. In the second year, algal cover was highest in the WC treatment (and CW), where there was a mix of bare space and barnacles, perhaps allowing more species of algae to grow.
+
+These conclusions suggest that high intertidal barnacle bed communities may have some resilience to climate warming, but that this resilience is limited. Barnacle abundance is limited by temperature, and barnacle recruitment, since it is higher where adults are present, could be suppressed with continuous warming, making for a structurally simple community when thermal stress is persistent. The facilitatory effect of barnacles thus becomes more limited in a hot world -- they cannot support the growth of algae or provide a refuge for small invertebrates and grazers, and the entire community becomes less diverse as a result.
+
+## Acknowledgements
+
+This work was conducted on the traditional territories of the Coast Salish peoples, to whom we extend our thanks. We thank Ruckle Provincial Park managers for allowing us access to the shore. Thanks also to S. Blain, A. Holland, and G. Brownlee for their assistance with field work, and R. Germain, C. Brauner, and S. Dudas for feedback on analysis. Funding for this work was generously supplied by the National Geographic Society through an Early Career research grant. Stipend support was provided by the National Science and Engineering Research Council and Canadian Healthy Oceans Network. The groundwork for this study was laid by R. Kordas, to whom we are indebted for this genius system for doing thermal manipulations in the high intertidal zone.
+
+## References
+
