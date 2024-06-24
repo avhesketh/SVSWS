@@ -12,13 +12,13 @@ We expected that:
 - Temperature: hourly temperature collected for experimental tiles and adjacent bedrock
 - Biological survey data: communities were surveyed monthly during summer and every two months during winter to identify and count species on tiles (or record percent cover, as in the case of algae)
 - Epifaunal community data: tiles were destructively sampled the fall and winter of year two to look at cryptic diversity within treatments.
-- Tide, daylight, and cloud data: these are pulled from US and Canadian government sources for analyses of temperature.
+- Tide and daylight hours data: these are pulled from Canadian government sources for analyses of temperature.
 
 # Analyses conducted (in scripts folders)
-1) Temperature differences between treatments, in terms of maximum daily temperature and mean temperature -- 01_temperature.R 
-2) Barnacle abundance (recruits and adults) differences between treatments -- 03_barnacles.R
-3) Grazer (littorine snail and limpet) abundance differences between treatments -- 04_grazers.R
-4) Algal cover differences between treatments -- 05_algae.R
-5) Alpha diversity differences between treatments -- 06_diversity.R
-6) Community composition and beta diversity between treatments -- 06_diversity.R
-7) Trajectory of community structure through time -- 07_cta.R
+1) Temperature differences between treatments, in terms of maximum daily temperature and mean temperature -- 03_temperature.R 
+2) Barnacle abundance (recruits and adults) differences between treatments -- 04_barnacles.R
+3) Grazer (littorine snail and limpet) abundance differences between treatments -- 05_grazers.R
+4) Algal cover differences between treatments -- 06_algae.R
+5) Alpha diversity differences between treatments -- 07_diversity.R
+6) Community composition and beta diversity between treatments -- 07_diversity.R
+7) Trajectory of community structure through time -- 08_cta.R
