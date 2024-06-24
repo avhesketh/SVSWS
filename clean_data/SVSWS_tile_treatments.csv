@@ -1,0 +1,1389 @@
+tile_id,survey_no,block,original_herb_trt,angle,new_compass,shore_level,treatment,trt_y1,trt_y2,notes
+49,1,A,"lsi, ld",16,55,2.382,CC,C,C,NA
+50,1,A,NA,23,52,2.382,CC,C,C,NA
+47,1,A,lsc,32,55,2.382,CC,C,C,NA
+51,1,A,"lsc, lpd",32,55,2.382,W,W,,NA
+52,1,A,lpd,34,51,2.382,CW,C,W,NA
+53,1,A,ld,23,42,2.382,CC,C,C,NA
+54,1,A,"lsi, lpd",23,70,2.382,CC,C,C,NA
+55,1,A,"lsc, lsi, ld, lpd",18,67,2.382,WW,W,W,NA
+56,1,A,"lsi, ld",17,73,2.382,WW,W,W,NA
+57,1,A,NA,18,74,2.382,WC,W,C,NA
+58,1,A,lsi,20,77,2.382,CC,C,C,NA
+59,1,A,"lsc, lsi, ld, lpd",17,77,2.382,CW,C,W,NA
+60,1,A,ld,23,77,2.382,WC,W,C,NA
+61,1,A,"lsc, ld",19,76,2.382,CW,C,W,NA
+62,1,A,lsc,19,50,2.382,WC,W,C,NA
+63,1,A,"lsc, ld",28,35,2.382,WC,W,C,NA
+64,1,A,lsi,36,50,2.382,WW,W,W,NA
+44,1,A,"lsi, lpd",29,65,2.382,WW,W,W,NA
+46,1,A,"lsc, lpd",15,67,2.382,CW,C,W,NA
+97,1,A,lpd,10,NA,2.382,W,W,,NA
+1,1,B,"lsc, lpd",13,98,2.404,WC,W,C,NA
+2,1,B,"lsc, ld",14,102,2.404,CC,C,C,NA
+3,1,B,"lsi, ld",14,108,2.404,WW,W,W,NA
+4,1,B,lsc,28,95,2.404,WW,W,W,NA
+5,1,B,ld,24,85,2.404,WC,W,C,NA
+6,1,B,"lsi, ld",23,89,2.404,WC,W,C,NA
+7,1,B,lpd,23,89,2.404,CC,C,C,NA
+8,1,B,"lsc, lsi, ld, lpd",28,89,2.404,CW,C,W,NA
+9,1,B,lsc,21,85,2.404,CC,C,C,NA
+10,1,B,lsi,24,80,2.404,WC,W,C,NA
+11,1,B,ld,23,80,2.404,CW,C,W,NA
+12,1,B,lsi,26,82,2.404,CW,C,W,NA
+43,1,B,NA,16,70,2.404,WW,W,W,NA
+42,1,B,"lsc, lsi, ld, lpd",14,66,2.404,WW,W,W,NA
+98,1,B,"lsc, lpd",15,NA,2.404,C,C,,NA
+99,1,B,NA,11,NA,2.404,C,C,,NA
+13,1,B,"lsc, ld",34,106,2.404,CW,C,W,NA
+14,1,B,"lsi, lpd",29,95,2.404,WW,W,W,NA
+15,1,B,lpd,32,103,2.404,WW,W,W,NA
+16,1,B,"lsi, lpd",33,90,2.404,CC,C,C,NA
+65,1,C,"lsi, ld",14,107,2.105,W,W,,NA
+66,1,C,lpd,12,88,2.105,C,C,,NA
+67,1,C,ld,16,114,2.105,W,W,,NA
+38,1,C,"lsc, lpd",18,44,2.105,WW,W,W,NA
+48,1,C,NA,20,60,2.105,CW,C,W,NA
+41,1,C,"lsi, ld",15,65,2.105,CC,C,C,NA
+36,1,C,"lsc, ld",19,55,2.105,WC,W,C,NA
+68,1,C,NA,16,125,2.105,WC,W,C,NA
+69,1,C,"lsc, ld",20,115,2.105,C,C,,NA
+70,1,C,lpd,20,103,2.105,WW,W,W,NA
+71,1,C,lsc,16,98,2.105,WC,W,C,NA
+72,1,C,"lsc, lsi, ld, lpd",11,88,2.105,CC,C,C,NA
+73,1,C,ld,10,110,2.105,CC,C,C,NA
+74,1,C,"lsc, lpd",9,113,2.105,CC,C,C,NA
+75,1,C,"lsi, lpd",11,115,2.105,WC,W,C,NA
+76,1,C,lsi,13,100,2.105,CW,C,W,NA
+77,1,C,"lsi, lpd",14,95,2.105,CW,C,W,NA
+78,1,C,lsc,18,85,2.105,CW,C,W,NA
+79,1,C,"lsc, lsi, ld, lpd",15,85,2.105,WW,W,W,NA
+80,1,C,lsi,15,97,2.105,WW,W,W,NA
+81,1,D,lsi,15,112,2.256,WW,W,W,NA
+82,1,D,"lsc, ld",16,115,2.256,WW,W,W,NA
+83,1,D,ld,19,125,2.256,CW,C,W,NA
+84,1,D,"lsc, lsi, ld, lpd",11,122,2.256,CC,C,C,NA
+85,1,D,ld,19,118,2.256,WC,W,C,NA
+40,1,D,lpd,20,67,2.256,WC,W,C,NA
+86,1,D,"lsc, lpd",20,115,2.256,WC,W,C,NA
+39,1,D,lsc,29,75,2.256,WC,W,C,NA
+87,1,D,NA,22,110,2.256,CW,C,W,NA
+88,1,D,"lsi, ld",22,115,2.256,WW,W,W,NA
+89,1,D,"lsc, lpd",24,105,2.256,C,C,,NA
+90,1,D,NA,26,122,2.256,WC,W,C,NA
+91,1,D,"lsi, lpd",25,117,2.256,CC,C,C,NA
+92,1,D,"lsc, ld",25,115,2.256,CC,C,C,NA
+93,1,D,"lsc, lsi, ld, lpd",30,125,2.256,WW,W,W,NA
+94,1,D,lsi,23,125,2.256,CW,C,W,NA
+95,1,D,lpd,29,125,2.256,CW,C,W,NA
+96,1,D,"lsi, lpd",24,115,2.256,WW,W,W,NA
+45,1,D,lsc,28,55,2.256,CC,C,C,NA
+100,1,D,"lsi, ld",28,NA,2.256,C,C,,NA
+23,1,E,"lsc, lpd",11,75,2.18,WW,W,W,NA
+24,1,E,lpd,1,73,2.18,WC,W,C,NA
+27,1,E,"lsc, ld",8,67,2.18,C,C,,NA
+37,1,E,lpd,6,51,2.18,CW,C,W,NA
+34,1,E,"lsi, lpd",9,68,2.18,C,C,,NA
+30,1,E,"lsc, lsi, ld, lpd",12,58,2.18,WW,W,W,NA
+32,1,E,lsi,16,60,2.18,CW,C,W,NA
+33,1,E,NA,12,65,2.18,WW,W,W,NA
+35,1,E,"lsi, ld",11,60,2.18,CC,C,C,NA
+18,1,E,lsc,12,79,2.18,WW,W,W,NA
+25,1,E,ld,9,74,2.18,CW,C,W,NA
+26,1,E,"lsi, lpd",12,75,2.18,W,W,,NA
+21,1,E,NA,17,78,2.18,CC,C,C,NA
+17,1,E,ld,16,75,2.18,WC,W,C,NA
+29,1,E,lsc,16,60,2.18,CC,C,C,NA
+28,1,E,"lsi, ld",14,61,2.18,WW,W,W,NA
+31,1,E,"lsc, lpd",8,56,2.18,WW,W,W,NA
+19,1,E,"lsc, lsi, ld, lpd",7,85,2.18,CW,C,W,NA
+20,1,E,lsi,7,81,2.18,CC,C,C,NA
+22,1,E,"lsc, ld",5,58,2.18,WC,W,C,NA
+65,2,C,"lsi, ld",14,107,2.105,W,W,,NA
+66,2,C,lpd,12,88,2.105,C,C,,NA
+67,2,C,ld,16,114,2.105,W,W,,NA
+38,2,C,"lsc, lpd",18,44,2.105,WW,W,W,NA
+48,2,C,NA,20,60,2.105,CW,C,W,NA
+41,2,C,"lsi, ld",15,65,2.105,CC,C,C,NA
+36,2,C,"lsc, ld",19,55,2.105,WC,W,C,NA
+68,2,C,NA,16,125,2.105,WC,W,C,NA
+69,2,C,"lsc, ld",20,115,2.105,C,C,,NA
+70,2,C,lpd,20,103,2.105,WW,W,W,NA
+71,2,C,lsc,16,98,2.105,WC,W,C,NA
+72,2,C,"lsc, lsi, ld, lpd",11,88,2.105,CC,C,C,NA
+73,2,C,ld,10,110,2.105,CC,C,C,NA
+74,2,C,"lsc, lpd",9,113,2.105,CC,C,C,NA
+75,2,C,"lsi, lpd",11,115,2.105,WC,W,C,NA
+76,2,C,lsi,13,100,2.105,CW,C,W,NA
+77,2,C,"lsi, lpd",14,95,2.105,CW,C,W,NA
+78,2,C,lsc,18,85,2.105,CW,C,W,NA
+79,2,C,"lsc, lsi, ld, lpd",15,85,2.105,WW,W,W,NA
+80,2,C,lsi,15,97,2.105,WW,W,W,NA
+81,2,D,lsi,15,112,2.256,WW,W,W,NA
+82,2,D,"lsc, ld",16,115,2.256,WW,W,W,NA
+83,2,D,ld,19,125,2.256,CW,C,W,NA
+84,2,D,"lsc, lsi, ld, lpd",11,122,2.256,CC,C,C,NA
+85,2,D,ld,19,118,2.256,WC,W,C,NA
+40,2,D,lpd,20,67,2.256,WC,W,C,NA
+86,2,D,"lsc, lpd",20,115,2.256,WC,W,C,NA
+39,2,D,lsc,29,75,2.256,WC,W,C,NA
+87,2,D,NA,22,110,2.256,CW,C,W,NA
+88,2,D,"lsi, ld",22,115,2.256,WW,W,W,NA
+89,2,D,"lsc, lpd",24,105,2.256,C,C,,NA
+90,2,D,NA,26,122,2.256,WC,W,C,NA
+91,2,D,"lsi, lpd",25,117,2.256,CC,C,C,NA
+92,2,D,"lsc, ld",25,115,2.256,CC,C,C,NA
+93,2,D,"lsc, lsi, ld, lpd",30,125,2.256,WW,W,W,NA
+94,2,D,lsi,23,125,2.256,CW,C,W,NA
+95,2,D,lpd,29,125,2.256,CW,C,W,NA
+96,2,D,"lsi, lpd",24,115,2.256,WW,W,W,NA
+45,2,D,lsc,28,55,2.256,CC,C,C,NA
+23,2,E,"lsc, lpd",11,75,2.18,WW,W,W,NA
+24,2,E,lpd,1,73,2.18,WC,W,C,NA
+27,2,E,"lsc, ld",8,67,2.18,C,C,,NA
+37,2,E,lpd,6,51,2.18,CW,C,W,NA
+34,2,E,"lsi, lpd",9,68,2.18,C,C,,NA
+30,2,E,"lsc, lsi, ld, lpd",12,58,2.18,WW,W,W,NA
+32,2,E,lsi,16,60,2.18,CW,C,W,NA
+33,2,E,NA,12,65,2.18,WW,W,W,NA
+35,2,E,"lsi, ld",11,60,2.18,CC,C,C,NA
+18,2,E,lsc,12,79,2.18,WW,W,W,NA
+25,2,E,ld,9,74,2.18,CW,C,W,NA
+26,2,E,"lsi, lpd",12,75,2.18,W,W,,NA
+21,2,E,NA,17,78,2.18,CC,C,C,NA
+17,2,E,ld,16,75,2.18,WC,W,C,NA
+29,2,E,lsc,16,60,2.18,CC,C,C,NA
+28,2,E,"lsi, ld",14,61,2.18,WW,W,W,NA
+31,2,E,"lsc, lpd",8,56,2.18,WW,W,W,NA
+19,2,E,"lsc, lsi, ld, lpd",7,85,2.18,CW,C,W,NA
+20,2,E,lsi,7,81,2.18,CC,C,C,NA
+22,2,E,"lsc, ld",5,58,2.18,WC,W,C,NA
+49,2,A,"lsi, ld",16,55,2.382,CC,C,C,NA
+50,2,A,NA,23,52,2.382,CC,C,C,NA
+51,2,A,"lsc, lpd",32,55,2.382,W,W,,NA
+52,2,A,lpd,34,51,2.382,CW,C,W,NA
+53,2,A,ld,23,42,2.382,CC,C,C,NA
+54,2,A,"lsi, lpd",23,70,2.382,CC,C,C,NA
+55,2,A,"lsc, lsi, ld, lpd",18,67,2.382,WW,W,W,NA
+56,2,A,"lsi, ld",17,73,2.382,WW,W,W,NA
+57,2,A,NA,18,74,2.382,WC,W,C,NA
+58,2,A,lsi,20,77,2.382,CC,C,C,NA
+59,2,A,"lsc, lsi, ld, lpd",17,77,2.382,CW,C,W,NA
+60,2,A,ld,23,77,2.382,WC,W,C,NA
+61,2,A,"lsc, ld",19,76,2.382,CW,C,W,NA
+62,2,A,lsc,19,50,2.382,WC,W,C,NA
+63,2,A,"lsc, ld",28,35,2.382,WC,W,C,NA
+64,2,A,lsi,36,50,2.382,WW,W,W,NA
+44,2,A,"lsi, lpd",29,65,2.382,WW,W,W,NA
+46,2,A,"lsc, lpd",15,67,2.382,CW,C,W,NA
+97,2,A,lpd,10,NA,2.382,W,W,,NA
+1,2,B,"lsc, lpd",13,98,2.404,WC,W,C,NA
+2,2,B,"lsc, ld",14,102,2.404,CC,C,C,NA
+3,2,B,"lsi, ld",14,108,2.404,WW,W,W,NA
+4,2,B,lsc,28,95,2.404,WW,W,W,NA
+5,2,B,ld,24,85,2.404,WC,W,C,NA
+6,2,B,"lsi, ld",23,89,2.404,WC,W,C,NA
+7,2,B,lpd,23,89,2.404,CC,C,C,NA
+8,2,B,"lsc, lsi, ld, lpd",28,89,2.404,CW,C,W,NA
+9,2,B,lsc,21,85,2.404,CC,C,C,NA
+10,2,B,lsi,24,80,2.404,WC,W,C,NA
+11,2,B,ld,23,80,2.404,CW,C,W,NA
+12,2,B,lsi,26,82,2.404,CW,C,W,NA
+43,2,B,NA,16,70,2.404,WW,W,W,NA
+42,2,B,"lsc, lsi, ld, lpd",14,66,2.404,WW,W,W,NA
+13,2,B,"lsc, ld",34,106,2.404,CW,C,W,NA
+14,2,B,"lsi, lpd",29,95,2.404,WW,W,W,NA
+15,2,B,lpd,32,103,2.404,WW,W,W,NA
+16,2,B,"lsi, lpd",33,90,2.404,CC,C,C,NA
+1,3,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,3,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,3,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,3,A,lsc,23,95,2.155,WW,W,W,NA
+5,3,A,ld,25,85,2.155,WC,W,C,NA
+6,3,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,3,A,lpd,23,89,2.155,CC,C,C,NA
+8,3,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,3,A,lsc,22,85,2.155,CC,C,C,NA
+10,3,A,lsi,22,80,2.155,WC,W,C,NA
+11,3,A,ld,23,80,2.155,CW,C,W,NA
+12,3,A,lsi,24,82,2.155,CW,C,W,NA
+13,3,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,3,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,3,A,lpd,32,103,2.155,WW,W,W,NA
+16,3,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,3,B,ld,17,75,2.543,WC,W,C,NA
+18,3,B,lsc,18,79,2.543,WW,W,W,NA
+19,3,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,3,B,lsi,21,81,2.543,CC,C,C,NA
+21,3,B,NA,25,78,2.543,CC,C,C,NA
+22,3,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,3,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,3,B,lpd,16,73,2.543,WC,W,C,NA
+25,3,B,ld,18,74,2.543,CW,C,W,NA
+26,3,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,3,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,3,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,3,B,lsc,12,60,2.543,CC,C,C,NA
+30,3,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,3,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,3,B,lsi,13,60,2.543,CW,C,W,NA
+33,3,C,NA,17,65,2.551,WW,W,W,NA
+34,3,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,3,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,3,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,3,C,lpd,11,51,2.551,CW,C,W,NA
+38,3,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,3,C,lsc,13,75,2.551,WC,W,C,NA
+40,3,C,lpd,19,67,2.551,WC,W,C,NA
+41,3,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,3,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,3,C,NA,14,70,2.551,WW,W,W,NA
+44,3,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,3,C,lsc,17,55,2.551,CC,C,C,NA
+46,3,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,3,C,lsc,17,55,2.551,CC,C,C,NA
+48,3,C,NA,13,60,2.551,CW,C,W,NA
+49,3,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,3,D,NA,13,52,2.383,CC,C,C,NA
+51,3,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,3,D,lpd,18,51,2.383,CW,C,W,NA
+53,3,D,ld,25,42,2.383,CC,C,C,NA
+54,3,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,3,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,3,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,3,D,NA,19,74,2.383,WC,W,C,NA
+58,3,D,lsi,15,77,2.383,CC,C,C,NA
+59,3,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,3,D,ld,10,77,2.383,WC,W,C,NA
+61,3,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,3,D,lsc,23,50,2.383,WC,W,C,NA
+63,3,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,3,D,lsi,13,50,2.383,WW,W,W,NA
+65,3,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,3,E,lpd,17,88,2.242,C,C,,NA
+67,3,E,ld,19,114,2.242,W,W,,NA
+68,3,E,NA,16,125,2.242,WC,W,C,NA
+69,3,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,3,E,lpd,18,103,2.242,WW,W,W,NA
+71,3,E,lsc,20,98,2.242,WC,W,C,NA
+72,3,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,3,E,ld,14,110,2.242,CC,C,C,NA
+74,3,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,3,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,3,E,lsi,13,100,2.242,CW,C,W,NA
+77,3,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,3,E,lsc,18,85,2.242,CW,C,W,NA
+79,3,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,3,E,lsi,22,97,2.242,WW,W,W,NA
+81,3,F,lsi,15,112,2.148,WW,W,W,NA
+82,3,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,3,F,ld,18,125,2.148,CW,C,W,NA
+84,3,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,3,F,ld,19,118,2.148,WC,W,C,NA
+86,3,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,3,F,NA,23,110,2.148,CW,C,W,NA
+88,3,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+89,3,F,"lsc, lpd",24,105,2.148,C,C,,NA
+90,3,F,NA,27,122,2.148,WC,W,C,NA
+91,3,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,3,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,3,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,3,F,lsi,22,125,2.148,CW,C,W,NA
+95,3,F,lpd,28,125,2.148,CW,C,W,NA
+96,3,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,4,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,4,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,4,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,4,A,lsc,23,95,2.155,WW,W,W,NA
+5,4,A,ld,25,85,2.155,WC,W,C,NA
+6,4,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,4,A,lpd,23,89,2.155,CC,C,C,NA
+8,4,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,4,A,lsc,22,85,2.155,CC,C,C,NA
+10,4,A,lsi,22,80,2.155,WC,W,C,NA
+11,4,A,ld,23,80,2.155,CW,C,W,NA
+12,4,A,lsi,24,82,2.155,CW,C,W,NA
+13,4,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,4,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,4,A,lpd,32,103,2.155,WW,W,W,NA
+16,4,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,4,B,ld,17,75,2.543,WC,W,C,NA
+18,4,B,lsc,18,79,2.543,WW,W,W,NA
+19,4,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,4,B,lsi,21,81,2.543,CC,C,C,NA
+21,4,B,NA,25,78,2.543,CC,C,C,NA
+22,4,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,4,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,4,B,lpd,16,73,2.543,WC,W,C,NA
+25,4,B,ld,18,74,2.543,CW,C,W,NA
+26,4,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,4,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,4,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,4,B,lsc,12,60,2.543,CC,C,C,NA
+30,4,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,4,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,4,B,lsi,13,60,2.543,CW,C,W,NA
+33,4,C,NA,17,65,2.551,WW,W,W,NA
+34,4,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,4,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,4,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,4,C,lpd,11,51,2.551,CW,C,W,NA
+38,4,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,4,C,lsc,13,75,2.551,WC,W,C,NA
+40,4,C,lpd,19,67,2.551,WC,W,C,NA
+41,4,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,4,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,4,C,NA,14,70,2.551,WW,W,W,NA
+44,4,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,4,C,lsc,17,55,2.551,CC,C,C,NA
+46,4,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,4,C,lsc,17,55,2.551,CC,C,C,NA
+48,4,C,NA,13,60,2.551,CW,C,W,NA
+49,4,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,4,D,NA,13,52,2.383,CC,C,C,NA
+51,4,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,4,D,lpd,18,51,2.383,CW,C,W,NA
+53,4,D,ld,25,42,2.383,CC,C,C,NA
+54,4,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,4,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,4,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,4,D,NA,19,74,2.383,WC,W,C,NA
+58,4,D,lsi,15,77,2.383,CC,C,C,NA
+59,4,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,4,D,ld,10,77,2.383,WC,W,C,NA
+61,4,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,4,D,lsc,23,50,2.383,WC,W,C,NA
+63,4,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,4,D,lsi,13,50,2.383,WW,W,W,NA
+65,4,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,4,E,lpd,17,88,2.242,C,C,,NA
+67,4,E,ld,19,114,2.242,W,W,,NA
+68,4,E,NA,16,125,2.242,WC,W,C,NA
+69,4,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,4,E,lpd,18,103,2.242,WW,W,W,NA
+71,4,E,lsc,20,98,2.242,WC,W,C,NA
+72,4,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,4,E,ld,14,110,2.242,CC,C,C,NA
+74,4,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,4,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,4,E,lsi,13,100,2.242,CW,C,W,NA
+77,4,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,4,E,lsc,18,85,2.242,CW,C,W,NA
+79,4,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,4,E,lsi,22,97,2.242,WW,W,W,NA
+81,4,F,lsi,15,112,2.148,WW,W,W,NA
+82,4,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,4,F,ld,18,125,2.148,CW,C,W,NA
+84,4,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,4,F,ld,19,118,2.148,WC,W,C,NA
+86,4,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,4,F,NA,23,110,2.148,CW,C,W,NA
+88,4,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+89,4,F,"lsc, lpd",24,105,2.148,C,C,,NA
+90,4,F,NA,27,122,2.148,WC,W,C,NA
+91,4,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,4,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,4,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,4,F,lsi,22,125,2.148,CW,C,W,NA
+95,4,F,lpd,28,125,2.148,CW,C,W,NA
+96,4,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,5,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,5,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,5,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,5,A,lsc,23,95,2.155,WW,W,W,NA
+5,5,A,ld,25,85,2.155,WC,W,C,NA
+6,5,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,5,A,lpd,23,89,2.155,CC,C,C,NA
+8,5,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,5,A,lsc,22,85,2.155,CC,C,C,NA
+10,5,A,lsi,22,80,2.155,WC,W,C,NA
+11,5,A,ld,23,80,2.155,CW,C,W,NA
+12,5,A,lsi,24,82,2.155,CW,C,W,NA
+13,5,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,5,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,5,A,lpd,32,103,2.155,WW,W,W,NA
+16,5,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,5,B,ld,17,75,2.543,WC,W,C,NA
+18,5,B,lsc,18,79,2.543,WW,W,W,NA
+19,5,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,5,B,lsi,21,81,2.543,CC,C,C,NA
+21,5,B,NA,25,78,2.543,CC,C,C,NA
+22,5,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,5,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,5,B,lpd,16,73,2.543,WC,W,C,NA
+25,5,B,ld,18,74,2.543,CW,C,W,NA
+26,5,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,5,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,5,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,5,B,lsc,12,60,2.543,CC,C,C,NA
+30,5,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,5,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,5,B,lsi,13,60,2.543,CW,C,W,NA
+33,5,C,NA,17,65,2.551,WW,W,W,NA
+34,5,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,5,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,5,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,5,C,lpd,11,51,2.551,CW,C,W,NA
+38,5,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,5,C,lsc,13,75,2.551,WC,W,C,NA
+40,5,C,lpd,19,67,2.551,WC,W,C,NA
+41,5,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,5,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,5,C,NA,14,70,2.551,WW,W,W,NA
+44,5,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,5,C,lsc,17,55,2.551,CC,C,C,NA
+46,5,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,5,C,lsc,17,55,2.551,CC,C,C,NA
+48,5,C,NA,13,60,2.551,CW,C,W,NA
+49,5,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,5,D,NA,13,52,2.383,CC,C,C,NA
+51,5,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,5,D,lpd,18,51,2.383,CW,C,W,NA
+53,5,D,ld,25,42,2.383,CC,C,C,NA
+54,5,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,5,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,5,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,5,D,NA,19,74,2.383,WC,W,C,NA
+58,5,D,lsi,15,77,2.383,CC,C,C,NA
+59,5,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,5,D,ld,10,77,2.383,WC,W,C,NA
+61,5,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,5,D,lsc,23,50,2.383,WC,W,C,NA
+63,5,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,5,D,lsi,13,50,2.383,WW,W,W,NA
+65,5,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,5,E,lpd,17,88,2.242,C,C,,NA
+67,5,E,ld,19,114,2.242,W,W,,NA
+68,5,E,NA,16,125,2.242,WC,W,C,NA
+69,5,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,5,E,lpd,18,103,2.242,WW,W,W,NA
+71,5,E,lsc,20,98,2.242,WC,W,C,NA
+72,5,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,5,E,ld,14,110,2.242,CC,C,C,NA
+74,5,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,5,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,5,E,lsi,13,100,2.242,CW,C,W,NA
+77,5,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,5,E,lsc,18,85,2.242,CW,C,W,NA
+79,5,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,5,E,lsi,22,97,2.242,WW,W,W,NA
+81,5,F,lsi,15,112,2.148,WW,W,W,NA
+82,5,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,5,F,ld,18,125,2.148,CW,C,W,NA
+84,5,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,5,F,ld,19,118,2.148,WC,W,C,NA
+86,5,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,5,F,NA,23,110,2.148,CW,C,W,NA
+88,5,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+89,5,F,"lsc, lpd",24,105,2.148,C,C,,NA
+90,5,F,NA,27,122,2.148,WC,W,C,NA
+91,5,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,5,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,5,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,5,F,lsi,22,125,2.148,CW,C,W,NA
+95,5,F,lpd,28,125,2.148,CW,C,W,NA
+96,5,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,6,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,6,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,6,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,6,A,lsc,23,95,2.155,WW,W,W,NA
+5,6,A,ld,25,85,2.155,WC,W,C,NA
+6,6,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,6,A,lpd,23,89,2.155,CC,C,C,NA
+8,6,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,6,A,lsc,22,85,2.155,CC,C,C,NA
+10,6,A,lsi,22,80,2.155,WC,W,C,NA
+11,6,A,ld,23,80,2.155,CW,C,W,NA
+12,6,A,lsi,24,82,2.155,CW,C,W,NA
+13,6,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,6,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,6,A,lpd,32,103,2.155,WW,W,W,NA
+16,6,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,6,B,ld,17,75,2.543,WC,W,C,NA
+18,6,B,lsc,18,79,2.543,WW,W,W,NA
+19,6,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,6,B,lsi,21,81,2.543,CC,C,C,NA
+21,6,B,NA,25,78,2.543,CC,C,C,NA
+22,6,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,6,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,6,B,lpd,16,73,2.543,WC,W,C,NA
+25,6,B,ld,18,74,2.543,CW,C,W,NA
+26,6,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,6,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,6,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,6,B,lsc,12,60,2.543,CC,C,C,NA
+30,6,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,6,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,6,B,lsi,13,60,2.543,CW,C,W,NA
+33,6,C,NA,17,65,2.551,WW,W,W,NA
+34,6,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,6,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,6,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,6,C,lpd,11,51,2.551,CW,C,W,NA
+38,6,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,6,C,lsc,13,75,2.551,WC,W,C,NA
+40,6,C,lpd,19,67,2.551,WC,W,C,NA
+41,6,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,6,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,6,C,NA,14,70,2.551,WW,W,W,NA
+44,6,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,6,C,lsc,17,55,2.551,CC,C,C,NA
+46,6,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,6,C,lsc,17,55,2.551,CC,C,C,NA
+48,6,C,NA,13,60,2.551,CW,C,W,NA
+49,6,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,6,D,NA,13,52,2.383,CC,C,C,NA
+51,6,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,6,D,lpd,18,51,2.383,CW,C,W,NA
+53,6,D,ld,25,42,2.383,CC,C,C,NA
+54,6,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,6,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,6,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,6,D,NA,19,74,2.383,WC,W,C,NA
+58,6,D,lsi,15,77,2.383,CC,C,C,NA
+59,6,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,6,D,ld,10,77,2.383,WC,W,C,NA
+61,6,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,6,D,lsc,23,50,2.383,WC,W,C,NA
+63,6,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,6,D,lsi,13,50,2.383,WW,W,W,NA
+65,6,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,6,E,lpd,17,88,2.242,C,C,,NA
+67,6,E,ld,19,114,2.242,W,W,,NA
+68,6,E,NA,16,125,2.242,WC,W,C,NA
+69,6,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,6,E,lpd,18,103,2.242,WW,W,W,NA
+71,6,E,lsc,20,98,2.242,WC,W,C,NA
+72,6,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,6,E,ld,14,110,2.242,CC,C,C,NA
+74,6,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,6,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,6,E,lsi,13,100,2.242,CW,C,W,NA
+77,6,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,6,E,lsc,18,85,2.242,CW,C,W,NA
+79,6,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,6,E,lsi,22,97,2.242,WW,W,W,NA
+81,6,F,lsi,15,112,2.148,WW,W,W,NA
+82,6,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,6,F,ld,18,125,2.148,CW,C,W,NA
+84,6,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,6,F,ld,19,118,2.148,WC,W,C,NA
+86,6,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,6,F,NA,23,110,2.148,CW,C,W,NA
+88,6,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+89,6,F,"lsc, lpd",24,105,2.148,C,C,,NA
+90,6,F,NA,27,122,2.148,WC,W,C,NA
+91,6,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,6,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,6,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,6,F,lsi,22,125,2.148,CW,C,W,NA
+95,6,F,lpd,28,125,2.148,CW,C,W,NA
+96,6,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,7,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,7,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,7,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,7,A,lsc,23,95,2.155,WW,W,W,NA
+5,7,A,ld,25,85,2.155,WC,W,C,NA
+6,7,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,7,A,lpd,23,89,2.155,CC,C,C,NA
+8,7,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,7,A,lsc,22,85,2.155,CC,C,C,NA
+10,7,A,lsi,22,80,2.155,WC,W,C,NA
+11,7,A,ld,23,80,2.155,CW,C,W,NA
+12,7,A,lsi,24,82,2.155,CW,C,W,NA
+13,7,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,7,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,7,A,lpd,32,103,2.155,WW,W,W,NA
+16,7,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,7,B,ld,17,75,2.543,WC,W,C,NA
+18,7,B,lsc,18,79,2.543,WW,W,W,NA
+19,7,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,7,B,lsi,21,81,2.543,CC,C,C,NA
+21,7,B,NA,25,78,2.543,CC,C,C,NA
+22,7,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,7,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,7,B,lpd,16,73,2.543,WC,W,C,NA
+25,7,B,ld,18,74,2.543,CW,C,W,NA
+26,7,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,7,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,7,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,7,B,lsc,12,60,2.543,CC,C,C,NA
+30,7,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,7,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,7,B,lsi,13,60,2.543,CW,C,W,NA
+33,7,C,NA,17,65,2.551,WW,W,W,NA
+34,7,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,7,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,7,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,7,C,lpd,11,51,2.551,CW,C,W,NA
+38,7,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,7,C,lsc,13,75,2.551,WC,W,C,NA
+40,7,C,lpd,19,67,2.551,WC,W,C,NA
+41,7,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,7,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,7,C,NA,14,70,2.551,WW,W,W,NA
+44,7,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,7,C,lsc,17,55,2.551,CC,C,C,NA
+46,7,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,7,C,lsc,17,55,2.551,CC,C,C,NA
+48,7,C,NA,13,60,2.551,CW,C,W,NA
+49,7,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,7,D,NA,13,52,2.383,CC,C,C,NA
+51,7,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,7,D,lpd,18,51,2.383,CW,C,W,NA
+53,7,D,ld,25,42,2.383,CC,C,C,NA
+54,7,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,7,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,7,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,7,D,NA,19,74,2.383,WC,W,C,NA
+58,7,D,lsi,15,77,2.383,CC,C,C,NA
+59,7,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,7,D,ld,10,77,2.383,WC,W,C,NA
+61,7,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,7,D,lsc,23,50,2.383,WC,W,C,NA
+63,7,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,7,D,lsi,13,50,2.383,WW,W,W,NA
+65,7,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,7,E,lpd,17,88,2.242,C,C,,NA
+67,7,E,ld,19,114,2.242,W,W,,NA
+68,7,E,NA,16,125,2.242,WC,W,C,NA
+69,7,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,7,E,lpd,18,103,2.242,WW,W,W,NA
+71,7,E,lsc,20,98,2.242,WC,W,C,NA
+72,7,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,7,E,ld,14,110,2.242,CC,C,C,NA
+74,7,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,7,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,7,E,lsi,13,100,2.242,CW,C,W,NA
+77,7,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,7,E,lsc,18,85,2.242,CW,C,W,NA
+79,7,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,7,E,lsi,22,97,2.242,WW,W,W,NA
+81,7,F,lsi,15,112,2.148,WW,W,W,NA
+82,7,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,7,F,ld,18,125,2.148,CW,C,W,NA
+84,7,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,7,F,ld,19,118,2.148,WC,W,C,NA
+86,7,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,7,F,NA,23,110,2.148,CW,C,W,NA
+88,7,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+89,7,F,"lsc, lpd",24,105,2.148,C,C,,NA
+90,7,F,NA,27,122,2.148,WC,W,C,NA
+91,7,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,7,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,7,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,7,F,lsi,22,125,2.148,CW,C,W,NA
+95,7,F,lpd,28,125,2.148,CW,C,W,NA
+96,7,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,8,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,8,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,8,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,8,A,lsc,23,95,2.155,WW,W,W,NA
+5,8,A,ld,25,85,2.155,WC,W,C,NA
+6,8,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,8,A,lpd,23,89,2.155,CC,C,C,NA
+8,8,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,8,A,lsc,22,85,2.155,CC,C,C,NA
+10,8,A,lsi,22,80,2.155,WC,W,C,NA
+11,8,A,ld,23,80,2.155,CW,C,W,NA
+12,8,A,lsi,24,82,2.155,CW,C,W,NA
+13,8,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,8,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,8,A,lpd,32,103,2.155,WW,W,W,NA
+16,8,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,8,B,ld,17,75,2.543,WC,W,C,NA
+18,8,B,lsc,18,79,2.543,WW,W,W,NA
+19,8,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,8,B,lsi,21,81,2.543,CC,C,C,NA
+21,8,B,NA,25,78,2.543,CC,C,C,NA
+22,8,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,8,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,8,B,lpd,16,73,2.543,WC,W,C,NA
+25,8,B,ld,18,74,2.543,CW,C,W,NA
+26,8,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,8,B,"lsc, ld",14,67,2.543,C,C,,NA
+28,8,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,8,B,lsc,12,60,2.543,CC,C,C,NA
+30,8,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,8,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,8,B,lsi,13,60,2.543,CW,C,W,NA
+33,8,C,NA,17,65,2.551,WW,W,W,NA
+34,8,C,"lsi, lpd",13,68,2.551,C,C,,NA
+35,8,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,8,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,8,C,lpd,11,51,2.551,CW,C,W,NA
+38,8,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,8,C,lsc,13,75,2.551,WC,W,C,NA
+40,8,C,lpd,19,67,2.551,WC,W,C,NA
+41,8,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,8,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,8,C,NA,14,70,2.551,WW,W,W,NA
+44,8,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,8,C,lsc,17,55,2.551,CC,C,C,NA
+46,8,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,8,C,lsc,17,55,2.551,CC,C,C,NA
+48,8,C,NA,13,60,2.551,CW,C,W,NA
+49,8,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,8,D,NA,13,52,2.383,CC,C,C,NA
+51,8,D,"lsc, lpd",25,55,2.383,W,W,,NA
+52,8,D,lpd,18,51,2.383,CW,C,W,NA
+53,8,D,ld,25,42,2.383,CC,C,C,NA
+54,8,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,8,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,8,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,8,D,NA,19,74,2.383,WC,W,C,NA
+58,8,D,lsi,15,77,2.383,CC,C,C,NA
+59,8,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,8,D,ld,10,77,2.383,WC,W,C,NA
+61,8,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,8,D,lsc,23,50,2.383,WC,W,C,NA
+63,8,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,8,D,lsi,13,50,2.383,WW,W,W,NA
+65,8,E,"lsi, ld",13,107,2.242,W,W,,NA
+66,8,E,lpd,17,88,2.242,C,C,,NA
+67,8,E,ld,19,114,2.242,W,W,,NA
+68,8,E,NA,16,125,2.242,WC,W,C,NA
+69,8,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,8,E,lpd,18,103,2.242,WW,W,W,NA
+71,8,E,lsc,20,98,2.242,WC,W,C,NA
+72,8,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,8,E,ld,14,110,2.242,CC,C,C,NA
+74,8,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,8,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,8,E,lsi,13,100,2.242,CW,C,W,NA
+77,8,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,8,E,lsc,18,85,2.242,CW,C,W,NA
+79,8,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,8,E,lsi,22,97,2.242,WW,W,W,NA
+81,8,F,lsi,15,112,2.148,WW,W,W,NA
+82,8,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,8,F,ld,18,125,2.148,CW,C,W,NA
+84,8,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,8,F,ld,19,118,2.148,WC,W,C,NA
+86,8,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,8,F,NA,23,110,2.148,CW,C,W,NA
+88,8,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,8,F,NA,27,122,2.148,WC,W,C,NA
+91,8,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,8,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,8,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+94,8,F,lsi,22,125,2.148,CW,C,W,NA
+95,8,F,lpd,28,125,2.148,CW,C,W,NA
+96,8,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+89,8,F,"lsc, lpd",24,105,2.148,C,C,,NA
+32,9,B,lsi,13,60,2.543,CW,C,W,NA
+31,9,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+30,9,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+29,9,B,lsc,12,60,2.543,CC,C,C,NA
+28,9,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+25,9,B,ld,18,74,2.543,CW,C,W,NA
+24,9,B,lpd,16,73,2.543,WC,W,C,NA
+23,9,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+22,9,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+21,9,B,NA,25,78,2.543,CC,C,C,NA
+17,9,B,ld,17,75,2.543,WC,W,C,NA
+18,9,B,lsc,18,79,2.543,WW,W,W,NA
+19,9,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,9,B,lsi,21,81,2.543,CC,C,C,NA
+33,9,C,NA,17,65,2.551,WW,W,W,NA
+35,9,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,9,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,9,C,lpd,11,51,2.551,CW,C,W,NA
+38,9,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,9,C,lsc,13,75,2.551,WC,W,C,NA
+40,9,C,lpd,19,67,2.551,WC,W,C,NA
+41,9,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,9,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,9,C,NA,14,70,2.551,WW,W,W,NA
+44,9,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,9,C,lsc,17,55,2.551,CC,C,C,NA
+46,9,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,9,C,lsc,17,55,2.551,CC,C,C,NA
+48,9,C,NA,13,60,2.551,CW,C,W,NA
+64,9,D,lsi,13,50,2.383,WW,W,W,NA
+63,9,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+62,9,D,lsc,23,50,2.383,WC,W,C,NA
+61,9,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+60,9,D,ld,10,77,2.383,WC,W,C,NA
+59,9,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+58,9,D,lsi,15,77,2.383,CC,C,C,NA
+57,9,D,NA,19,74,2.383,WC,W,C,NA
+56,9,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+55,9,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+54,9,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+53,9,D,ld,25,42,2.383,CC,C,C,NA
+52,9,D,lpd,18,51,2.383,CW,C,W,NA
+51,9,D,"lsc, lpd",25,55,2.383,W,W,,NA
+50,9,D,NA,13,52,2.383,CC,C,C,NA
+49,9,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+80,9,E,lsi,22,97,2.242,WW,W,W,NA
+79,9,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+78,9,E,lsc,18,85,2.242,CW,C,W,NA
+77,9,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+76,9,E,lsi,13,100,2.242,CW,C,W,NA
+75,9,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+74,9,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+73,9,E,ld,14,110,2.242,CC,C,C,NA
+65,9,E,"lsi, ld",13,107,2.242,W,W,,NA
+67,9,E,ld,19,114,2.242,W,W,,NA
+68,9,E,NA,16,125,2.242,WC,W,C,NA
+69,9,E,"lsc, ld",18,115,2.242,C,C,,NA
+70,9,E,lpd,18,103,2.242,WW,W,W,NA
+71,9,E,lsc,20,98,2.242,WC,W,C,NA
+72,9,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+96,9,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+95,9,F,lpd,28,125,2.148,CW,C,W,NA
+93,9,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+92,9,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+91,9,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+90,9,F,NA,27,122,2.148,WC,W,C,NA
+88,9,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+87,9,F,NA,23,110,2.148,CW,C,W,NA
+81,9,F,lsi,15,112,2.148,WW,W,W,NA
+82,9,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,9,F,ld,18,125,2.148,CW,C,W,NA
+84,9,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,9,F,ld,19,118,2.148,WC,W,C,NA
+16,9,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+15,9,A,lpd,32,103,2.155,WW,W,W,NA
+14,9,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+13,9,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+12,9,A,lsi,24,82,2.155,CW,C,W,NA
+11,9,A,ld,23,80,2.155,CW,C,W,NA
+10,9,A,lsi,22,80,2.155,WC,W,C,NA
+9,9,A,lsc,22,85,2.155,CC,C,C,NA
+1,9,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,9,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,9,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,9,A,lsc,23,95,2.155,WW,W,W,NA
+5,9,A,ld,25,85,2.155,WC,W,C,NA
+6,9,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,9,A,lpd,23,89,2.155,CC,C,C,NA
+8,9,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+1,10,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,10,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,10,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,10,A,lsc,23,95,2.155,WW,W,W,NA
+5,10,A,ld,25,85,2.155,WC,W,C,NA
+6,10,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,10,A,lpd,23,89,2.155,CC,C,C,NA
+8,10,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,10,A,lsc,22,85,2.155,CC,C,C,NA
+10,10,A,lsi,22,80,2.155,WC,W,C,NA
+11,10,A,ld,23,80,2.155,CW,C,W,NA
+12,10,A,lsi,24,82,2.155,CW,C,W,NA
+13,10,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,10,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,10,A,lpd,32,103,2.155,WW,W,W,NA
+16,10,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,10,B,ld,17,75,2.543,WC,W,C,NA
+18,10,B,lsc,18,79,2.543,WW,W,W,NA
+19,10,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,10,B,lsi,21,81,2.543,CC,C,C,NA
+21,10,B,NA,25,78,2.543,CC,C,C,NA
+22,10,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,10,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,10,B,lpd,16,73,2.543,WC,W,C,NA
+25,10,B,ld,18,74,2.543,CW,C,W,NA
+28,10,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,10,B,lsc,12,60,2.543,CC,C,C,NA
+30,10,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,10,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,10,B,lsi,13,60,2.543,CW,C,W,NA
+33,10,C,NA,17,65,2.551,WW,W,W,NA
+35,10,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,10,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,10,C,lpd,11,51,2.551,CW,C,W,NA
+38,10,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,10,C,lsc,13,75,2.551,WC,W,C,NA
+40,10,C,lpd,19,67,2.551,WC,W,C,NA
+41,10,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,10,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,10,C,NA,14,70,2.551,WW,W,W,NA
+44,10,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,10,C,lsc,17,55,2.551,CC,C,C,NA
+46,10,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,10,C,lsc,17,55,2.551,CC,C,C,NA
+48,10,C,NA,13,60,2.551,CW,C,W,NA
+49,10,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,10,D,NA,13,52,2.383,CC,C,C,NA
+52,10,D,lpd,18,51,2.383,CW,C,W,NA
+53,10,D,ld,25,42,2.383,CC,C,C,NA
+54,10,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,10,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,10,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,10,D,NA,19,74,2.383,WC,W,C,NA
+58,10,D,lsi,15,77,2.383,CC,C,C,NA
+59,10,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,10,D,ld,10,77,2.383,WC,W,C,NA
+61,10,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,10,D,lsc,23,50,2.383,WC,W,C,NA
+63,10,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,10,D,lsi,13,50,2.383,WW,W,W,NA
+51,10,D,"lsc, lpd",25,55,2.383,W,W,,NA
+68,10,E,NA,16,125,2.242,WC,W,C,NA
+70,10,E,lpd,18,103,2.242,WW,W,W,NA
+71,10,E,lsc,20,98,2.242,WC,W,C,NA
+72,10,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,10,E,ld,14,110,2.242,CC,C,C,NA
+74,10,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,10,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,10,E,lsi,13,100,2.242,CW,C,W,NA
+77,10,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,10,E,lsc,18,85,2.242,CW,C,W,NA
+79,10,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,10,E,lsi,22,97,2.242,WW,W,W,NA
+81,10,F,lsi,15,112,2.148,WW,W,W,NA
+82,10,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,10,F,ld,18,125,2.148,CW,C,W,NA
+84,10,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,10,F,ld,19,118,2.148,WC,W,C,NA
+86,10,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,10,F,NA,23,110,2.148,CW,C,W,NA
+88,10,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,10,F,NA,27,122,2.148,WC,W,C,NA
+91,10,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,10,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,10,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+95,10,F,lpd,28,125,2.148,CW,C,W,NA
+96,10,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,11,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,11,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,11,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,11,A,lsc,23,95,2.155,WW,W,W,NA
+5,11,A,ld,25,85,2.155,WC,W,C,NA
+6,11,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,11,A,lpd,23,89,2.155,CC,C,C,NA
+8,11,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,11,A,lsc,22,85,2.155,CC,C,C,NA
+10,11,A,lsi,22,80,2.155,WC,W,C,NA
+11,11,A,ld,23,80,2.155,CW,C,W,NA
+12,11,A,lsi,24,82,2.155,CW,C,W,NA
+13,11,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,11,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,11,A,lpd,32,103,2.155,WW,W,W,NA
+16,11,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,11,B,ld,17,75,2.543,WC,W,C,NA
+18,11,B,lsc,18,79,2.543,WW,W,W,NA
+19,11,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,11,B,lsi,21,81,2.543,CC,C,C,NA
+21,11,B,NA,25,78,2.543,CC,C,C,NA
+22,11,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,11,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,11,B,lpd,16,73,2.543,WC,W,C,NA
+25,11,B,ld,18,74,2.543,CW,C,W,NA
+28,11,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,11,B,lsc,12,60,2.543,CC,C,C,NA
+30,11,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,11,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,11,B,lsi,13,60,2.543,CW,C,W,NA
+26,11,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,11,B,"lsc, ld",14,67,2.543,C,C,,NA
+33,11,C,NA,17,65,2.551,WW,W,W,NA
+35,11,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,11,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,11,C,lpd,11,51,2.551,CW,C,W,NA
+38,11,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,11,C,lsc,13,75,2.551,WC,W,C,NA
+40,11,C,lpd,19,67,2.551,WC,W,C,NA
+41,11,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,11,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,11,C,NA,14,70,2.551,WW,W,W,NA
+44,11,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,11,C,lsc,17,55,2.551,CC,C,C,NA
+46,11,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,11,C,lsc,17,55,2.551,CC,C,C,NA
+48,11,C,NA,13,60,2.551,CW,C,W,NA
+49,11,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,11,D,NA,13,52,2.383,CC,C,C,NA
+52,11,D,lpd,18,51,2.383,CW,C,W,NA
+53,11,D,ld,25,42,2.383,CC,C,C,NA
+54,11,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,11,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,11,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,11,D,NA,19,74,2.383,WC,W,C,NA
+58,11,D,lsi,15,77,2.383,CC,C,C,NA
+59,11,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,11,D,ld,10,77,2.383,WC,W,C,NA
+61,11,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,11,D,lsc,23,50,2.383,WC,W,C,NA
+63,11,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,11,D,lsi,13,50,2.383,WW,W,W,NA
+51,11,D,"lsc, lpd",25,55,2.383,W,W,,NA
+68,11,E,NA,16,125,2.242,WC,W,C,NA
+70,11,E,lpd,18,103,2.242,WW,W,W,NA
+71,11,E,lsc,20,98,2.242,WC,W,C,NA
+72,11,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,11,E,ld,14,110,2.242,CC,C,C,NA
+74,11,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,11,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,11,E,lsi,13,100,2.242,CW,C,W,NA
+77,11,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,11,E,lsc,18,85,2.242,CW,C,W,NA
+79,11,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,11,E,lsi,22,97,2.242,WW,W,W,NA
+81,11,F,lsi,15,112,2.148,WW,W,W,NA
+82,11,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,11,F,ld,18,125,2.148,CW,C,W,NA
+84,11,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,11,F,ld,19,118,2.148,WC,W,C,NA
+86,11,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,11,F,NA,23,110,2.148,CW,C,W,NA
+88,11,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,11,F,NA,27,122,2.148,WC,W,C,NA
+91,11,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,11,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,11,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+95,11,F,lpd,28,125,2.148,CW,C,W,NA
+96,11,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,12,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,12,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,12,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,12,A,lsc,23,95,2.155,WW,W,W,NA
+5,12,A,ld,25,85,2.155,WC,W,C,NA
+6,12,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,12,A,lpd,23,89,2.155,CC,C,C,NA
+8,12,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,12,A,lsc,22,85,2.155,CC,C,C,NA
+10,12,A,lsi,22,80,2.155,WC,W,C,NA
+11,12,A,ld,23,80,2.155,CW,C,W,NA
+12,12,A,lsi,24,82,2.155,CW,C,W,NA
+13,12,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,12,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,12,A,lpd,32,103,2.155,WW,W,W,NA
+16,12,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,12,B,ld,17,75,2.543,WC,W,C,NA
+18,12,B,lsc,18,79,2.543,WW,W,W,NA
+19,12,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,12,B,lsi,21,81,2.543,CC,C,C,NA
+21,12,B,NA,25,78,2.543,CC,C,C,NA
+22,12,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,12,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,12,B,lpd,16,73,2.543,WC,W,C,NA
+25,12,B,ld,18,74,2.543,CW,C,W,NA
+28,12,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,12,B,lsc,12,60,2.543,CC,C,C,NA
+30,12,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,12,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,12,B,lsi,13,60,2.543,CW,C,W,NA
+26,12,B,"lsi, lpd",17,75,2.543,W,W,,NA
+27,12,B,"lsc, ld",14,67,2.543,C,C,,NA
+33,12,C,NA,17,65,2.551,WW,W,W,NA
+35,12,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,12,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,12,C,lpd,11,51,2.551,CW,C,W,NA
+38,12,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,12,C,lsc,13,75,2.551,WC,W,C,NA
+40,12,C,lpd,19,67,2.551,WC,W,C,NA
+41,12,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,12,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,12,C,NA,14,70,2.551,WW,W,W,NA
+44,12,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+45,12,C,lsc,17,55,2.551,CC,C,C,NA
+46,12,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,12,C,lsc,17,55,2.551,CC,C,C,NA
+48,12,C,NA,13,60,2.551,CW,C,W,NA
+49,12,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,12,D,NA,13,52,2.383,CC,C,C,NA
+52,12,D,lpd,18,51,2.383,CW,C,W,NA
+53,12,D,ld,25,42,2.383,CC,C,C,NA
+54,12,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,12,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,12,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,12,D,NA,19,74,2.383,WC,W,C,NA
+58,12,D,lsi,15,77,2.383,CC,C,C,NA
+59,12,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,12,D,ld,10,77,2.383,WC,W,C,NA
+61,12,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,12,D,lsc,23,50,2.383,WC,W,C,NA
+63,12,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,12,D,lsi,13,50,2.383,WW,W,W,NA
+51,12,D,"lsc, lpd",25,55,2.383,W,W,,NA
+68,12,E,NA,16,125,2.242,WC,W,C,NA
+70,12,E,lpd,18,103,2.242,WW,W,W,NA
+71,12,E,lsc,20,98,2.242,WC,W,C,NA
+72,12,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,12,E,ld,14,110,2.242,CC,C,C,NA
+74,12,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,12,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,12,E,lsi,13,100,2.242,CW,C,W,NA
+77,12,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,12,E,lsc,18,85,2.242,CW,C,W,NA
+79,12,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,12,E,lsi,22,97,2.242,WW,W,W,NA
+81,12,F,lsi,15,112,2.148,WW,W,W,NA
+82,12,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,12,F,ld,18,125,2.148,CW,C,W,NA
+84,12,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,12,F,ld,19,118,2.148,WC,W,C,NA
+86,12,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+87,12,F,NA,23,110,2.148,CW,C,W,43.5 sq left
+88,12,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,12,F,NA,27,122,2.148,WC,W,C,NA
+91,12,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,12,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,12,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+95,12,F,lpd,28,125,2.148,CW,C,W,NA
+96,12,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+68,13,E,NA,16,125,2.242,WC,W,C,NA
+70,13,E,lpd,18,103,2.242,WW,W,W,NA
+71,13,E,lsc,20,98,2.242,WC,W,C,NA
+72,13,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,13,E,ld,14,110,2.242,CC,C,C,NA
+74,13,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,13,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,13,E,lsi,13,100,2.242,CW,C,W,NA
+77,13,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,13,E,lsc,18,85,2.242,CW,C,W,NA
+79,13,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,13,E,lsi,22,97,2.242,WW,W,W,NA
+81,13,F,lsi,15,112,2.148,WW,W,W,NA
+82,13,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,13,F,ld,18,125,2.148,CW,C,W,NA
+84,13,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,13,F,ld,19,118,2.148,WC,W,C,NA
+86,13,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+88,13,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,13,F,NA,27,122,2.148,WC,W,C,NA
+91,13,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,13,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,13,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+95,13,F,lpd,28,125,2.148,CW,C,W,NA
+96,13,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,13,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,13,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,13,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,13,A,lsc,23,95,2.155,WW,W,W,NA
+5,13,A,ld,25,85,2.155,WC,W,C,NA
+6,13,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,13,A,lpd,23,89,2.155,CC,C,C,NA
+8,13,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,13,A,lsc,22,85,2.155,CC,C,C,NA
+10,13,A,lsi,22,80,2.155,WC,W,C,NA
+11,13,A,ld,23,80,2.155,CW,C,W,NA
+12,13,A,lsi,24,82,2.155,CW,C,W,NA
+13,13,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,13,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,13,A,lpd,32,103,2.155,WW,W,W,NA
+16,13,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+49,13,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,13,D,NA,13,52,2.383,CC,C,C,NA
+52,13,D,lpd,18,51,2.383,CW,C,W,NA
+53,13,D,ld,25,42,2.383,CC,C,C,NA
+54,13,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,13,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,13,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,13,D,NA,19,74,2.383,WC,W,C,NA
+58,13,D,lsi,15,77,2.383,CC,C,C,NA
+59,13,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,13,D,ld,10,77,2.383,WC,W,C,NA
+61,13,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,13,D,lsc,23,50,2.383,WC,W,C,NA
+63,13,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,13,D,lsi,13,50,2.383,WW,W,W,NA
+17,13,B,ld,17,75,2.543,WC,W,C,NA
+18,13,B,lsc,18,79,2.543,WW,W,W,NA
+19,13,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,13,B,lsi,21,81,2.543,CC,C,C,NA
+21,13,B,NA,25,78,2.543,CC,C,C,NA
+22,13,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,13,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,13,B,lpd,16,73,2.543,WC,W,C,NA
+25,13,B,ld,18,74,2.543,CW,C,W,NA
+28,13,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,13,B,lsc,12,60,2.543,CC,C,C,NA
+30,13,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,13,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,13,B,lsi,13,60,2.543,CW,C,W,NA
+33,13,C,NA,17,65,2.551,WW,W,W,NA
+35,13,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,13,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,13,C,lpd,11,51,2.551,CW,C,W,NA
+38,13,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,13,C,lsc,13,75,2.551,WC,W,C,NA
+40,13,C,lpd,19,67,2.551,WC,W,C,NA
+41,13,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,13,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,13,C,NA,14,70,2.551,WW,W,W,NA
+44,13,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+46,13,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,13,C,lsc,17,55,2.551,CC,C,C,NA
+48,13,C,NA,13,60,2.551,CW,C,W,NA
+1,14,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,14,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,14,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+4,14,A,lsc,23,95,2.155,WW,W,W,NA
+5,14,A,ld,25,85,2.155,WC,W,C,NA
+6,14,A,"lsi, ld",24,89,2.155,WC,W,C,NA
+7,14,A,lpd,23,89,2.155,CC,C,C,NA
+8,14,A,"lsc, lsi, ld, lpd",28,89,2.155,CW,C,W,NA
+9,14,A,lsc,22,85,2.155,CC,C,C,NA
+10,14,A,lsi,22,80,2.155,WC,W,C,NA
+11,14,A,ld,23,80,2.155,CW,C,W,NA
+12,14,A,lsi,24,82,2.155,CW,C,W,NA
+13,14,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+14,14,A,"lsi, lpd",26,95,2.155,WW,W,W,NA
+15,14,A,lpd,32,103,2.155,WW,W,W,NA
+16,14,A,"lsi, lpd",34,90,2.155,CC,C,C,NA
+17,14,B,ld,17,75,2.543,WC,W,C,NA
+18,14,B,lsc,18,79,2.543,WW,W,W,NA
+19,14,B,"lsc, lsi, ld, lpd",17,85,2.543,CW,C,W,NA
+20,14,B,lsi,21,81,2.543,CC,C,C,NA
+21,14,B,NA,25,78,2.543,CC,C,C,NA
+22,14,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,14,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+24,14,B,lpd,16,73,2.543,WC,W,C,NA
+25,14,B,ld,18,74,2.543,CW,C,W,NA
+28,14,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+29,14,B,lsc,12,60,2.543,CC,C,C,NA
+30,14,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+31,14,B,"lsc, lpd",13,56,2.543,WW,W,W,NA
+32,14,B,lsi,13,60,2.543,CW,C,W,NA
+33,14,C,NA,17,65,2.551,WW,W,W,NA
+35,14,C,"lsi, ld",13,60,2.551,CC,C,C,NA
+36,14,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+37,14,C,lpd,11,51,2.551,CW,C,W,NA
+38,14,C,"lsc, lpd",15,44,2.551,WW,W,W,NA
+39,14,C,lsc,13,75,2.551,WC,W,C,NA
+40,14,C,lpd,19,67,2.551,WC,W,C,NA
+41,14,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,14,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,14,C,NA,14,70,2.551,WW,W,W,NA
+44,14,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+46,14,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+47,14,C,lsc,17,55,2.551,CC,C,C,NA
+48,14,C,NA,13,60,2.551,CW,C,W,NA
+49,14,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,14,D,NA,13,52,2.383,CC,C,C,NA
+52,14,D,lpd,18,51,2.383,CW,C,W,NA
+53,14,D,ld,25,42,2.383,CC,C,C,NA
+54,14,D,"lsi, lpd",22,70,2.383,CC,C,C,NA
+55,14,D,"lsc, lsi, ld, lpd",19,67,2.383,WW,W,W,NA
+56,14,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,14,D,NA,19,74,2.383,WC,W,C,NA
+58,14,D,lsi,15,77,2.383,CC,C,C,NA
+59,14,D,"lsc, lsi, ld, lpd",19,77,2.383,CW,C,W,NA
+60,14,D,ld,10,77,2.383,WC,W,C,NA
+61,14,D,"lsc, ld",17,76,2.383,CW,C,W,NA
+62,14,D,lsc,23,50,2.383,WC,W,C,NA
+63,14,D,"lsc, ld",17,35,2.383,WC,W,C,NA
+64,14,D,lsi,13,50,2.383,WW,W,W,NA
+68,14,E,NA,16,125,2.242,WC,W,C,NA
+70,14,E,lpd,18,103,2.242,WW,W,W,NA
+71,14,E,lsc,20,98,2.242,WC,W,C,NA
+72,14,E,"lsc, lsi, ld, lpd",21,88,2.242,CC,C,C,NA
+73,14,E,ld,14,110,2.242,CC,C,C,NA
+74,14,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,14,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,14,E,lsi,13,100,2.242,CW,C,W,NA
+77,14,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+78,14,E,lsc,18,85,2.242,CW,C,W,NA
+79,14,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+80,14,E,lsi,22,97,2.242,WW,W,W,NA
+81,14,F,lsi,15,112,2.148,WW,W,W,NA
+82,14,F,"lsc, ld",15,115,2.148,WW,W,W,NA
+83,14,F,ld,18,125,2.148,CW,C,W,NA
+84,14,F,"lsc, lsi, ld, lpd",16,122,2.148,CC,C,C,NA
+85,14,F,ld,19,118,2.148,WC,W,C,NA
+86,14,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+88,14,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+90,14,F,NA,27,122,2.148,WC,W,C,NA
+91,14,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,14,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,14,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+95,14,F,lpd,28,125,2.148,CW,C,W,NA
+96,14,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,16,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,16,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,16,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+9,16,A,lsc,22,85,2.155,CC,C,C,NA
+10,16,A,lsi,22,80,2.155,WC,W,C,NA
+12,16,A,lsi,24,82,2.155,CW,C,W,NA
+13,16,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+15,16,A,lpd,32,103,2.155,WW,W,W,NA
+17,16,B,ld,17,75,2.543,WC,W,C,NA
+18,16,B,lsc,18,79,2.543,WW,W,W,NA
+20,16,B,lsi,21,81,2.543,CC,C,C,NA
+21,16,B,NA,25,78,2.543,CC,C,C,NA
+22,16,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,16,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+25,16,B,ld,18,74,2.543,CW,C,W,NA
+28,16,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+30,16,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+32,16,B,lsi,13,60,2.543,CW,C,W,NA
+36,16,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+44,16,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+42,16,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,16,C,NA,14,70,2.551,WW,W,W,NA
+41,16,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+46,16,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+49,16,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,16,D,NA,13,52,2.383,CC,C,C,NA
+53,16,D,ld,25,42,2.383,CC,C,C,NA
+56,16,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,16,D,NA,19,74,2.383,WC,W,C,NA
+60,16,D,ld,10,77,2.383,WC,W,C,NA
+68,16,E,NA,16,125,2.242,WC,W,C,NA
+70,16,E,lpd,18,103,2.242,WW,W,W,NA
+73,16,E,ld,14,110,2.242,CC,C,C,NA
+74,16,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,16,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,16,E,lsi,13,100,2.242,CW,C,W,NA
+77,16,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+79,16,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+81,16,F,lsi,15,112,2.148,WW,W,W,NA
+83,16,F,ld,18,125,2.148,CW,C,W,NA
+85,16,F,ld,19,118,2.148,WC,W,C,NA
+86,16,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+88,16,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+91,16,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+93,16,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+92,16,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+96,16,F,"lsi, lpd",26,115,2.148,WW,W,W,NA
+1,15,A,"lsc, lpd",11,98,2.155,WC,W,C,NA
+2,15,A,"lsc, ld",12,102,2.155,CC,C,C,NA
+3,15,A,"lsi, ld",14,108,2.155,WW,W,W,NA
+9,15,A,lsc,22,85,2.155,CC,C,C,NA
+10,15,A,lsi,22,80,2.155,WC,W,C,NA
+12,15,A,lsi,24,82,2.155,CW,C,W,NA
+13,15,A,"lsc, ld",24,106,2.155,CW,C,W,NA
+15,15,A,lpd,32,103,2.155,WW,W,W,NA
+17,15,B,ld,17,75,2.543,WC,W,C,NA
+18,15,B,lsc,18,79,2.543,WW,W,W,NA
+20,15,B,lsi,21,81,2.543,CC,C,C,NA
+21,15,B,NA,25,78,2.543,CC,C,C,NA
+22,15,B,"lsc, ld",19,58,2.543,WC,W,C,NA
+23,15,B,"lsc, lpd",10,75,2.543,WW,W,W,NA
+25,15,B,ld,18,74,2.543,CW,C,W,NA
+28,15,B,"lsi, ld",14,61,2.543,WW,W,W,NA
+30,15,B,"lsc, lsi, ld, lpd",7,58,2.543,WW,W,W,NA
+32,15,B,lsi,13,60,2.543,CW,C,W,NA
+36,15,C,"lsc, ld",11,55,2.551,WC,W,C,NA
+41,15,C,"lsi, ld",18,65,2.551,CC,C,C,NA
+42,15,C,"lsc, lsi, ld, lpd",16,66,2.551,WW,W,W,NA
+43,15,C,NA,14,70,2.551,WW,W,W,NA
+44,15,C,"lsi, lpd",9,65,2.551,WW,W,W,NA
+46,15,C,"lsc, lpd",15,67,2.551,CW,C,W,NA
+49,15,D,"lsi, ld",20,55,2.383,CC,C,C,NA
+50,15,D,NA,13,52,2.383,CC,C,C,NA
+56,15,D,"lsi, ld",11,73,2.383,WW,W,W,NA
+57,15,D,NA,19,74,2.383,WC,W,C,NA
+60,15,D,ld,10,77,2.383,WC,W,C,NA
+53,15,D,ld,25,42,2.383,CC,C,C,NA
+68,15,E,NA,16,125,2.242,WC,W,C,NA
+70,15,E,lpd,18,103,2.242,WW,W,W,NA
+73,15,E,ld,14,110,2.242,CC,C,C,NA
+74,15,E,"lsc, lpd",16,113,2.242,CC,C,C,NA
+75,15,E,"lsi, lpd",14,115,2.242,WC,W,C,NA
+76,15,E,lsi,13,100,2.242,CW,C,W,NA
+77,15,E,"lsi, lpd",13,95,2.242,CW,C,W,NA
+79,15,E,"lsc, lsi, ld, lpd",20,85,2.242,WW,W,W,NA
+81,15,F,lsi,15,112,2.148,WW,W,W,NA
+83,15,F,ld,18,125,2.148,CW,C,W,NA
+85,15,F,ld,19,118,2.148,WC,W,C,NA
+86,15,F,"lsc, lpd",18,115,2.148,WC,W,C,NA
+88,15,F,"lsi, ld",22,115,2.148,WW,W,W,NA
+91,15,F,"lsi, lpd",25,117,2.148,CC,C,C,NA
+92,15,F,"lsc, ld",27,115,2.148,CC,C,C,NA
+93,15,F,"lsc, lsi, ld, lpd",30,125,2.148,WW,W,W,NA
+96,15,F,"lsi, lpd",26,115,2.148,WW,W,W,NA

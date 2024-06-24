@@ -27,6 +27,10 @@ alga_list <- as.data.frame(c("Ulothrix_sp", "Ulva_sp", "Savoiea_robusta", "Pyrop
 
 invert_list <- sp_list %>% anti_join(alga_list)
 
+spp_list <- alga_list %>% mutate(type = "alga") %>% 
+  rbind(invert_list %>% mutate(type = "invert")) %>% 
+  write_csv("./clean_data/SVSWS_species_list.csv")
+
 # check that all algae have percent cover recorded and that all invertebrates have count data
 survey_data %>% filter(species %in% invert_list$species) %>% verify(is.na(percent_cover)) %>% verify(count >= 0)
 
@@ -111,7 +115,7 @@ tile_info <- surveys_clean2 %>% select(tile_id, survey_no, block,
                                        original_herb_trt, angle, 
                                        new_compass,shore_level,treatment,
                                        trt_y1, trt_y2, notes) %>% 
-  unique()
+  unique() %>% write_csv("./clean_data/SVSWS_tile_treatments.csv")
 
 tile_data <- surveys_clean2 %>% select(tile_id, survey_no, species, count, percent_cover)
 
@@ -184,25 +188,51 @@ write_csv(all_epifauna_trts, "./clean_data/SVSHS_epifauna_clean.csv")
 
 
 ##################
-# Appendix plot of number of tiles in each treatment over time
+# Appendix plot Fig A3 of number of tiles in each treatment over time
+
+# read in survey dates
+survey_dates <- read_csv("./raw_data/design/SVSWS_survey_times.csv") %>% 
+  # sometimes surveys occurred over multiple tides (if tide window was short)
+  # here, we just take the date of survey completion as the survey date
+  group_by(survey_no) %>% 
+  summarize(date = max(date))
+
+# read in the tile data
 tile_numbers <- read_csv("./clean_data/SVSWS_survey_clean.csv") %>% 
   mutate(treatment = if_else(survey_no <= 10, trt_y1, treatment)) %>% 
   filter((survey_no > 10 & treatment %in% c("C","W")) == F) %>% 
   group_by(survey_no, treatment) %>% 
+  # calculate the number of tiles present at each survey timepoint
   summarize(number_tiles = length(unique(tile_id))) %>% 
-  left_join(visits_info) %>% 
+  left_join(survey_dates)
+
+# for site visits where the number of tiles quickly changed (April 2020 - treatments changed for Year 2;
+# September 2020 - half of tiles destructively sampled), add in these data manually
+tiles_extrapts <- data.frame(treatment = c("C","W","CC","CW","WC","WW",
+                                           "CC","CW","WC","WW"),
+         number_tiles = c(41,46,22,19,20,25,12,10,11,16), 
+         date = c(rep(ymd("2020-04-03"), times = 2, each =1),
+                  rep(ymd("2020-04-03"), times = 4, each = 1),
+                  rep(ymd("2020-09-14"), times = 4, each = 1)))
+
+# join together the data
+tile_numbers <- tile_numbers %>% full_join(tiles_extrapts) %>% 
   mutate(treatment = factor(treatment, levels = c("C","W","CC","CW","WC","WW")))
 
+# create plot of changes in treatment sample sizes (tile numbers) over time
 tile.time <- ggplot(tile_numbers %>% filter(date > "2019-08-14"), 
-                    aes(x=date, y = number_tiles, lty = treatment, col = treatment)) +
+                    aes(x=date, y = number_tiles, col = treatment)) +
   geom_line(lwd = 0.8) +
+  theme_classic() +
   scale_color_manual(values = pal.trt) +
-  plot_theme +
-  scale_linetype_manual(values = lty.trt) +
-  geom_vline(aes(xintercept = as.Date("2020-04-07")), linetype = "dotted", col = "grey30", lwd = 0.8) +
+  geom_vline(aes(xintercept = as.Date("2020-04-03")), linetype = "dashed", col = "grey30", lwd = 0.4) +
   labs(x = "Date", y = "Sample size", col = "Treatment", lty = "Treatment") +
   annotate("segment", x=as.Date("2020-09-14"), lwd = 0.8, xend = as.Date("2020-09-14"),
-           y = 33, yend = 28, arrow = arrow(length = unit(0.08, "inches")))
+           y = 33, yend = 28, arrow = arrow(length = unit(0.08, "inches"))) +
+  ylim(c(0,50))
 tile.time
-ggsave(tile.time, filename = "./figures/tiletime.png", dpi = 1000, 
-       width = 3.5, height = 2, units = "in", scale = 2)
+
+# save this figure
+png("./figures/FigS3.png", res = 700, width = 6, height = 3.5, units = "in")
+tile.time
+dev.off()

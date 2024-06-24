@@ -1,10 +1,12 @@
 ## Community trajectories & analysis
 ## Amelia Hesketh: October 2021
 
+# load packages
 pkgs <- c("tidyverse","lubridate","vegan", "ecotraj")
 lapply(pkgs, library, character.only = TRUE)
 rm(pkgs)
 
+# load tidy survey data
 survey_data <- read_csv("./clean_data/SVSWS_survey_clean.csv")
 
 
@@ -109,13 +111,15 @@ cta_bray <- dbrda(cta_matrix ~ treatment, distance = "bray", k = 2, try = 999, a
 pal.trt <- c("#014779", "#EE4B2B", "#014779", "#7985CB", "#9C0098", "#EE4B2B", "grey50")
 lty.trt <- c("twodash","twodash","solid","solid","solid","solid")
 
-scores(cta_bray)$sites
-
+# extract scores (coordinates along dbRDA1 and dbRDA2 axes)
+# join the treatment factors to these scores for plotting
 bray.plot <- scores(cta_bray)$sites %>% cbind(survey_data_spread_smush$treatment) %>% 
   cbind(survey_data_spread_smush$survey_no) %>% as_tibble(.) %>% rename(treatment = 3, survey_no = 4) %>% 
   mutate(dbRDA1 = as.numeric(dbRDA1),dbRDA2 = as.numeric(dbRDA2)) %>% 
   mutate(treatment = factor(treatment, levels = c("C","W","CC","CW","WC","WW")))
 
+# the end of the arrows is the coordinate of the next timepoint, so create
+# new columns of x.end and y.end for plot
 for (row in 1:nrow(bray.plot)){
   if (row < nrow(bray.plot)){
     bray.plot$x.end[row] <- bray.plot$dbRDA1[row+1]
@@ -123,8 +127,10 @@ for (row in 1:nrow(bray.plot)){
   }
 }
 
+# get rid of the last timepoints (since this is where the final arrow will end anyhow)
 bray.plot.2 <- bray.plot %>% slice(c(-10,-20,-27,-34,-41,-48))
 
+# Plot community trajectory from bray scores using arrows and marking key points
 cta <- ggplot(bray.plot.2, aes(x = dbRDA1, y =dbRDA2, xend = x.end, yend = y.end, col = treatment, lty = treatment)) +
   geom_segment(arrow = arrow(type = "closed", ends = "last", length = unit(0.1,"in"))) +
   scale_linetype_manual(values = lty.trt) +
@@ -135,14 +141,15 @@ cta <- ggplot(bray.plot.2, aes(x = dbRDA1, y =dbRDA2, xend = x.end, yend = y.end
         axis.title= element_text(size = 14),
         legend.text = element_text(size = 12),
         legend.title = element_text(size = 14)) +
+  # here and below, will add in points of interest manually with labels
   geom_point(data=bray.plot.2 %>% filter(survey_no ==1), col = "black", pch = 1, size = 3,
              stroke = 1) +
   annotate("point", y = -0.9, x = -1.9, pch = 1, size = 3) +
   annotate("text", y = -0.9, x = -1.4, label = "April 2019 (start y1)", size = 4) +
-  geom_point(data=bray.plot.2 %>% filter(survey_no ==7), col = "black", pch = 0, size = 3,
+  geom_point(data=bray.plot.2 %>% filter(survey_no ==8), col = "black", pch = 0, size = 3,
              stroke = 1) +
   annotate("point", y = -1.05, x = -1.9, pch = 0, size = 3) +
-  annotate("text", y = -1.05, x = -1.55, label = "August 2019", size = 4) +
+  annotate("text", y = -1.05, x = -1.52, label = "October 2019", size = 4) +
   geom_point(data=bray.plot.2 %>% filter(survey_no ==10), col = "black", pch = 2, size = 3,
              stroke = 1) +
   annotate("point", y = -1.2, x = -1.9, pch = 2, size = 3) +
@@ -158,5 +165,6 @@ cta <- ggplot(bray.plot.2, aes(x = dbRDA1, y =dbRDA2, xend = x.end, yend = y.end
   annotate("text", y = -1.5, x = -1.39, label = "February 2021 (end)", size = 4)
 cta
 
-ggsave(cta, filename = "./figures/FigA11.png",dpi = 1000, width = 3.5, height = 2.5, units = "in",scale = 2)
+# save plot
+ggsave(cta, filename = "./figures/FigA10.png",dpi = 1000, width = 3.5, height = 2.5, units = "in",scale = 2)
 
