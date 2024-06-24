@@ -1,4 +1,4 @@
-## The effect of single versus successive warm summer on intertidal barnacle beds
+## The effect of single versus successive warm summer on intertidal communities
 
 This experiment set out to test how temperature shapes the composition of intertidal barnacle bed communities, asking the question: how do single vs. successive warm summers affect this community? We used a passive warming manipulation of black and white settlement tiles to generate differences in substratum temperatures and tracked communities over two years. After the first year, the treatment of half of each group (warm and cool) were swapped to manipulate thermal stress through time.
 
