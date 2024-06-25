@@ -14,6 +14,8 @@ We expected that:
 - Epifaunal community data: tiles were destructively sampled the fall and winter of year two to look at cryptic diversity within treatments.
 - Tide and daylight hours data: these are pulled from Canadian government sources for analyses of temperature.
 
+For a full data dictionary, please see the project_summary.pdf file within the metadata folder.
+
 # Analyses conducted (in scripts folders)
 1) Temperature differences between treatments, in terms of maximum daily temperature and mean temperature -- 03_temperature.R 
 2) Barnacle abundance (recruits and adults) differences between treatments -- 04_barnacles.R
