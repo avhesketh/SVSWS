@@ -150,31 +150,23 @@ write_csv(all_data, "./clean_data/SVSWS_survey_clean.csv")
 # Cleaning epifaunal data (destructive sampling)
 
 # load in the two dataframes in question
-sept20_samples <- read_csv("./raw_data/final_samples/SVSWS_20200914_epifauna.csv") %>% mutate(date = "2020-09-14")
-feb21_samples <- read_csv("./raw_data/final_samples/SVSWS_20210224_epifauna.csv") %>% mutate(date = "2021-02-24")
+sept20_samples <- read_csv("./raw_data/epifauna/SVSWS_20200914_epifauna.csv") %>% mutate(date = "2020-09-14")
+feb21_samples <- read_csv("./raw_data/epifauna/SVSWS_20210224_epifauna.csv") %>% mutate(date = "2021-02-24")
 
 # need to clean up the species names to be consistently formatted
 
 epifauna_original <- as.data.frame(unique(c(sept20_samples$taxon, feb21_samples$taxon))) %>% 
   rename(taxon = 1)
 
-# create "clean" name vector to replace current messy names
-# and allow like groups (e.g. polychaeta 1 & polychaeta 2)
-# to be subsequently summed
-epifauna_repair <- c("Amphipoda", "Insecta","Littorina_scutulata","Littorina_sitkana",
-                    "Lottia_paradigitalis","Polychaeta","Copepoda","Cirripedia_larva","Amphipoda",
-                    "Mytilus_trossulus","Nemertean","Isopoda","Amphipoda_larva",
-                    "Lottia_pelta","Anthopleura_elegantissima","Polychaeta","Isopoda","Lasaea_rubra",
-                    "Lottia_digitalis","Onchidoris_bilamellata","Nemertean","Pagurus_hirsutiusculus",
-                    "Lottia_spp_recruit","Polychaeta","Oedoparena_sp_larva","Insecta","Amphipoda","Lottia_spp_recruits",
-                    "All","Cirripedia_larva","Polychaeta","Isopoda","Lottia_scutum","Neostylidium_eschrichtii",
-                    "Platyhelminthes","Oedoparena_sp_larva","Oedoparena_sp_larva","Annelida","Insecta")
+# load name repair file 
 
-epifauna_join <- cbind(epifauna_original, epifauna_repair)
+repair <- read_csv("./raw_data/epifauna/taxonomic_codes.csv")
 
 # drop messy names, sum abundances of each taxon
-all_epifauna <- sept20_samples %>% full_join(feb21_samples) %>% left_join(epifauna_join) %>% select(-taxon) %>% 
-  rename(taxon = epifauna_repair) %>% select(-notes) %>% group_by(date, block, number, taxon) %>% 
+all_epifauna <- sept20_samples %>% full_join(feb21_samples) %>% 
+  left_join(repair) %>% select(-taxon) %>% 
+  rename(taxon = taxon_repaired) %>% select(-notes) %>% 
+  group_by(date, block, number, taxon) %>% 
   transmute(total_abund = sum(abund)) %>% ungroup()
 
 block_design_useful <- block_design %>% select(new_no, new_block, treatment, tile_id)
