@@ -1,7 +1,7 @@
 ---
 title: "The effect of single versus successive warm summers on an intertidal community"
 author: "A.V. Hesketh, C.A. Konecny, S.M. Emry, C.D.G. Harley"
-date: "2024/06/24"
+date: "2025/03/14"
 output:
   pdf_document: default
   html_document: default
@@ -208,6 +208,11 @@ possible) and counted under a dissecting microscope.
 
 */design*
 
+**SVSWS_satellite_temps.nc**: This .nc file is downloaded from the
+Copernicus Climate Data Store from the ERA5 Land hourly surface
+temperature dataset. It is used here as an auxiliary variable for
+multiple imputation of temperature
+
 **SVSWS_daylight_hours_pst.rtf**: This raw text file includes sunset and
 sunrise times for the entire duration of the experiment, for the exact
 lat/long of the field experiment, using the National Research Council of
@@ -234,7 +239,7 @@ Fulford Harbor, BC, the nearest tide station to the field site.
 
 -   column 1: YYYY-MM-DD, date associated with tide prediction
 
--    column 2: HH:MM, 24 hour time associated with tide prediction
+-   column 2: HH:MM, 24 hour time associated with tide prediction
 
 -   column 3: either PST or PDT, time zone associated with tide
     prediction
@@ -312,7 +317,7 @@ and design considerations (e.g., treatment in year one and year two)
 **SVSWS_20200914_epifauna.csv**: Epifauna data obtained from destructive
 sampling in September 2020
 
--    block: same as new_block in SVSWS_tilesetup.csv, experimental block
+-   block: same as new_block in SVSWS_tilesetup.csv, experimental block
     (A-F) in which tile was located
 
 -   number: same as new_number in SVSWS_tilesetup.csv, identifying
@@ -376,6 +381,22 @@ Value: Numeric data, the recorded temperature in degrees Celsius
 
 */tile_surveys*
 
+**SVSWS_barnacle_mortality.csv**: These tabular data contain data on the
+abundance of dead barnacles (lateral plates remaining, even partially;
+not single basal plates), for timepoints where full photographic series
+of tiles exist.
+
+-   date: Date, format YYYY-MM-DD, date on which photograph was taken of
+    tile
+
+-   block: Experimental block in which tile was located (same as
+    new_block in SVSWS_tilesetup.csv)
+
+-   number: Number of tile identifying it within the experimental block
+    (same as new_block in SVSWS_tilesetup.csv)
+
+-   number_dead: integer, number of dead barnacles
+
 **SVSWS_barnacle_recruit.csv**: These tabular data contain abundance
 data for barnacles, both recruits and adults, beginning in June 2020
 when we began to distinguish between adults and recruits.
@@ -395,6 +416,29 @@ when we began to distinguish between adults and recruits.
     that were counted on the tile surface.
 
 -   date: Date, format YYYY-MM-DD, of tile survey
+
+**SVSWS_barnacle_size.csv:** These tabular data contain data on the size
+(basal diameter) of live and dead barnacles, for timepoints where full
+photographic series of tiles exist.
+
+-   date: Date, format YYYY-MM-DD, date on which photograph was taken of
+    tile
+
+-   treatment: Character, code representing the treatment of the tile at
+    the time the photograph was taken (C, W, CC, CW, WC, or WW)
+
+-   basal_diameter_mm: Numeric, basal diameter in millimetres of
+    barnacle in photograph
+
+-   Experimental block in which tile was located (same as new_block in
+    SVSWS_tilesetup.csv)
+
+-   number: Number of tile identifying it within the experimental block
+    (same as new_block in SVSWS_tilesetup.csv)
+
+-   status: Character factor, either "alive" or "dead" depending upon
+    whether the measured barnacle was alive or dead at the time the
+    photograph was taken.
 
 **SVSWS_surveys.csv**: Contain all other data resulting from visual
 surveys of tile surfaces date:
