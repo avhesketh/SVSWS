@@ -137,34 +137,37 @@ cta <- ggplot(bray.plot.2, aes(x = dbRDA1, y =dbRDA2, xend = x.end, yend = y.end
   scale_color_manual(values = pal.trt) +
   labs(lty = "Treatment", col = "Treatment") +
   theme_classic() +
-  theme(axis.text = element_text(size = 12),
-        axis.title= element_text(size = 14),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 14)) +
+  theme(axis.text = element_text(size = 8),
+        axis.title= element_text(size = 10),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 10)) +
   # here and below, will add in points of interest manually with labels
   geom_point(data=bray.plot.2 %>% filter(survey_no ==1), col = "black", pch = 1, size = 3,
              stroke = 1) +
-  annotate("point", y = -0.9, x = -1.9, pch = 1, size = 3) +
-  annotate("text", y = -0.9, x = -1.4, label = "April 2019 (start y1)", size = 4) +
+  annotate("point", y = -1.3, x = -1.7, pch = 1, size = 3) +
+  annotate("text", y = -1.3, x = -0.91, label = "April 2019 (start y1)", size = 4) +
   geom_point(data=bray.plot.2 %>% filter(survey_no ==8), col = "black", pch = 0, size = 3,
              stroke = 1) +
-  annotate("point", y = -1.05, x = -1.9, pch = 0, size = 3) +
-  annotate("text", y = -1.05, x = -1.52, label = "October 2019", size = 4) +
+  annotate("point", y = -1.45, x = -1.7, pch = 0, size = 3) +
+  annotate("text", y = -1.45, x = -1.12, label = "October 2019", size = 4) +
   geom_point(data=bray.plot.2 %>% filter(survey_no ==10), col = "black", pch = 2, size = 3,
              stroke = 1) +
-  annotate("point", y = -1.2, x = -1.9, pch = 2, size = 3) +
-  annotate("text", y = -1.2, x = -1.4, label = "April 2020 (start y2)", size = 4) +
+  annotate("point", y = -1.6, x = -1.7, pch = 2, size = 3) +
+  annotate("text", y = -1.6, x = -0.91, label = "April 2020 (start y2)", size = 4) +
   geom_point(data=bray.plot.2 %>% filter(survey_no == 14), col = "black", pch = 5, size = 3,
              stroke = 1) +
-  annotate("point", y = -1.35, x = -1.9, pch = 5, size = 3) +
-  annotate("text", y = -1.35, x = -1.47, label = "September 2020", size = 4) +
+  annotate("point", y = -1.75, x = -1.7, pch = 5, size = 3) +
+  annotate("text", y = -1.75, x = -1.02, label = "September 2020", size = 4) +
   geom_point(data=bray.plot.2 %>% filter(survey_no == 15), aes(x = x.end, y = y.end),
              col = "black", pch = 13, size = 3,
              stroke = 1) +
-  annotate("point", y = -1.5, x = -1.9, pch = 13, size = 3) +
-  annotate("text", y = -1.5, x = -1.39, label = "February 2021 (end)", size = 4)
+  annotate("point", y = -1.9, x = -1.7, pch = 13, size = 3) +
+  annotate("text", y = -1.9, x = -0.88, label = "February 2021 (end)", size = 4) +
+  xlim(c(-2.5,1.5)) +
+  coord_equal()
 cta
 
+
 # save plot
-ggsave(cta, filename = "./figures/FigA10.png",dpi = 1000, width = 3.5, height = 2.5, units = "in",scale = 2)
+ggsave(cta, filename = "./figures/FigS13.png",dpi = 1000, width = 3.5, height = 2.5, units = "in",scale = 2)
 

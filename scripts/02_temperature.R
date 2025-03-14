@@ -5,7 +5,7 @@
 # Load packages
 pkgs <- c("tidyverse","lubridate","lme4", "lmerTest", "car", "stringi", 
           "DHARMa", "patchwork", "glmmTMB", "plotrix", "emmeans",
-          "ggnewscale")
+          "ggnewscale", "mice", "ncdf4", "sjmisc")
 lapply(pkgs, library, character.only = TRUE)
 rm(pkgs)
 
@@ -182,7 +182,7 @@ daylight_hours_pdt <- read_csv("./raw_data/design/SVSWS_daylight_hours_pst.rtf",
 daylight_tides <- tides %>% 
   left_join(daylight_hours_pdt) %>% 
   filter(date_time > sunrise_datetime & date_time < sunset_datetime) %>% 
-  select(date_time, date, tide_height, min_tide)
+  select(date_time, date, tide_height)
 
 # We approximated tile heights based on the tide height when temperatures drop 
 # as tides rise during peak summertime low tides (averaged over three tides)
@@ -196,114 +196,193 @@ tile_heights <- read_csv("./raw_data/design/SVSWS_tilelevels.csv") %>%
 # define date when treatments swapped from y1 to y2 treatments
 swap_date <- ymd_hms("2020-04-03 17:00:00")
 
-# filter temperature data that satisfy our requirements
-daily_temps <- ibutton_clean %>% 
-  # if date is before treatment swap date, then the "active" treatment is that of y1
-  # else it is that of y2
-  mutate(treatment = if_else(date_time < swap_date, trt_y1, trt_y2)) %>% 
-  mutate(period = if_else(date_time < swap_date, "Year 1", "Year 2")) %>% 
-  # only retain those temperatures collected during daytime low tides
-  right_join(daylight_tides) %>% 
-  left_join(tile_heights) %>% 
-  # and only retain temperatures collected when water levels falls below level of the tile
-  filter(date > "2019-06-06" & tide_height < tile_level) %>% 
-# retain only data collected between 15 June and 31 August of each year
-  filter(is.na(temp) == F)  %>% 
-  select(-tide_height) %>% 
-  filter(date >= "2019-06-01" & date < "2019-09-01" |
-           date >= "2020-06-01" & date < "2020-09-01") %>% 
-# some loggers, on inspection of data and residuals plots, seem to have malfunctioned. REMOVE these data
-  filter(((block == "A" & number == "5" & date >= "2019-07-11" & date <= "2019-10-18") |
-         (block == "A" & number =="3" & date >= "2020-06-04" & date <= "2020-08-13") |
-         (block == "B" & number == "7" & date >= "2019-07-16" & date <= "2019-08-14")) == F)
+###########################
+# Multiple imputation of temperature data
 
-# mean daily temperatures
-mean_daily <- daily_temps %>% 
-  group_by(treatment, date, period, block, number) %>% 
-  summarize(mean_dt = mean(temp, na.rm = T)) %>% ungroup()
+# load in clean ibutton data
+temp_data <- read_csv("./clean_data/SVSWS_temp_clean.csv")
 
-# ean daily maximum (MDM) temperatures
-max_daily <- daily_temps %>% 
-  group_by(treatment, date, period, block, number) %>% 
-  summarize(mdt = max(temp, na.rm = T)) %>% ungroup() 
+# subset two loggers from each treatment in each block with most intact temperature trace
+# for imputation plus single rock temp loggers in each block
+subset_impute <- temp_data %>%
+  filter(tile_id %in% c(NA, 1,4,7,8,10,13,15,16,
+                        17,18,21,24,25,29,30,32,
+                        36,37,38,40,41,42,46,47,
+                        52,53,54,55,57,59,63,64,
+                        68,70,71,73,74,76,77,79,
+                        81,83,84,85,86,87,88,91)) %>% 
+  filter(is.na(new_block) == F) %>% 
+  dplyr::select(new_block, new_no, trt_y1, trt_y2, date_time, temp) %>% 
+  # add explicit NA data where missing for certain time/date/tile combinations
+  complete(date_time, nesting(new_block, new_no, trt_y1, trt_y2), 
+           fill = list(temp = NA)) %>% 
+  # create separating variable for pre-treatment-swap date (Year 1) and post- (Year 2)
+  mutate(period = if_else(date_time < swap_date, "Year 1", "Year 2"),
+         date = date(date_time))
 
-# residual MDM temperatures
-deviance <- max_daily %>% 
-  group_by(date, period) %>% 
-  mutate(grand_mean = mean(mdt)) %>% ungroup() %>% 
-  group_by(treatment, date, period, block, number) %>% 
-  summarize(residual = mdt - grand_mean)
+# year one data to impute
+impute_year1 <- subset_impute %>% 
+  filter(period == "Year 1") %>% 
+  dplyr::select(-trt_y2)
 
-# absolute maximum temperatures
-absolute_max <- daily_temps %>% 
-  group_by(treatment, period, block, number) %>% 
-  summarize(max = max(temp, na.rm = T))
+# year two data to impute
+impute_year2 <- subset_impute %>% 
+  filter(period == "Year 2") %>% 
+  dplyr::select(-trt_y1)
 
+# read in hourly surface temperature data from ERA5 satellite
+# to use as an auxiliary variable
+data <- nc_open("./raw_data/design/satellite_temps.nc")
+print(data)
+attributes(data$var)
+attributes(data$dim)
+time <- ncvar_get(data, "valid_time") 
+temp_array <- ncvar_get(data, "t2m")
+
+# extract meaningful variables into single dataframe
+temp_time <- time %>% cbind(temp_array) %>% 
+  tibble %>% 
+  mutate(date_time = as.POSIXct(time, origin = "1970-01-01", tz = "GMT"),
+         temp_satellite_C = as.numeric(temp_array - 273.15)) %>% 
+  dplyr::select(date_time, temp_satellite_C)
+
+# join auxiliary surface temperature data with tile temperatures to impute
+impute_y1 <- impute_year1 %>% left_join(temp_time)
+impute_y2 <- impute_year2 %>% left_join(temp_time)
+
+# now impute! note that these take a long time
+imputed <- mice(impute_y1, m = 5, method = "cart")
+imputed_2 <- mice(impute_y2, m = 5, method = "cart")
+
+# merge the five imputation sets into one (take the mean)
+imputed_y1 <- merge_imputations(impute_y1, imputed, impute_y1) %>% 
+  mutate(treatment = trt_y1, period = "Year 1") %>% 
+  ungroup() %>% 
+  dplyr::select(-trt_y1, -temp)
+
+# do the same for year two
+imputed_y2 <- merge_imputations(impute_y2, imputed_2, impute_y2) %>% 
+  mutate(treatment = trt_y2, period = "Year 2") %>% 
+  ungroup() %>% 
+  dplyr::select(-trt_y2, -temp)
+
+# put these imputed datasets together
+all_imputed <- imputed_y1 %>% 
+  full_join(imputed_y2)
+
+# write imputed data to csv file
+write_csv(all_imputed, "./clean_data/SVSWS_temp_imputed.csv")
 
 ##########################
-# Modeling residual MDM temperature
+# Modeling mean daily maximum temperature
 
+all_imputed <- read_csv("./clean_data/SVSWS_temp_imputed.csv")
+
+# isolate the imputed temperature data for analysis
+for_analysis <- all_imputed %>% 
+  right_join(daylight_tides) %>% 
+  left_join(tile_heights) %>% 
+  rename(block = new_block, number = new_no) %>% 
+  # and only retain temperatures collected when water levels falls below level of the tile
+  filter(tide_height < tile_level) %>% 
+  # retain only data collected between 15 June and 31 August of each year
+  filter(date >= "2019-05-01" & date < "2019-09-01" |
+           date >= "2020-05-01" & date < "2020-09-01")
+
+# mean daily maximum (MDM) temperatures
+max_daily <- for_analysis %>% 
+  group_by(treatment, date, period, block, number) %>% 
+  summarize(mdt = max(temp_imp, na.rm = T)) %>% ungroup() %>% 
+  mutate(tile_id = paste(block,number)) %>% 
+  mutate(julian = yday(date))
+
+# mean daily temperatures
+mean_daily <- for_analysis %>% 
+  group_by(treatment, date, period, block, number) %>% 
+  summarize(mean_dt = mean(temp_imp, na.rm = T)) %>% ungroup() %>% 
+  mutate(tile_id = paste(block,number))
 
 # Model Year 1 and Year 2 temperatures separately due to changes in design from
 # 2 (C and W) to 4 (CC, CW, WC, WW) treatments (+ bedrock)
 
 # Filter for the first year of temperature data only and model
-trt.y1 <- deviance %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment))
-trt.y1 %>% group_by(treatment) %>% summarize(mean = mean(residual),
-                                             se = std.error(residual))
+trt.y1 <- max_daily %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment),
+                                                              date = as.factor(date),
+                                                              julian = as.numeric(julian),
+                                                              tile_id = as.factor(tile_id))
+
+# print mean and standard error for each treatment
+trt.y1 %>% group_by(treatment) %>% summarize(mean = mean(mdt),
+                                             se = std.error(mdt),
+                                             sd = sd(mdt)) 
 
 # model as a function of treatment and include random effect for block and tile id
-mod.dev1 <- lmer(residual ~ treatment + (1|block/number), data = trt.y1)
-plot(mod.dev1)
-summary(mod.dev1)
-anova(mod.dev1, type = 2)
+mod.mdm1 <- glmmTMB(mdt ~ treatment + (1|tile_id) + (1|date) + ar1(date-1|tile_id),
+                data = trt.y1)
+
+acf(residuals(mod.mdm1)) # slight pattern; looks like it is correlated with tides
+# however, much improved from version with no autocorrelation structure
+
+plot(simulateResiduals(mod.mdm1)) # model is not perfect; KS test & homogeneity violated + outliers for cold May, 
+# but the number of observations is very large ... proceed as specified!
+
+plot(residuals(mod.mdm1)) # warm and cool treatments have higher dispersion than bedrock
+summary(mod.mdm1)
+Anova(mod.mdm1, type = 2)
 
 # Use emmeans for pairwise comparisons of treatments
-emm1 <- emmeans(mod.dev1, "treatment")
+emm1 <- emmeans(mod.mdm1, "treatment")
 contrast(emm1, method = "pairwise", adjust = "tukey")
 
-# Filter for the second year of temperature data only and model
-trt.y2 <- deviance %>% filter(period == "Year 2") %>% mutate(treatment = factor(treatment))
-trt.y2 %>% group_by(treatment) %>% summarize(mean = mean(residual),
-                                             se = std.error(residual))
-mod.dev2 <- lmer(residual ~ treatment + (1|block/number), data = trt.y2)
-plot(mod.dev2)
-summary(mod.dev2)
-anova(mod.dev2, type = 2)
 
-emm2 <- emmeans(mod.dev2, "treatment")
+# Filter for the second year of temperature data only and model
+trt.y2 <- max_daily %>% filter(period == "Year 2") %>% mutate(treatment = factor(treatment),
+                                                              date = as.factor(date))
+trt.y2 %>% group_by(treatment) %>% summarize(mean = mean(mdt),
+                                             se = std.error(mdt),
+                                             sd = sd(mdt))
+
+mod.mdm2 <- glmmTMB(mdt ~ treatment + (1|tile_id) + (1|date) + ar1(date-1|tile_id), 
+                 data = trt.y2)
+
+plot(simulateResiduals(mod.mdm2))
+plot(residuals(mod.mdm2)) # model is not perfect; KS test & homogeneity violated, 
+# but the number of observations is very large ... proceed as specified!
+
+summary(mod.mdm2)
+Anova(mod.mdm2, type = 2)
+
+emm2 <- emmeans(mod.mdm2, "treatment")
 contrast(emm2, method = "pairwise", adjust = "tukey")
 
 # here, generating labels for eventual plot of MDM temperature based on 
 # significant differences by emmeans comparisons
-labels.res <- as.data.frame(cbind(
+labels.mdt <- as.data.frame(cbind(
   c("C","W","Rock", "CC","CW","WC","WW","Rock"),
   c("Summer 2019","Summer 2019","Summer 2019",
     "Summer 2020", "Summer 2020", "Summer 2020", 
     "Summer 2020", "Summer 2020"),
-  c(1.9,4.5,4.5,1.9,4.3,1.9,4.3,4.3),
+  c(31,32.1,32.1,30,32.1,30,32.1,30),
   c("a","b","b","c","d","c","d","cd"))
 )
-colnames(labels.res) <- c("treatment","period", "mean_res","label")
-labels.res <- labels.res %>% mutate(mean_res = as.numeric(mean_res))
+colnames(labels.mdt) <- c("treatment","period", "mean_mdt","label")
+labels.mdt <- labels.mdt %>% mutate(mean_mdt = as.numeric(mean_mdt))
 
 # examining at overall mean ± SD for treatments and bedrock for reporting
-overall_mean <-  daily_temps %>% 
+overall_mean <-  for_analysis %>% 
   group_by(treatment, date, period, block, number) %>% 
-  summarize(mdt = max(temp, na.rm = T)) %>% ungroup() %>% 
-  mutate(treatment = as.factor(treatment)) %>% 
+  summarize(mdt = max(temp_imp, na.rm = T)) %>% ungroup() %>% 
   group_by(treatment, period) %>% 
   summarize(mmdt = mean(mdt), sd_mdt = sd(mdt)) %>% ungroup()
 
-
 ###########################
-# Visualizing residual MDM temperatures in each treatment
+# Visualizing MDM temperatures in each treatment
 
-# generate dataframe for mdm deviance plot
-av_deviance <- deviance %>% 
+# generate dataframe for mean daily maximum temperature plot
+av_mdt <- max_daily %>% 
   group_by(treatment, period, block, number) %>% 
-  summarize(mean_res = mean(residual, na.rm = T), se_res = std.error(residual),
-            sd_res = sd(residual)) %>% 
+  summarize(mean_mdt = mean(mdt, na.rm = T), se_mdt = std.error(mdt),
+            sd_mdt = sd(mdt)) %>% 
   mutate(treatment = factor(treatment, levels = c("C", "W", "CC","CW","WC","WW", "Rock")),
          period = if_else(period == "Year 1", "Summer 2019", "Summer 2020"))
 
@@ -312,168 +391,99 @@ pal.trt <- c("#014779", "#EE4B2B", "#014779", "#7985CB", "#9C0098", "#EE4B2B", "
 pch.block <- c(1,2,3,4,5,6)
 
 # maximum daily temperature plot
-res_plot <- ggplot(data = av_deviance, aes(x = treatment, y = mean_res, col = treatment)) +
+mdm_plot <- ggplot(data = av_mdt, aes(x = treatment, y = mean_mdt, col = treatment)) +
   geom_boxplot(outlier.color = NA, lwd = 0.4) +
   geom_jitter(aes(pch = block), height = 0, width = 0.25, alpha = 0.8, size = 0.8,
               show.legend = FALSE) +
   scale_color_manual(values = pal.trt) +
   scale_shape_manual(values = pch.block) +
-  labs(y = "Residual MDM temperature (ºC)", 
+  labs(y = "MDM temperature (ºC)", 
        x = "Treatment",
        col = "Treatment",
        pch = "Block") +
   theme_classic() +
   theme(legend.position = "none") +
   facet_wrap(~period, scales = "free_x") +
-  theme(plot.tag = element_text(face = "bold"),
+  theme(
         strip.text = element_text(size = 10),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8),
         legend.position = "none") +
-  geom_hline(aes(yintercept = 0), lty = "dashed") +
-  geom_text(data = labels.res, aes(label = label), size = 3, col = "black", fontface = "bold")
-res_plot
+  geom_text(data = labels.mdt, aes(label = label), size = 3, col = "black", fontface = "bold")
+mdm_plot
 
-ggsave(res_plot, filename = "./figures/Fig1.pdf", device = cairo_pdf, 
-       width = 8.5, height = 9, units = "cm", dpi = 500)
+ggsave(mdm_plot, filename = "./figures/Fig2.pdf", device = cairo_pdf, 
+       width = 8.5, height = 9, units = "cm", dpi = 600)
 
 
 ##########################
 # ADDITIONAL MODELS AND VISUALIZATIONS OF TEMPERATURE DATA (SEE APPENDIX 2)
 
-# MDM temperatures (not residuals) in each treatment
+# Mean temperatures
 
-# Model of maximum daily temperature in y1
-
-# Isolate appropriate data to model (collected in Year 1 of the experiment)
-trt.y1 <- max_daily %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment))
-
-trt.y1 %>% group_by(treatment) %>% summarize(mean = mean(mdt),
-                                             sd = sd(mdt))
-
-# Include main effects of treatment
-mod.amdt1 <- lmer(mdt ~ treatment + 
-                    # nested random effect for individual tile within block
-                    # and for date to account for repeated measures
-                    (1|block/number) + (1|date),
-                  data = trt.y1)
-
-# visualize residuals
-plot(mod.amdt1) # violation of normality in residuals
-
-# model summary and anova (Type I)
-summary(mod.amdt1)
-anova(mod.amdt1, type = 1)
-
-# repeat for model in second year
-trt.y2 <- max_daily %>% filter(period == "Year 2") %>% mutate(treatment = factor(treatment))
-
-trt.y2 %>% group_by(treatment) %>% summarize(mean = mean(mdt),
-                                          sd = sd(mdt))
-
-# model does not require additional covariates
-mod.amdt2 <- lmer(mdt ~ treatment +
-                    (1|block/number) + (1|date),
-                  data = trt.y2)
-
-plotResiduals(mod.amdt2)
-plot(mod.amdt2)
-summary(mod.amdt2)
-anova(mod.amdt2, type = 1)
-
-# look at significance of contrasts between treatment groups using emmeans=
-emm1 <- emmeans(mod.amdt1, "treatment")
-contrast(emm1, method = "pairwise", adjust = "tukey")
-
-emm2 <- emmeans(mod.amdt2, "treatment")
-contrast(emm2, method = "pairwise", adjust = "tukey")
-
-# Mean temperature modeling (Appendix 2)
-
-trt.y1 <- mean_daily %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment))
+trt.y1 <- mean_daily %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment),
+                                                               date = factor(date),
+                                                               tile_id = paste(block, number))
 
 trt.y1 %>% group_by(treatment) %>% summarize(mean = mean(mean_dt),
                                              sd = sd(mean_dt))
 
-mod.meant1 <- lmer(mean_dt ~ treatment +
-                        (1|block/number) + (1|date),
-                      data = trt.y1)
+mod.meant1 <- glmmTMB(mean_dt ~ treatment + (1|tile_id) + (1|date) + ar1(date-1|tile_id),
+                   data = trt.y1)
 
-plot(mod.meant1)
+plot(simulateResiduals(mod.meant1))
 summary(mod.meant1)
-anova(mod.meant1, type = 1)
+Anova(mod.meant1, type = 2)
+
+emm1 <- emmeans(mod.meant1, "treatment")
+contrast(emm1, method = "pairwise", adjust = "tukey")
 
 trt.y2 <- mean_daily %>% filter(period == "Year 2") %>% mutate(treatment = factor(treatment),
-                                                               julian_day = yday(date))
+                                                              date = factor(date),
+                                                              tile_id = paste(block, number))
 
 trt.y2 %>% group_by(treatment) %>% summarize(mean = mean(mean_dt),
                                              sd = sd(mean_dt))
 
-mod.meant2 <- lmer(mean_dt ~ treatment +  
-                        (1|block/number) + (1|date), 
+mod.meant2 <- glmmTMB(mean_dt ~ treatment + (1|tile_id) + (1|date) + ar1(date-1|tile_id),
                       data = trt.y2)
 
-plot(mod.meant2)
+plot(simulateResiduals(mod.meant2))
 summary(mod.meant2)
-anova(mod.meant2, type = 1)
-emm_options(opt.digits = FALSE)
-emm1 <- emmeans(mod.meant1, "treatment")
-contrast(emm1, method = "pairwise", adjust = "tukey")
+Anova(mod.meant2, type = 2)
+
 
 emm2 <- emmeans(mod.meant2, "treatment")
 contrast(emm2, method = "pairwise", adjust = "tukey")
 
-# Absolute maximum temperature modeling
-
-trt.y1 <- absolute_max %>% filter(period == "Year 1") %>% mutate(treatment = factor(treatment))
-
-trt.y1 %>% group_by(treatment) %>% summarize(mean_max = mean(max),
-                                             sd_max = sd(max))
-
-mod.amt1 <- lmer(max ~ treatment +
-                     (1|block),
-                   data = trt.y1)
-
-plot(mod.amt1)
-summary(mod.amt1)
-anova(mod.amt1, type = 1)
-
-trt.y2 <- absolute_max %>% filter(period == "Year 2") %>% mutate(treatment = factor(treatment))
-
-trt.y2 %>% group_by(treatment) %>% summarize(mean_max = mean(max),
-                                                 sd_max = sd(max))
-
-mod.amt2 <- lmer(max ~ treatment +  
-                     (1|block), 
-                   data = trt.y2)
-
-plot(mod.amt2)
-summary(mod.amt2)
-anova(mod.amt2, type = 1)
-
-
-emm1 <- emmeans(mod.amt1, "treatment")
-contrast(emm1, method = "pairwise", adjust = "tukey")
-
-emm2 <- emmeans(mod.amt2, "treatment")
-contrast(emm2, method = "pairwise", adjust = "tukey")
+# here, generating labels for eventual plot of MDM temperature based on 
+# significant differences by emmeans comparisons
+labels.meant <- as.data.frame(cbind(
+  c("C","W","Rock", "CC","CW","WC","WW","Rock"),
+  c("Summer 2019","Summer 2019","Summer 2019",
+    "Summer 2020", "Summer 2020", "Summer 2020", 
+    "Summer 2020", "Summer 2020"),
+  c(24.3,24.6,24.6,23.2,24.6,23.2,24.6,23.2),
+  c("a","b","b","c","de","c","e","cd"))
+)
+colnames(labels.meant) <- c("treatment","period", "av_mdt","label")
+labels.meant <- labels.meant %>% mutate(av_mdt = as.numeric(av_mdt))
 
 
 # Fig A4
 
-ibutton_clean <- read_csv("./clean_data/SVSWS_temp_clean.csv")
+ibutton_traces <- read_csv("./clean_data/SVSWS_temp_imputed.csv")
 
 # Here, we visualize temperature traces for the whole experiment
 
 # Generate a summary dataframe for plotting with mean and maximum daily temperatures
-temp_summary <- ibutton_clean %>% 
-  mutate(current_trt = if_else(date_time < "2020-04-03", trt_y1, trt_y2)) %>% 
-  group_by(current_trt, date) %>% 
-  summarise(mean_temp = mean(temp, na.rm = TRUE), max_temp = max(temp, na.rm = T)) %>% 
-  mutate(overlay = factor(if_else(current_trt %in% c("W","CW","WW"),"Warm",
-                                  if_else(current_trt %in% c("C","WC","CC"), "Cool", "Rock")),
+temp_summary <- ibutton_traces %>% 
+  group_by(treatment, date) %>% 
+  summarise(mean_temp = mean(temp_imp, na.rm = TRUE), max_temp = max(temp_imp, na.rm = T)) %>% 
+  mutate(overlay = factor(if_else(treatment %in% c("W","CW","WW"),"Warm",
+                                  if_else(treatment %in% c("C","WC","CC"), "Cool", "Rock")),
                           levels = c("Cool", "Warm", "Rock")),
-         current_trt = factor(current_trt, levels = c("C","CC","CW","W","WW","WC","Rock")))
+         treatment = factor(treatment, levels = c("C","CC","CW","W","WW","WC","Rock")))
 
 # define color palette
 pal.traces <- c("#014779", "#014779","#7985CB", "#EE4B2B","#EE4B2B","#9C0098","grey50")
@@ -487,7 +497,7 @@ surveys <- read_csv("./raw_data/design/SVSWS_survey_times.csv") %>%
   mutate(important = if_else(survey_no %in% c(8,10,14,16), "y","n"))
 
 # First panel: Average maximum temperature
-FigS4a <- ggplot(aes(y = max_temp, x = date, colour = current_trt), 
+FigS4a <- ggplot(aes(y = max_temp, x = date, colour = treatment), 
                         data = temp_summary) +
   geom_line(lwd = 0.5, alpha = 0.7) +
   facet_grid(rows = vars(overlay)) +
@@ -500,11 +510,13 @@ FigS4a <- ggplot(aes(y = max_temp, x = date, colour = current_trt),
   theme(panel.grid.major.y = element_line(linewidth= 0.3),
         panel.grid.minor.y = element_line(linewidth = 0.2),
         plot.tag = element_text(face = "bold")) +
-  scale_x_date(date_labels = "%Y-%m", breaks=breaks)
+  scale_x_date(date_labels = "%Y-%m", breaks=breaks) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey20", lwd = 0.5) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "#B86622", lty = "dashed", lwd = 0.5)
 FigS4a
 
 # Second panel: Mean daily temperature
-FigS4b <- ggplot(aes(y = mean_temp, x = date, colour = current_trt), 
+FigS4b <- ggplot(aes(y = mean_temp, x = date, colour = treatment), 
                          data = temp_summary) +
   geom_line(lwd = 0.5, alpha = 0.7) +
   facet_grid(rows = vars(overlay)) +
@@ -517,18 +529,19 @@ FigS4b <- ggplot(aes(y = mean_temp, x = date, colour = current_trt),
   theme(panel.grid.major.y = element_line(linewidth= 0.3),
         panel.grid.minor.y = element_line(linewidth= 0.2),
         plot.tag = element_text(face = "bold")) +
-  scale_x_date(date_labels = "%Y-%m", breaks=breaks)
+  scale_x_date(date_labels = "%Y-%m", breaks=breaks) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey20", lwd = 0.5) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "#B86622", lty = "dashed", lwd = 0.5)
 FigS4b
 
 # A3C: Example trace showing treatment effect over one summer low tide series
 # Isolate one fragment of temperature data
-sample_data <- ibutton_clean %>% 
+sample_data <- ibutton_traces %>% 
   filter(date %in% c("2019-07-28","2019-07-29",
                             "2019-07-30","2019-07-31","2019-08-01", "2019-08-02", "2019-08-03")) %>% 
-  mutate(current_trt = if_else(date_time < "2020-04-03 16:00:00", 
-                               trt_y1, if_else(trt_y2 == "Rock", trt_y2,substr(trt_y2,2,2)))) %>% 
-  group_by(current_trt, date_time) %>% 
-  summarise(mean_temp = mean(temp, na.rm = TRUE), mean_shore_level = mean(new_shore_level))
+  left_join(tile_heights) %>% 
+  group_by(treatment, date_time) %>% 
+  summarise(mean_temp = mean(temp_imp, na.rm = TRUE), mean_shore_level = mean(tile_level))
 
 # Isolate analogous chunk of tide height data
 tides_trace <- tides %>% 
@@ -539,12 +552,12 @@ tides_trace <- tides %>%
 # Join together the data, indicating when the tide is above the tiles and vice versa
 sample_data2 <- sample_data %>% left_join(tides_trace) %>% 
   mutate(above_below = if_else(tide_height >= mean_shore_level, "below", "above")) %>% 
-  mutate(current_trt = factor(current_trt, levels = c("C","W","Rock")))
+  mutate(treatment = factor(treatment, levels = c("C","W","Rock")))
 
 # Third panel
 FigS4c <- ggplot(aes(x = date_time), data = sample_data2) +
   geom_tile(aes(y = 20, height = 40, fill = above_below), alpha = 0.2) +
-  geom_line(aes(y = mean_temp, colour = current_trt), lwd = 0.5, show.legend = F) +
+  geom_line(aes(y = mean_temp, colour = treatment), lwd = 0.5, show.legend = F) +
   theme_classic() +
   labs(x = "Date", y = "Average hourly temperature (˚C)", colour = "Treatment") +
   scale_colour_manual(values = c("#014779","#EE4B2B","grey50")) +
@@ -566,18 +579,7 @@ png("./figures/FigS4.png", width = 10, height = 10, units = "in",
 FigS4
 dev.off()
 
-# Note that some data are missing for rock temperatures between 19 July to 19 August 2020.
-# iButtons were pre-programmed incorrectly, and started recording too early.
-
-# Max & mean temperature plots (Appendix 1: Fig. A5)
-
-# generate dataframe for mean daily maximum temperature plot
-av_mdt <- max_daily %>% 
-  group_by(treatment, period, block, number) %>% 
-  summarize(mean_mdt = mean(mdt, na.rm = T), se_mdt = std.error(mdt),
-            sd_mdt = sd(mdt)) %>% 
-  mutate(treatment = factor(treatment, levels = c("C", "W", "CC","CW","WC","WW", "Rock")),
-         period = if_else(period == "Year 1", "Summer 2019", "Summer 2020"))
+# Mean temperature plots (Appendix 1: Fig. A5)
 
 # generate dataframe for mean daily temperature plot
 av_meandt <- mean_daily %>% 
@@ -587,41 +589,15 @@ av_meandt <- mean_daily %>%
   mutate(treatment = factor(treatment, levels = c("C", "W", "CC","CW","WC","WW", "Rock")),
          period = if_else(period == "Year 1", "Summer 2019", "Summer 2020"))
 
-# generate dataframe for absolute maximum temperature plot
-max_plot <- absolute_max %>% 
-  mutate(treatment = factor(treatment, levels = c("C", "W", "CC","CW","WC","WW", "Rock")),
-         period = if_else(period == "Year 1", "Summer 2019", "Summer 2020"))
-
 # define palettes for colour and shape for plots
 pal.trt <- c("#014779", "#EE4B2B", "#014779", "#7985CB", "#9C0098", "#EE4B2B", "grey50")
 pch.block <- c(1,2,3,4,5,6)
 
-# Maximum daily temperature (not residuals) plot
-
-
-# Raw (not residual) mean daily maximum temperature plot
-FigS5a <- ggplot(data = av_mdt, aes(x = treatment, y = mean_mdt, col = treatment)) +
-  geom_boxplot(outlier.color = NA, lwd = 0.4) +
-  geom_jitter(aes(pch = block), height = 0, width = 0.25, alpha = 0.8, size = 0.8,
-              show.legend = FALSE) +
-  theme(strip.text = element_text(size = 14)) +
-  scale_color_manual(values = pal.trt) +
-  scale_shape_manual(values = pch.block) +
-  labs(y = "Mean daily max temperature (ºC)", 
-       x = "Treatment",
-       col = "Treatment",
-       pch = "Block") +
-  theme_classic() +
-  facet_wrap(~period, scales = "free_x") +
-  theme(plot.tag = element_text(face= "bold"))
-FigS5a
-
-# mean daily tempearture plot
-FigS5b <- ggplot(aes(x = treatment, y = av_mdt, col = treatment),
+# mean daily temperature plot
+FigS5 <- ggplot(aes(x = treatment, y = av_mdt, col = treatment),
                    data = av_meandt) +
   geom_boxplot(outlier.color = NA, lwd = 0.4) +
   geom_jitter(aes(pch = block), alpha = 0.8, height = 0, size = 0.8, show.legend = F) +
-  theme(strip.text = element_text(size = 14)) +
   scale_color_manual(values = pal.trt) +
   scale_shape_manual(values = pch.block) +
   labs(y = "Mean temperature (ºC)", 
@@ -630,33 +606,12 @@ FigS5b <- ggplot(aes(x = treatment, y = av_mdt, col = treatment),
        pch = "Treatment") +
   theme_classic() +
   facet_wrap(~period, scales = "free_x") +
-  theme(plot.tag = element_text(face= "bold"))
-FigS5b
-
-# absolute maximum temperature
-FigS5c <- ggplot(aes(x = treatment, y = max, col = treatment),
-                 data = max_plot) +
-  geom_boxplot(outlier.color = NA, lwd = 0.4) +
-  geom_jitter(aes(pch = block), alpha = 0.8, height = 0, size = 0.8, show.legend = F) +
-  theme(strip.text = element_text(size = 14)) +
-  scale_color_manual(values = pal.trt) +
-  scale_shape_manual(values = pch.block) +
-  labs(y = "Maximum temperature (ºC)", 
-       x = "Treatment",
-       col = "Treatment",
-       pch = "Treatment") +
-  theme_classic() +
-  facet_wrap(~period, scales = "free_x") +
-  theme(plot.tag = element_text(face= "bold"))
-FigS5c
-
-# assemble multipanel plot
-FigS5 <- (FigS5a / FigS5b/ FigS5c) + 
-  plot_annotation(tag_levels = "a", tag_prefix = "(", tag_suffix = ")") +
-  plot_layout(guides = "collect")
+  geom_text(data = labels.meant, aes(label = label), size = 3, col = "black", fontface = "bold") +
+  theme(legend.position = "none") 
+FigS5
 
 # Save figure
-png("./figures/FigS5.png", res = 700, width = 6, height = 9, units = "in")
+png("./figures/FigS5.png", res = 700, width = 6, height = 4, units = "in")
 FigS5
 dev.off()
 

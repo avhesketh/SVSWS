@@ -26,12 +26,12 @@ grazers_y2 <- surveys %>%
   mutate(grazer = if_else(species %in% limpets, "Lottia spp.", "Littorina spp."),
       timesincestart = difftime(date, ymd("2019-04-12"), units = c("weeks")),
          count = as.integer(count)) %>% 
-  group_by(date, treatment, grazer, timesincestart,block, tile_id, trt_y1, trt_y2, original_herb_trt) %>% 
+  group_by(date, treatment, grazer, timesincestart,block, tile_id, trt_y1, trt_y2, second_herb_trt) %>% 
   # calculate total grazer abundance for limpets and littorines (across species)
   summarise(total_grazers = sum(count)) %>% ungroup() %>% 
   # only retain tiles that continued into year 2 (some were damaged and excluded early in year 2)
   filter((treatment %in% c("C","W")) == F) %>% 
-  mutate(original_herb_trt = if_else(is.na(original_herb_trt), "control", original_herb_trt), 
+  mutate(herb_trt = if_else(is.na(second_herb_trt), "control", "grazer"), 
          day = yday(date), treatment = factor(treatment), block = factor(block),
          tile_id = factor(tile_id)) %>% 
   mutate(treatment = factor(treatment, levels = c("CC", "CW", "WC", "WW")))
@@ -41,58 +41,103 @@ grazers_y2 <- surveys %>%
 
 grazers_y2 <- grazers_y2 %>% mutate(date = factor(date))
 
-# Model for limpet abundance
-limpet.abund <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + date +
-                               (1|block), data = grazers_y2 %>% filter(date %in% c("2020-09-14","2021-02-24") &
-                                                                         grazer == "Lottia spp."),
-                             family = nbinom1())
-limpet.abund.herb <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + date + original_herb_trt +
-                               (1|block), data = grazers_y2 %>% filter(date %in% c("2020-09-14","2021-02-24") &
-                                                                        grazer == "Lottia spp."),
-                             family = nbinom1())
+# Model for limpet abundance post-summer
 
-AIC(limpet.abund, limpet.abund.herb) # herbivore term does not improve fit
-
-plot(simulateResiduals(limpet.abund))
-summary(limpet.abund)
-Anova(limpet.abund, type = 3)
+limpet.abund.ps.herb <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + herb_trt + 
+                        (1|block), data = grazers_y2 %>% filter(date == "2020-09-14" &
+                                                                  grazer == "Lottia spp."),
+                        family = poisson())
+plot(simulateResiduals(limpet.abund.ps.herb))
+summary(limpet.abund.ps.herb)
+Anova(limpet.abund.ps.herb, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum")) 
+# effect of grazers in y1 not significant; drop this term
 
 
-emm.lott <- emmeans(limpet.abund, specs = c("trt_y1","trt_y2"))
-contrast(emm.lott, method = "pairwise", adjust = "tukey")
+limpet.abund.ps <- glmmTMB(total_grazers ~ trt_y1*trt_y2 +
+                             (1|block), data = grazers_y2 %>% filter(date %in% c("2020-09-14") &
+                                                                       grazer == "Lottia spp."),
+                           family = poisson())
+plot(simulateResiduals(limpet.abund.ps))
+summary(limpet.abund.ps)
+Anova(limpet.abund.ps, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
 
-# Model for littorine abundance
-litt.abund <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + date  
+emm.lott.ps <- emmeans(limpet.abund.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm.lott.ps, method = "pairwise", adjust = "tukey")
+
+
+# limpet abundance in winter
+
+limpet.abund.w <- glmmTMB(total_grazers ~ trt_y1*trt_y2 +
+                          (1|block), data = grazers_y2 %>% filter(date == "2021-02-24" &
+                                                                    grazer == "Lottia spp."),
+                        family = nbinom1())
+
+plot(simulateResiduals(limpet.abund.w))
+summary(limpet.abund.w)
+Anova(limpet.abund.w, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm.lott.w <- emmeans(limpet.abund.w, specs = c("trt_y1","trt_y2"))
+contrast(emm.lott.w, method = "pairwise", adjust = "tukey")
+
+
+# Littorine abundance post-summer
+litt.abund.ps.herb <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + herb_trt
+                              + (1|block), 
+                              data = grazers_y2 %>% filter(date == "2020-09-14" &
+                                                             grazer == "Littorina spp."),
+                              family = nbinom1())
+plot(simulateResiduals(litt.abund.ps.herb))
+summary(litt.abund.ps.herb)
+Anova(litt.abund.ps.herb, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+# grazer manipulation in y1 not significant; drop this term
+
+litt.abund.ps <- glmmTMB(total_grazers ~ trt_y1*trt_y2 
                       + (1|block),
-                      data = grazers_y2 %>% filter(date %in% c("2020-09-14","2021-02-24") &
+                      data = grazers_y2 %>% filter(date == "2020-09-14" &
                                                    grazer == "Littorina spp."),
                       family = nbinom1())
-litt.abund.herb <- glmmTMB(total_grazers ~ trt_y1*trt_y2 + date + original_herb_trt
-                           + (1|block), 
-                           data = grazers_y2 %>% filter(date %in% c("2020-09-14","2021-02-24") &
-                                                          grazer == "Littorina spp."),
+plot(simulateResiduals(litt.abund.ps))
+summary(litt.abund.ps)
+Anova(litt.abund.ps, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm.litt.ps <- emmeans(litt.abund.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm.litt.ps, method = "pairwise", adjust = "tukey")
+
+# Littorine abundance in winter
+litt.abund.w <- glmmTMB(total_grazers ~ trt_y1*trt_y2 
+                      + (1|block),
+                      data = grazers_y2 %>% filter(date == "2021-02-24" &
+                                                     grazer == "Littorina spp."),
                       family = nbinom1())
-AIC(litt.abund, litt.abund.herb) # herbivore term does not improve fit
+plot(simulateResiduals(litt.abund.w))
+summary(litt.abund.w)
+Anova(litt.abund.w, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
-plot(simulateResiduals(litt.abund))
-summary(litt.abund)
-Anova(litt.abund, type = 3)
-
-emm.litt <- emmeans(litt.abund, specs = c("trt_y1","trt_y2"))
-contrast(emm.litt, method = "pairwise", adjust = "tukey")
+emm.litt.w <- emmeans(litt.abund.w, specs = c("trt_y1","trt_y2"))
+contrast(emm.litt.w, method = "pairwise", adjust = "tukey")
 
 
 # create dataframe with significance labels from emmeans comparisons
-labels.3 <- as.data.frame(cbind(
+labels.4a <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
   c(rep(c("CC","CW","WC","WW"),times = 2)),
-  c(rep("Lottia spp.",times = 4), rep("Littorina spp.", times = 4)),
-  c(33,20,20,20, 205,148,148,148),
-  c("a","bc","ac","b","d","e","e","e"))
+  c(20,20,20,20,34,20,20,20),
+  c("a","bc","ab","c","d","de","d","e"))
 )
-colnames(labels.3) <- c("treatment","grazer","total_grazers","label")
-labels.3 <- labels.3 %>% mutate(total_grazers = as.numeric(total_grazers),
-                                grazer = factor(grazer, levels = c("Lottia spp.", "Littorina spp.")))
+colnames(labels.4a) <- c("season","treatment","total_grazers","label")
+labels.4a <- labels.4a %>% mutate(total_grazers = as.numeric(total_grazers),
+                                season = factor(season, levels = c("Post-summer", "Winter")))
+
+labels.4b <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
+  c(rep(c("CC","CW","WC","WW"),times = 2)),
+  c(215,150,150,150, 150, 150,150,150),
+  c("a","b","bc","c","d","de","de","e"))
+)
+colnames(labels.4b) <- c("season","treatment","total_grazers","label")
+labels.4b <- labels.4b %>% mutate(total_grazers = as.numeric(total_grazers),
+                                  season = factor(season, levels = c("Post-summer", "Winter")))
 
 #######################
 # Plotting
@@ -104,42 +149,77 @@ pal.trt.y2 <- c("#014779", "#7985CB","#9C0098", "#EE4B2B")
 
 grazers_keytimes <- grazers_y2 %>% 
   filter(date %in% c("2020-09-14", "2021-02-24")) %>% 
-  mutate(date = if_else(date == "2020-09-14", "Post-summer", "Winter"),
+  mutate(season = if_else(date == "2020-09-14", "Post-summer", "Winter"),
          grazer = factor(grazer, levels = c("Lottia spp.", "Littorina spp.")))
 
-Fig3 <- ggplot(grazers_keytimes, aes(x = treatment, y = total_grazers,
+Fig4a <- ggplot(grazers_keytimes %>% filter(grazer == "Lottia spp."), 
+                aes(x = treatment, y = total_grazers,
                                      col = treatment,
-                                     fill = treatment,
-                                     alpha = date)) +
+                                     alpha = season)) +
   geom_boxplot(size = 0.4, outlier.color = NA) +
-  labs(x = "Treatment", y = "Total abundance", col = "Treatment", pch = "Time of year") +
-  facet_grid(rows = vars(grazer), scales = "free_y") +
+  labs(x = "Treatment", y = expression("Abundance of"~italic("Lottia")~"spp."), col = "Treatment", pch = "Season") +
+  facet_grid(cols = vars(season), scales = "free_y") +
   scale_color_manual(values = pal.trt.y2, guide = "none") +
   scale_fill_manual(values = pal.trt.y2, guide = "none") +
   scale_alpha_manual(values = c(0.4,0)) +
   scale_shape_manual(values = c(16,17)) +
   guides(fill = "none", alpha = "none", shape = guide_legend(override.aes = list(size = 3))) +
-  geom_jitter(size = 0.7, alpha = 1,
-              position = position_jitterdodge(jitter.width = 0.5, 
+  geom_jitter(size = 1, alpha = 0.7,
+              position = position_jitterdodge(jitter.width = 1, 
                                               jitter.height = 0, 
-                                              dodge.width = 0.7), aes(shape = date)) +
+                                              dodge.width = 1), aes(shape = season)) +
   theme_classic() +
   theme(plot.tag = element_text(face = "bold", size = 10),
-        strip.text = element_text(size = 10, face = "italic"),
+        strip.text = element_text(size = 10),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8),
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.position = "top",
         legend.box.margin=margin(-5,-5,-5,-5)) +
-  geom_text(data = labels.3, 
+  geom_text(data = labels.4a, 
             aes(x = treatment, y = total_grazers, label = label), 
-            col = "black", fontface = "bold", size = 2.5, inherit.aes = FALSE) +
+            col = "black", fontface = "bold", size = 3, inherit.aes = FALSE) +
+  lims(y = c(0,35)) +
   guides(pch = guide_legend(override.aes = list(size = 2) ) )
+Fig4a
 
+Fig4b <- ggplot(grazers_keytimes %>% filter(grazer == "Littorina spp."), 
+                aes(x = treatment, y = total_grazers,
+                    col = treatment,
+                    alpha = season)) +
+  geom_boxplot(size = 0.4, outlier.color = NA) +
+  labs(x = "Treatment", y = expression("Abundance of"~italic("Littorina")~"spp."), col = "Treatment", pch = "Season") +
+  facet_grid(cols = vars(season), scales = "free_y") +
+  scale_color_manual(values = pal.trt.y2, guide = "none") +
+  scale_fill_manual(values = pal.trt.y2, guide = "none") +
+  scale_alpha_manual(values = c(0.4,0)) +
+  scale_shape_manual(values = c(16,17)) +
+  guides(fill = "none", alpha = "none", shape = guide_legend(override.aes = list(size = 3))) +
+  geom_jitter(size = 1, alpha = 0.7,
+              position = position_jitterdodge(jitter.width = 1, 
+                                              jitter.height = 0, 
+                                              dodge.width = 1), aes(shape = season)) +
+  theme_classic() +
+  theme(plot.tag = element_text(face = "bold", size = 10),
+        strip.text = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 10),
+        legend.box.margin=margin(-5,-5,-5,-5)) +
+  lims(y = c(0,230)) +
+  geom_text(data = labels.4b, 
+            aes(x = treatment, y = total_grazers, label = label), 
+            col = "black", fontface = "bold", size = 3, inherit.aes = FALSE) +
+  guides(pch = guide_legend(override.aes = list(size = 2) ) )
+Fig4b
 
-ggsave(Fig3, filename = "./figures/Fig3.pdf", device = cairo_pdf, 
-       width = 8.5, height = 10, units = "cm")
+Fig4 <- (Fig4a / Fig4b) + plot_annotation(tag_levels = "a", tag_prefix = "(",
+                                          tag_suffix = ")") + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+Fig4
+
+ggsave(Fig4, filename = "./figures/Fig4.pdf", device = cairo_pdf, 
+       width = 8.5, height = 15, units = "cm")
 
 
 #########################
@@ -152,7 +232,7 @@ grazers_plot <- grazers_y2 %>% group_by(date, grazer, treatment) %>%
   mutate(date = ymd(date))
 
 # limpet and littorine abundance through time during year two
-FigS7 <- ggplot(grazers_plot, aes(x=date, y=mean_grazers, col = treatment)) +
+FigS9 <- ggplot(grazers_plot, aes(x=date, y=mean_grazers, col = treatment)) +
   geom_point()+
   geom_line(lwd = 0.8) +
   theme_classic() +
@@ -170,7 +250,7 @@ FigS7 <- ggplot(grazers_plot, aes(x=date, y=mean_grazers, col = treatment)) +
                                                ymd("2020-12-01"),
                                                ymd("2021-02-01")))
 
-png("./figures/FigS7.png", res = 700, width = 8, height = 4, units = "in",
+png("./figures/FigS9.png", res = 700, width = 8, height = 4, units = "in",
     pointsize = 22)
-FigS7
+FigS9
 dev.off()

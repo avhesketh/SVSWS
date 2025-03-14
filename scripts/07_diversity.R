@@ -24,13 +24,13 @@ diversity <- read_csv("./clean_data/SVSWS_survey_clean.csv") %>%
   mutate(timesincestart = max(timesincestart),
          date = max(date)) %>% 
   mutate(abund = if_else(is.na(count), percent_cover, as.numeric(count))) %>% 
-  select(species, abund, survey_no, tile_id, original_herb_trt) %>% 
+  select(species, abund, survey_no, tile_id, second_herb_trt) %>% 
   unique() %>% 
   pivot_wider(names_from = species, values_from = abund,values_fill = 0)
 
 # calculate species richness and Shannon diversity
 diversity.factors <- diversity %>% 
-  select(survey_no, tile_id, original_herb_trt)
+  select(survey_no, tile_id, second_herb_trt)
 
 # note that, because Shannon diversity from count & cover data cannot be combined
 # invertebrate and algal diversity metrics must be calculated separately
@@ -47,7 +47,7 @@ diversity.algae.abund <- diversity %>%
   ungroup() %>% 
   select(any_of(alga_list$species))
 
-richness <- specnumber(diversity %>% ungroup() %>% select(-survey_no, -tile_id, -original_herb_trt))
+richness <- specnumber(diversity %>% ungroup() %>% select(-survey_no, -tile_id, -second_herb_trt))
 shannon.algae <- diversity(diversity.algae.abund)
 shannon.invert <- diversity(diversity.invert.abund)
 
@@ -80,7 +80,7 @@ diversity_y2 <- diversity.responses %>%
          tile_id = as.factor(tile_id))
 
 diversity <- diversity_y1 %>% full_join(diversity_y2) %>% 
-  mutate(original_herb_trt = if_else(is.na(original_herb_trt), "control",original_herb_trt))
+  mutate(herb_trt = if_else(is.na(second_herb_trt), "control","grazer"))
 
 # prepare data for plotting
 diversity.plot <- diversity %>% group_by(timesincestart, date, treatment) %>% 
@@ -98,126 +98,175 @@ diversity.plot <- diversity %>% group_by(timesincestart, date, treatment) %>%
 
 # Species richness
 
-# Year 1
-richness.y1 <- glmmTMB(richness ~ trt_y1*date + (1|block), 
-                       family = poisson(),
-                       data = diversity %>% filter(date %in% c("2019-10-20","2020-03-15")))
-richness.y1.herb <- glmmTMB(richness ~ trt_y1*date + original_herb_trt + (1|block), 
+# Year 1 post summer
+richness.y1.ps.herb <- glmmTMB(richness ~ trt_y1+ herb_trt + (1|block), 
                          family = poisson(), 
-                         data = diversity %>% filter(date %in% c("2019-10-20","2020-03-15")))
-AIC(richness.y1, richness.y1.herb) # better without herbivores 
+                         data = diversity %>% filter(date == "2019-10-20"))
+plot(simulateResiduals(richness.y1.ps.herb))
+summary(richness.y1.ps.herb)
+Anova(richness.y1.ps.herb, type = 2)
+# grazer treatment not significant; drop this from the model
 
-plot(simulateResiduals(richness.y1))
-summary(richness.y1)
-Anova(richness.y1, type = 3)
+richness.y1.ps <- glmmTMB(richness ~ trt_y1 + (1|block),
+                          family = poisson(), 
+                          data = diversity %>% filter(date == "2019-10-20"))
+plot(simulateResiduals(richness.y1.ps))
+plot(residuals(richness.y1.ps)) # slightly underdispersed residuals, but overall not too bad
+summary(richness.y1.ps)
+Anova(richness.y1.ps, type = 2)
 
-emm1.rich <- emmeans(richness.y1, specs = "trt_y1", by = "date")
-contrast(emm1.rich, method = "pairwise", adjust = "tukey")
+
+emm1.rich.ps <- emmeans(richness.y1.ps, specs = c("trt_y1"))
+contrast(emm1.rich.ps, method = "pairwise", adjust = "tukey")
+
+# Year 1 winter
+richness.y1.w.herb <- glmmTMB(log(richness+1) ~ trt_y1+ herb_trt + (1|block), 
+                               data = diversity %>% filter(date == "2020-03-15"))
+
+plot(simulateResiduals(richness.y1.w.herb)) # just over significance for distribution test; should be OK for anova
+summary(richness.y1.w.herb)
+Anova(richness.y1.w.herb, type = 2)
+
+# grazer treatment not significant; drop this from the model
+
+richness.y1.w <- glmmTMB(richness ~ trt_y1 + (1|block), 
+                          family = poisson(),
+                          data = diversity %>% filter(date == "2020-03-15"))
+plot(simulateResiduals(richness.y1.w))
+plot(residuals(richness.y1.w)) # KS test failed (p = 0.04); this is fairly marginal, 
+# and the distribution is overall appropriate to the data (count)
+summary(richness.y1.w)
+Anova(richness.y1.w, type = 2)
 
 
-# Year 2
-# including random effect causes singularity, so dropped from model here 
+emm1.rich.w <- emmeans(richness.y1.w, specs = c("trt_y1"))
+contrast(emm1.rich.w, method = "pairwise", adjust = "tukey")
 
-richness.y2 <- glmmTMB(richness ~ trt_y1*trt_y2 + date + (1|block),
+# labels for plot of richness (emmeans results)
+labels.6a <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 2), rep("Winter", times = 2)),
+  c("C","W", "C","W"),
+  c(7.8,5.9,9,5),
+  c("a","b","a","b"))
+)
+colnames(labels.6a) <- c("season", "treatment","richness","label")
+labels.6a <- labels.6a %>% mutate(richness = as.numeric(richness))
+
+
+# Year 2 post-summer
+
+richness.y2.ps <- glmmTMB(log(richness+1) ~ trt_y1*trt_y2 + (1|block),
+                       data = diversity %>% filter(date == "2020-09-14"))
+
+plot(simulateResiduals(richness.y2.ps)) 
+summary(richness.y2.ps)
+Anova(richness.y2.ps, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm2.rich.ps <- emmeans(richness.y2.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm2.rich.ps, method = "pairwise", adjust = "tukey")
+
+richness.y2.w <- glmmTMB(richness ~ trt_y1*trt_y2 + (1|block),
                        family = poisson(),
-                       data = diversity %>% filter(date %in% c("2020-09-14","2021-02-24")))
-richness.y2.herb <- glmmTMB(richness ~ trt_y1*trt_y2 + date + original_herb_trt + (1|block), 
-                       family = poisson(),
-                       data = diversity %>% filter(date %in% c("2020-09-14", "2021-02-24")))
+                       data = diversity %>% filter(date == "2021-02-24"))
 
-AIC(richness.y2, richness.y2.herb) # better without herbivores
-plot(simulateResiduals(richness.y2)) # model is under-dispersed, which will yield more conservative p values
-# no other distribution is appropriate, so we will keep this as-is despite violations
-summary(richness.y2)
-Anova(richness.y2, type = 3)
+plot(simulateResiduals(richness.y2.w))
+summary(richness.y2.w)
+Anova(richness.y2.w, type = 3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
-emm2.rich <- emmeans(richness.y2, specs = c("trt_y1","trt_y2"))
-contrast(emm2.rich, method = "pairwise", adjust = "tukey")
+emm2.rich.w <- emmeans(richness.y2.w, specs = c("trt_y1","trt_y2"))
+contrast(emm2.rich.w, method = "pairwise", adjust = "tukey")
 
 # create dataframe with significance labels for eventual plot
-labels.5b <- as.data.frame(cbind(
-  c("CC","CW","WC","WW"),
-  c(6.7,5.05,5.85,4.3),
-  c("a","ab","a","b"))
+labels.6b <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
+  c(rep(c("CC","CW","WC","WW"), times = 2)),
+  c(7.8,7.8,7.8,7.8,9.9,7.8,9.9,7.8),
+  c("a","ab","a","b", "c","cd","c","d"))
 )
-colnames(labels.5b) <- c("treatment","richness","label")
-labels.5b <- labels.5b %>% mutate(richness = as.numeric(richness))
+colnames(labels.6b) <- c("season","treatment","richness","label")
+labels.6b <- labels.6b %>% mutate(richness = as.numeric(richness))
 
 
 ################
 # plots of alpha diversity metrics at key times (post summer and in winter)
 
 # define palettes for plotting
-pal.trt <- c("#014779", "#EE4B2B", "#014779", "#7985CB", "#9C0098", "#EE4B2B", "grey50")
-pch.trt <- c(1,1,16,16,16,16,16)
-lty.trt <- c("dotdash","dotdash","solid","solid","solid","solid","solid","solid")
+pal.trt <- c("#014779", "#EE4B2B", "#014779", "#7985CB", "#9C0098", "#EE4B2B")
+pch.trt <- c(1,1,16,16,16,16)
 
 # Create summary dataframe
 diversity_keytimes <- diversity %>% 
   filter(date %in% c("2019-10-20", "2020-03-15", "2020-09-14","2021-02-24")) %>% 
   mutate(period = if_else(date %in% c("2019-10-20", "2020-03-15"), "Year 1", "Year 2"),
-         timept = if_else(date %in% c("2019-10-20", "2020-09-14"), "Post-summer", "Winter")) %>% 
+         season = if_else(date %in% c("2019-10-20", "2020-09-14"), "Post-summer", "Winter")) %>% 
   mutate(treatment = if_else(period == "Year 1", trt_y1, treatment),
          treatment = factor(treatment, levels = c("C","W","CC","CW","WC","WW")),
          date = factor(date))
 
 # Plot as single point ± one standard error, so summarize mean and standard error
 diversity_plots <- diversity_keytimes %>% 
-  group_by(treatment, timept, period) %>% 
+  group_by(treatment, season, period) %>% 
   summarize(mean.rich = mean(richness), se.rich = std.error(richness),
             mean.isd = mean(shannon.invert), se.isd = std.error(shannon.invert),
             mean.asd = mean(shannon.algae), se.asd = std.error(shannon.algae)) %>% ungroup()
 
 # Extract year 1 and year 2 data for separate plots
-diversity_plot_y1 <- diversity_plots %>% filter(period == "Year 1")
-diversity_plot_y2 <- diversity_plots %>% filter(period == "Year 2")
+diversity_plot_y1_summary <- diversity_plots %>% filter(period == "Year 1") 
+diversity_plot_y2_summary <- diversity_plots %>% filter(period == "Year 2") %>% mutate(factor(treatment))
+
+diversity_plot_y1 <- diversity_keytimes %>% filter(period == "Year 1") 
+diversity_plot_y2 <- diversity_keytimes %>% filter(period == "Year 2")
 
 # mean richness post-summer and wintertime in year 1
-Fig5a <- ggplot(diversity_plot_y1, aes(x = treatment, y = mean.rich, 
-                                       col = treatment, pch = timept)) +
-  geom_point(position = position_dodge(width = 1), size = 2.5) +
-  geom_errorbar(aes(ymax = mean.rich + se.rich, ymin = mean.rich - se.rich),
-                position = position_dodge(width = 1), width = 0.3) +
+Fig6a <- ggplot(diversity_plot_y1, aes(x = treatment, y = richness, 
+                                       col = treatment, pch = season)) +
+  geom_point(data = diversity_plot_y1_summary, aes(x = treatment, y = mean.rich),
+             size = 2, stroke = 1, alpha = 0.9) +
+  geom_errorbar(data = diversity_plot_y1_summary, 
+                aes(y = mean.rich, 
+                    ymax = mean.rich + se.rich, 
+                    ymin = mean.rich - se.rich),
+                width = 0.25, color = "grey20") +
+  geom_jitter(alpha = 0.1, height = 0, width = 0.2) +
+  facet_wrap(~season) +
   theme_classic() +
   scale_color_manual(values = pal.trt, guide = "none") +
   scale_shape_manual(values = c(1,2), guide = "none") +
-  labs(x = "Treatment", pch = "Time of year", col = "Treatment", y = "Species richness") +
+  labs(x = "Treatment", pch = "Season", col = "Treatment", y = "Species richness") +
   theme(plot.tag = element_text(face = "bold", size = 10),
-        strip.text = element_text(size = 10),
+        strip.text = element_text(size = 9.5),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8)) +
-  scale_y_continuous(limits = c(0,7), breaks = c(0,1,2,3,4,5,6,7)) +
-  annotate("segment", x = 0.75, xend = 0.75, y = 5.3, yend = 5.7, col = "black") +
-  annotate("segment", x = 1.75, xend = 1.75, y = 5.3, yend = 5.7, col = "black") +
-  annotate("segment", x = 0.75, xend = 1.75, y = 5.5, yend = 5.5, col = "black") +
-  annotate("segment", x = 1.25, xend = 1.25, y = 4.1, yend = 4.5, col = "black") +
-  annotate("segment", x = 2.25, xend = 2.25, y = 4.1, yend = 4.5, col = "black") +
-  annotate("segment", x = 1.25, xend = 2.25, y = 4.3, yend = 4.3, col = "black") +
-  annotate("text", x = 1.25, y = 5.95, label = "p < 0.001", size = 2.5) +
-  annotate("text", x = 1.75, y = 4.75, label = "p < 0.001", size = 2.5)
-Fig5a
+  scale_y_continuous(limits = c(0,10), breaks = c(0,2,4,6,8,10)) +
+  geom_text(data = labels.6a, aes(x = treatment, y = richness, label = label),
+           col = "black", size = 3, fontface = "bold")
+Fig6a
 
 # mean richness post-summer and wintertime in year 2
 
-Fig5b <- ggplot(diversity_plot_y2, aes(x = treatment, y = mean.rich, 
-                                       col = treatment, pch = timept)) +
-  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
-  geom_errorbar(aes(ymax = mean.rich + se.rich, ymin = mean.rich - se.rich),
-                position = position_dodge(width = 1), width = 0.3) +
+Fig6b <- ggplot(diversity_plot_y2_summary, aes(x = treatment, y = mean.rich, 
+                                       col = treatment, pch = season)) +
+  geom_jitter(data = diversity_plot_y2, aes(y = richness),
+              alpha = 0.2, height = 0, width = 0.2, show.legend = F) +
+  geom_point(size = 3, alpha = 0.8, show.legend = T) +
+  geom_errorbar(aes(ymax = mean.rich + se.rich, 
+                    ymin = mean.rich - se.rich),
+                width = 0.25, color = "grey20") +
   theme_classic() +
-  scale_color_manual(values = pal.trt.y2, guide = "none") +
-  scale_shape_manual(values = c(16,17)) +
-  labs(x = "Treatment", pch = "Time of year", col = "Treatment", y = "Species richness") +
-  scale_y_continuous(limits = c(0,7), breaks = c(0,1,2,3,4,5,6,7)) +
-  geom_text(data = labels.5b, 
-            aes(x = treatment, y = richness, label = label), 
-            col = "black", fontface = "bold", inherit.aes = FALSE, size = 2.5) +
+  facet_wrap(~season) +
+  labs(x = "Treatment", pch = "Season", col = "Treatment", y = "Species richness") +
+  geom_text(data = labels.6b, aes(x = treatment, y = richness, label = label),
+            col = "black", size = 3, fontface = "bold") +
+  scale_color_manual(values = pal.trt, drop = FALSE) +
+  scale_y_continuous(limits = c(0,10), breaks = c(0,2,4,6,8,10)) +
+  guides(color = guide_legend(override.aes = list(shape = pch.trt, size = 3))) +
   theme(plot.tag = element_text(face = "bold", size = 10),
-        strip.text = element_text(size = 10),
+        strip.text = element_text(size = 9.5),
         axis.title = element_text(size = 10),
-        axis.text = element_text(size = 8))
-  
-Fig5b
+        axis.text = element_text(size = 8),
+        legend.box = "horizontal")
+Fig6b
+
 
 ##################
 # beta analysis of invertebrate community living within foundation spp
@@ -227,7 +276,6 @@ set.seed(26)
 # load community data
 epifauna_sept20 <- read_csv("./raw_data/epifauna/SVSWS_20200914_epifauna.csv")
 epifauna_feb21 <- read_csv("./raw_data/epifauna/SVSWS_20210224_epifauna.csv")
-
 
 # read in relevant metadata
 block_design <- read_csv("./raw_data/design/SVSWS_tilesetup.csv")
@@ -247,19 +295,21 @@ epifauna_summer <- epifauna_sept20 %>%
   summarize(abund = sum(abund)) %>% ungroup() %>% 
  # pivot for dbRDA (wide format required)
   pivot_wider(id_cols = c(block, number, treatment), names_from = unified_code, values_from = abund,
-              values_fill = list(abund =0))
+              values_fill = list(abund = 0))
 
 # extract factors for analyses
 epifauna_factors.summer <- epifauna_summer %>% 
-  select(block, number, treatment) 
+  select(block, number, treatment) %>% 
+  mutate(trty1 = substring(treatment, 1, 1),
+         trty2 = substring(treatment, 2,2))
 
 # convert wide-format data to abundance matrix
 epifauna_matrix.summer <- epifauna_summer %>% 
   select(-block, -number, - treatment) %>% 
-  as.matrix()
+  as.matrix() 
 
 
-epi_summer <- dbrda(epifauna_matrix.summer ~ treatment, epifauna_factors.summer, dist = "bray")
+epi_summer <- dbrda(epifauna_matrix.summer ~ trty1*trty2, epifauna_factors.summer, dist = "bray")
 summary(epi_summer)
 screeplot(epi_summer)
 
@@ -303,26 +353,28 @@ data.scores.summer <- data.scores.summer %>% mutate(treatment = factor(case_when
 
 
 # ordination in ggplot2
-Fig5c <- ggplot() + 
+Fig6c <- ggplot() + 
   # add ellipses
-  geom_path(data=df_ell_summer, aes(x=dbRDA1,y=dbRDA2,colour=treatment)) +
+  geom_path(data=df_ell_summer, aes(x=dbRDA1,y=dbRDA2,colour=treatment),
+            show.legend = F) +
   # add points for each tile
   geom_point(data=data.scores.summer, aes(x=dbRDA1,y=dbRDA2,colour=treatment),
-             size=2, alpha = 0.8) + # add the point markers
+             size=2, alpha = 0.8, show.legend = F) + # add the point markers
   scale_color_manual(values = pal.trt.y2) +
   theme_classic()+
   labs(color = "Treatment", x = "dbRDA1", y = "dbRDA2") +
   theme(plot.tag = element_text(face = "bold", size = 10),
         strip.text = element_text(size = 10),
         axis.title = element_text(size = 10),
-        axis.text = element_text(size = 8)) +
+        axis.text = element_text(size = 8), 
+        legend.position = "none") +
+  coord_equal()+
   # add labels showing results of pairwise comparisons
-  annotate(geom = "text", x = -0.9, y = 1, label = "a", col ="#014779", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = -0.5, y = -0.53, label = "ab", col = "#7985CB", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = -0.08, y = -0.7, label = "ab", col = "#9C0098", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = 1.25, y = 0.8, label = "b", col = "#EE4B2B", size = 2.5, fontface = "bold") 
-
-Fig5c
+  annotate(geom = "text", x = -0.9, y = 1, label = "a", col ="#014779", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = -0.5, y = -0.53, label = "ab", col = "#7985CB", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = -0.08, y = -0.7, label = "ab", col = "#9C0098", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = 1.25, y = 0.8, label = "b", col = "#EE4B2B", size = 3, fontface = "bold") 
+Fig6c
 
 # PerMANOVA
 # need to constrain permutations within experimental blocks.
@@ -361,7 +413,7 @@ epifauna_matrix.winter <- epifauna_winter %>%
   select(-block, -number, - treatment) %>% 
   as.matrix() 
 
-epi_winter <- dbrda(epifauna_matrix.winter ~ treatment, epifauna_factors.winter, dist = "bray")
+epi_winter <- dbrda(epifauna_matrix.winter ~ trty1*trty2, epifauna_factors.winter, dist = "bray")
 summary(epi_winter)
 screeplot(epi_winter)
 
@@ -387,20 +439,21 @@ for(g in levels(as.factor(data.scores.winter$treatment))){
 df_ell.winter$treatment <- df_ell.winter$group 
 
 # ordination in ggplot2
-Fig5d <- ggplot() + 
-  geom_path(data=df_ell.winter, aes(x=dbRDA1,y=dbRDA2,colour=treatment)) +
+Fig6d <- ggplot() + 
+  geom_path(data=df_ell.winter, aes(x=dbRDA1,y=dbRDA2,colour=treatment),show.legend = F) +
   geom_point(data=data.scores.winter, aes(x=dbRDA1,y=dbRDA2,colour=treatment),
-             size=2, alpha = 0.8, shape = 17) + # add the point markers
+             size=2, alpha = 0.8, shape = 17, show.legend = F) + # add the point markers
   scale_color_manual(values = pal.trt.y2) +
   labs(color = "Treatment", x = "dbRDA1", y = "dbRDA2") +
   theme_classic()  + 
-  theme(plot.tag = element_text(face = "bold"),
+  theme(plot.tag = element_text(face = "bold", size = 10),
         legend.position = "none") +
-  annotate(geom = "text", x = 1, y = 0.7, label = "c", col ="#014779", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = -0.6, y = -0.8, label = "ab", col = "#7985CB", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = 0.52, y = -0.5, label = "b", col = "#9C0098", size = 2.5, fontface = "bold") +
-  annotate(geom = "text", x = -0.9, y = 0.6, label = "a", col = "#EE4B2B", size = 2.5, fontface = "bold") 
-Fig5d
+  coord_equal()+
+  annotate(geom = "text", x = 1, y = -0.7, label = "c", col ="#014779", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = -0.6, y = 0.8, label = "ab", col = "#7985CB", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = 0.52, y = 0.5, label = "b", col = "#9C0098", size = 3, fontface = "bold") +
+  annotate(geom = "text", x = -0.9, y = -0.6, label = "a", col = "#EE4B2B", size = 3, fontface = "bold") 
+Fig6d
 
 # PerMANOVA
 # need to constrain permutations within experimental blocks.
@@ -418,39 +471,51 @@ disp.epi.winter <- betadisper(dist.epi.winter, type = "centroid",  bias.adjust =
                               group = epifauna_factors.winter$treatment)
 anova(disp.epi.winter)
 
+# define layout
+layout <- 
+"AAAAAABBBBBBBBBB
+ CCCCCCCDDDDDDDDD
+"
+
 # assemble multipanel figure
-Fig5 <- ((Fig5a | Fig5b) / ((Fig5c) | (Fig5d))) +
-  plot_layout(guides = "collect", widths = c(0.6, 0.4)) +
+Fig6 <- Fig6a + Fig6b + Fig6c + Fig6d +
+  plot_layout(guides = "collect", 
+              design = layout, heights = c(0.4,0.6)) +
   plot_annotation(tag_levels = "a", tag_prefix = "(",
-                  tag_suffix = ")") 
-Fig5
+                  tag_suffix = ")") &
+  theme(legend.position = "bottom",
+        legend.box = "horizontal",
+        legend.box.just = "left") 
+Fig6
+
 
 # save figure
-ggsave(Fig5, filename = "./figures/Fig5.pdf", device = cairo_pdf, 
-       width = 16, height = 12, units = "cm")
+ggsave(Fig6, filename = "./figures/Fig6.pdf", device = cairo_pdf, 
+       width = 18, height = 18, units = "cm")
 
 ################ 
 # Appendix content: Figures & analyses
 
 # Plot of species richness of treatments through time
-FigS8a <- ggplot(diversity.plot, aes(y = mean.rich, x =date, 
-                                     col = treatment, shape = treatment,
-                                     lty = treatment)) +
+FigS10a <- ggplot(diversity.plot, aes(y = mean.rich, x =date, col = treatment,lty = treatment, pch=treatment)) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey60", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey70", lty = "dashed", lwd = 0.8) +
+  theme_classic() +                            
   geom_point() +
   geom_line(lwd = 0.8) +
   scale_color_manual(values = pal.trt) +
   scale_linetype_manual(values = lty.trt) +
   scale_shape_manual(values = pch.trt) +
+  theme_classic() + theme(legend.key.width = unit(1,"cm"), plot.tag = element_text(face = "bold")) +
   geom_errorbar(aes(ymax = mean.rich + se.rich, ymin = mean.rich - se.rich, lty = NULL)) +
   labs(y = "Species richness", x = "Date", pch = "Treatment", col = "Treatment", lty = "Treatment") +
-  geom_vline(aes(xintercept = as.Date("2020-04-07")), linetype = "dotted", col = "grey30", lwd = 0.8) +
-  theme_classic() +
-  theme(legend.key.width = unit(1,"cm"), plot.tag = element_text(face = "bold")) +
   scale_x_date(date_labels = "%Y-%m", breaks=breaks)
-FigS8a
+FigS10a
 
 # Shannon diversity of invertebrate community over time
-FigS8b <- ggplot(diversity.plot, aes(y = mean.shann.i, x =date, col = treatment,lty = treatment, pch=treatment)) +
+FigS10b <- ggplot(diversity.plot, aes(y = mean.shann.i, x =date, col = treatment,lty = treatment, pch=treatment)) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey60", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey70", lty = "dashed", lwd = 0.8) +
   theme_classic() +                            
   geom_point() +
   geom_line(lwd = 0.8) +
@@ -460,13 +525,14 @@ FigS8b <- ggplot(diversity.plot, aes(y = mean.shann.i, x =date, col = treatment,
   theme_classic() + theme(legend.key.width = unit(1,"cm"), plot.tag = element_text(face = "bold")) +
   geom_errorbar(aes(ymax = mean.shann.i + se.shann.i, ymin = mean.shann.i - se.shann.i, lty = NULL)) +
   labs(y = "Invert. Shannon diversity", x = "Date", pch = "Treatment", col = "Treatment", lty = "Treatment") +
-  geom_vline(aes(xintercept = as.Date("2020-04-07")), linetype = "dotted", col = "grey30", lwd = 0.8) +
   scale_x_date(date_labels = "%Y-%m", breaks=breaks)
-FigS8b
+FigS10b
 
 # Shannon diversity of algal community over time
-FigS8c <- ggplot(diversity.plot, aes(y = mean.shann.a, x =date, 
+FigS10c <- ggplot(diversity.plot, aes(y = mean.shann.a, x =date, 
                                      col = treatment, pch = treatment, lty = treatment)) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey60", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey70", lty = "dashed", lwd = 0.8) +
   geom_point() +
   geom_line(lwd = 0.8) +
   scale_color_manual(values = pal.trt) +
@@ -475,19 +541,18 @@ FigS8c <- ggplot(diversity.plot, aes(y = mean.shann.a, x =date,
   theme_classic() + theme(legend.key.width = unit(1,"cm"),plot.tag = element_text(face = "bold")) +
   geom_errorbar(aes(ymax = mean.shann.a + se.shann.a, ymin = mean.shann.a - se.shann.a, lty = NULL)) +
   labs(y = "Algal Shannon diversity", x = "Date", pch = "Treatment", col = "Treatment", lty = "Treatment") +
-  geom_vline(aes(xintercept = as.Date("2020-04-07")), linetype = "dotted", col = "grey30", lwd = 0.8) +
   scale_x_date(date_labels = "%Y-%m", breaks=breaks)
-FigS8c
+FigS10c
 
 # stitch them all together
-FigS8 <- FigS8a / FigS8b / FigS8c +
+FigS10 <- FigS10a / FigS10b / FigS10c +
   plot_annotation(tag_levels = "a", tag_prefix = "(", tag_suffix = ")") +
   plot_layout(guides = "collect") & theme(plot.tag = element_text(size = 14, face = "bold")) 
-FigS8
+FigS10
 
 # save plot
-png("./figures/FigS8.png", res = 700, width = 9, height = 9, units = "in")
-FigS8
+png("./figures/FigS10.png", res = 700, width = 9, height = 9, units = "in")
+FigS10
 dev.off()
 
 
@@ -495,166 +560,219 @@ dev.off()
 
 # Invertebrate Shannon diversity
 
-# Year 1
-isd.y1 <- glmmTMB(shannon.invert ~ trt_y1*date + (1|block), 
+# Year 1 post-summer
+
+isd.y1.ps.herb <- glmmTMB(shannon.invert ~ trt_y1 + herb_trt+ (1|block), 
+                          dispformula = ~trt_y1,
+                          family = tweedie(), data = diversity %>% filter(date == "2019-10-20"))
+plot(simulateResiduals(isd.y1.ps.herb))
+summary(isd.y1.ps.herb)
+Anova(isd.y1.ps.herb, type = 2) # herbivore treatments are not significant; drop this term
+
+isd.y1.ps <- glmmTMB(shannon.invert ~ trt_y1 + (1|block), 
                          family = tweedie(), dispformula = ~trt_y1,
-                         data = diversity %>% filter(date %in% c("2019-10-20", "2020-03-15")))
-isd.y1.herb <- glmmTMB(shannon.invert ~ trt_y1*date + original_herb_trt+ (1|block), 
-                              dispformula = ~trt_y1,
-                              family = tweedie(), data = diversity %>% filter(date %in% c("2019-10-20", "2020-03-15")))
+                         data = diversity %>% filter(date == "2019-10-20"))
+plot(simulateResiduals(isd.y1.ps))
+summary(isd.y1.ps)
+Anova(isd.y1.ps, type = 2) 
 
-AIC(isd.y1, isd.y1.herb) # better without herbivores 
+# Year 1 winter
 
-plot(simulateResiduals(isd.y1))
-summary(isd.y1)
-Anova(isd.y1, type = 3)
+isd.y1.w.herb <- glmmTMB(shannon.invert ~ trt_y1 + herb_trt+ (1|block), 
+                          family = tweedie(), data = diversity %>% filter(date == "2020-03-15"))
+plot(simulateResiduals(isd.y1.w.herb))
+summary(isd.y1.w.herb)
+Anova(isd.y1.w.herb, type = 2) # herbivore treatments are not significant; drop this term
 
-emm1.isd <- emmeans(isd.y1, specs = "trt_y1", by = "date")
-contrast(emm1.isd, method = "pairwise", adjust = "tukey")
+isd.y1.w <- glmmTMB(shannon.invert ~ trt_y1 + (1|block), 
+                     family = tweedie(), dispformula = ~trt_y1,
+                     data = diversity %>% filter(date == "2020-03-15"))
+plot(simulateResiduals(isd.y1.w))
+summary(isd.y1.w)
+Anova(isd.y1.w, type = 2)
 
-# Year 2
-
-isd.y2 <- glmmTMB(shannon.invert ~ trt_y1*trt_y2 + date + (1|block),
-                         data = diversity %>% filter(date %in% c("2020-09-14","2021-02-24")))
-isd.y2.herb <- glmmTMB(shannon.invert ~ trt_y1*trt_y2 + date + original_herb_trt + (1|block), 
-                              data = diversity %>% filter(date %in% c("2020-09-14","2021-02-24")))
-
-AIC(isd.y2, isd.y2.herb) # better without herbivores
-
-plot(simulateResiduals(isd.y2))
-summary(isd.y2)
-Anova(isd.y2, type = 3)
-
-emm2.isd <- emmeans(isd.y2, specs = c("trt_y1","trt_y2"))
-contrast(emm2.isd, method = "pairwise", adjust = "tukey")
-
-labels.S9b <- as.data.frame(cbind(
-  c("CC","CW","WC","WW"),
-  c(1.35,1.25,1.15,1.05),
-  c("a","ab","bc","c"))
+labels.S11a <- as.data.frame(cbind(
+  c("C","W","C","W"),
+  c("Post-summer", "Post-summer",
+    "Winter", "Winter"),
+  c(1.45,1.45,1.15,1.15),
+  c("a","a","b","c"))
 )
-colnames(labels.S9b) <- c("treatment","mean.isd","label")
-labels.S9b <- labels.S9b %>% mutate(mean.isd = as.numeric(mean.isd))
+colnames(labels.S11a) <- c("treatment","season", "mean.isd","label")
+labels.S11a <- labels.S11a %>% mutate(mean.isd = as.numeric(mean.isd))
+
+
+# Year 2 post-summer
+isd.y2.ps <- glmmTMB(shannon.invert ~ trt_y1*trt_y2 + (1|block), 
+                       data = diversity %>% filter(date == "2020-09-14"))
+
+plot(simulateResiduals(isd.y2.ps))
+summary(isd.y2.ps)
+Anova(isd.y2.ps, type = 3,contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm2.isd.ps <- emmeans(isd.y2.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm2.isd.ps, method = "pairwise", adjust = "tukey")
+
+# Year 2 winter
+isd.y2.w <- glmmTMB(shannon.invert ~ trt_y1*trt_y2 + (1|block), 
+                     data = diversity %>% filter(date == "2021-02-24"))
+
+plot(simulateResiduals(isd.y2.w))
+summary(isd.y2.w)
+Anova(isd.y2.w, type = 3,contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm2.isd.w <- emmeans(isd.y2.w, specs = c("trt_y1","trt_y2"))
+contrast(emm2.isd.w, method = "pairwise", adjust = "tukey")
+
+labels.S11b <- as.data.frame(cbind(
+  c(rep(c("CC","CW","WC","WW"), times = 2)),
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
+  c(1.6,1.6,1.5,1.5,1.55,1.55,1.55,1.4),
+  c("a","ab","bc","c", "d","de","de","e"))
+)
+colnames(labels.S11b) <- c("treatment","season","mean.isd","label")
+labels.S11b <- labels.S11b %>% mutate(mean.isd = as.numeric(mean.isd))
 
 
 # Invert Shannon diversity post-summer and wintertime in year 1 and year 2
-FigS9a <- ggplot(diversity_plot_y1, aes(x = treatment, y = mean.isd, 
-                                        col = treatment, pch = timept)) +
-  geom_point(position = position_dodge(width = 1), size = 2.5) +
-  geom_errorbar(aes(ymax = mean.isd + se.isd, ymin = mean.isd - se.isd),
-                position = position_dodge(width = 1), width = 0.3) +
+FigS11a <- ggplot(diversity_plot_y1, aes(x = treatment, y = shannon.invert, 
+                                        col = treatment, pch = season)) +
+  geom_point(data = diversity_plot_y1_summary, aes(x = treatment, y = mean.isd),
+             size = 2, stroke = 1, alpha = 0.9) +
+  geom_errorbar(data = diversity_plot_y1_summary, 
+                aes(y = mean.isd, 
+                    ymax = mean.isd + se.isd, 
+                    ymin = mean.isd - se.isd),
+                width = 0.15, color = "grey20") +
+  geom_jitter(alpha = 0.2, height = 0, width = 0.2) +
+  facet_wrap(~season) +
   theme_classic() +
   scale_color_manual(values = pal.trt, guide = "none") +
   scale_shape_manual(values = c(1,2), guide = "none") +
-  labs(x = "Treatment", pch = "Time of year", col = "Treatment", y = "Invertebrate Shannon diversity") +
-  theme(plot.tag = element_text(face = "bold"), 
-        axis.text = element_text(size = 9),
-        axis.title = element_text(size = 11)) +
-  scale_y_continuous(breaks = c(0,0.1,0.2,0.3,0.4,0.5), limits = c(0,0.55)) +
-  annotate("segment", x = 0.75, xend = 0.75, y = 0.51, yend = 0.53, col = "black") +
-  annotate("segment", x = 1.75, xend = 1.75, y = 0.51, yend = 0.53, col = "black") +
-  annotate("segment", x = 0.75, xend = 1.75, y = 0.52, yend = 0.52, col = "black") +
-  annotate("segment", x = 1.25, xend = 1.25, y = 0.43, yend = 0.45, col = "black") +
-  annotate("segment", x = 2.25, xend = 2.25, y = 0.43, yend = 0.45, col = "black") +
-  annotate("segment", x = 1.25, xend = 2.25, y = 0.44, yend = 0.44, col = "black") +
-  annotate("text", x = 1.25, y = 0.55, label = "ns") +
-  annotate("text", x = 1.75, y = 0.475, label = "p < 0.001")
-FigS9a
+  labs(x = "Treatment", pch = "Season", col = "Treatment", y = "Invertebrate Shannon diversity") +
+  theme(plot.tag = element_text(face = "bold", size = 10),
+        strip.text = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)) +
+  scale_y_continuous(limits = c(0,1.5), breaks = c(0,0.3,0.6,0.9,1.2,1.5)) +
+  geom_text(data = labels.S11a, aes(x = treatment, y = mean.isd, label = label),
+            col = "black", size = 3, fontface = "bold")
+FigS11a
 
-FigS9b <- ggplot(diversity_plot_y2, aes(x = treatment, y = mean.isd, 
-                                       col = treatment, pch = timept)) +
-  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
-  geom_errorbar(aes(ymax = mean.isd + se.isd, ymin = mean.isd - se.isd),
-                position = position_dodge(width = 1), width = 0.3) +
+FigS11b <- ggplot(diversity_plot_y2, aes(x = treatment, y = shannon.invert, 
+                                                col = treatment, pch = season)) +
+  geom_jitter(alpha = 0.2, height = 0, width = 0.2, show.legend = F) +
+  geom_errorbar(data = diversity_plot_y2_summary, aes(y = mean.isd, 
+                                                      ymax = mean.isd + se.isd, 
+                                                      ymin = mean.isd - se.isd),
+                width = 0.15, color = "grey20") +
+  geom_point(data = diversity_plot_y2_summary, aes(y = mean.isd), 
+             size = 3, alpha = 0.8, show.legend = T) +
   theme_classic() +
-  scale_color_manual(values = pal.trt.y2, guide = "none") +
-  scale_shape_manual(values = c(16,17)) +
-  labs(x = "Treatment", pch = "Time of year", col = "Treatment", y = "Invertebrate Shannon diversity") +
-  theme(plot.tag = element_text(face = "bold")) +
-  scale_y_continuous(breaks = c(0,0.25,0.5,0.75,1,1.25,1.5), limits = c(0,1.35)) +
-  geom_text(data = labels.S9b, 
-            aes(x = treatment, y = mean.isd, label = label), 
-            col = "black", fontface = "bold", inherit.aes = FALSE)
+  facet_wrap(~season) +
+  labs(x = "Treatment", pch = "Season", col = "Treatment", y = "Invertebrate Shannon diversity") +
+  geom_text(data = labels.S11b, aes(x = treatment, y = mean.isd, label = label),
+            col = "black", size = 3, fontface = "bold") +
+  scale_color_manual(values = pal.trt, drop = FALSE) +
+  scale_y_continuous(limits = c(0,1.6), breaks = c(0,0.3,0.6,0.9,1.2,1.5)) +
+  guides(color = guide_legend(override.aes = list(shape = pch.trt, size = 3))) +
+  theme(plot.tag = element_text(face = "bold", size = 10),
+        strip.text = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8),
+        legend.box = "horizontal")
+FigS11b
 
-FigS9b
-
-pal.trt.time <- c("transparent", "transparent", "#014779", "#7985CB" ,"#9C0098", "#EE4B2B")
 
 # Year 1: post-summer
-asd.y1 <- glmmTMB(shannon.algae ~ trt_y1 + date + (1|block), 
+asd.y1.ps.herb <- glmmTMB(shannon.algae ~ trt_y1 + herb_trt + (1|block), 
                          family = tweedie(), 
-                         data = diversity %>% filter(date %in% c("2019-10-20","2020-03-15")))
-asd.y1.herb <- glmmTMB(shannon.algae ~ trt_y1 + date + original_herb_trt + (1|block), 
-                              family = tweedie(), data = diversity %>% filter(date %in% c("2019-10-20","2020-03-15")))
+                         data = diversity %>% filter(date == "2019-10-20"))
+plot(simulateResiduals(asd.y1.ps.herb))
+summary(asd.y1.ps.herb)
+Anova(asd.y1.ps.herb, type = 2) # significant! do not include this test or these data
 
-AIC(asd.y1, asd.y1.herb) # better without herbivores 
+asd.y1.w.herb
 
-plot(simulateResiduals(asd.stress.y1))
-summary(asd.y1)
-Anova(asd.y1, type = 2)
+asd.y1.w.herb <- glmmTMB(shannon.algae ~ trt_y1 + herb_trt + (1|block), 
+                              family = tweedie(), data = diversity %>% filter(date == "2020-03-15"))
+plot(simulateResiduals(asd.y1.w.herb))
+summary(asd.y1.w.herb)
+Anova(asd.y1.w.herb, type = 2) # herbivory not significant; drop this term
 
-emm1.asd <- emmeans(asd.y1, specs = c("trt_y1"))
-contrast(emm1.asd, method = "pairwise", adjust = "tukey")
-
+asd.y1.w <- glmmTMB(shannon.algae ~ trt_y1 + (1|block), 
+                         family = tweedie(), data = diversity %>% filter(date == "2020-03-15"))
+plot(simulateResiduals(asd.y1.w))
+summary(asd.y1.w)
+Anova(asd.y1.w, type = 2) # herbivory not significant; drop this term
 
 # Year 2: post-summer has too many zeroes, can't model data
 
 # Year 2: winter
 
-asd.recovery.y2 <- glmmTMB(shannon.algae ~ trt_y1*trt_y2 + (1|block), 
+asd.y2.w <- glmmTMB(shannon.algae ~ trt_y1*trt_y2 + (1|block), 
                            family = tweedie(),
                            data = diversity %>% filter(date == "2021-02-24"))
 
-# adding herbivore term causes convergence. Based on other models, will exclude from model
-#asd.recovery.y2.herb <- glmmTMB(shannon.algae ~ trt_y1*trt_y2 + original_herb_trt +(1|block), 
-                             #   family = tweedie(),
-                             #   data = diversity %>% filter(date == "2021-02-24"))
+plot(simulateResiduals(asd.y2.w))
+summary(asd.y2.w)
+Anova(asd.y2.w, type = 3,contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
-plot(simulateResiduals(asd.recovery.y2))
-summary(asd.recovery.y2)
-Anova(asd.recovery.y2, type = 3)
+emm2.asd.w <- emmeans(asd.y2.w, specs = c("trt_y1","trt_y2"))
+contrast(emm2.asd.w, method = "pairwise", adjust = "tukey")
 
-emm2.asd <- emmeans(asd.recovery.y2, specs = c("trt_y1","trt_y2"))
-contrast(emm2.asd, method = "pairwise", adjust = "tukey")
-
-labels.S9c <- as.data.frame(cbind(
-  c(1,2,1.25,2.25,3.25,4.25),
+labels.S11c <- as.data.frame(cbind(
   c("Year 1", "Year 1", "Year 2","Year 2", "Year 2", "Year 2"),
-  c(0.21, 0.11,0.36, 0.265,0.61,0.22),
+  c("C","W","CC","CW","WC","WW"),
+  c(0.8, 0.65,1.1,1.1,1.1,1.1),
   c("a","b","c","c","c","c"))
 )
-colnames(labels.S9c) <- c("x","period", "mean.asd","label")
-labels.S9c <- labels.A9c %>% mutate(mean.asd = as.numeric(mean.asd),
-                                    x = as.numeric(x))
+colnames(labels.S11c) <- c("period", "treatment", "mean.asd","label")
+labels.S11c <- labels.S11c %>% mutate(mean.asd = as.numeric(mean.asd))
 
 # mean Shannon diversity of algae post-summer and wintertime in year 1 and year 2
 
-FigS9c <- ggplot(diversity_plots, aes(x = treatment, y = mean.asd, fill = treatment, col = treatment, pch = timept)) +
-  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
-  geom_errorbar(aes(ymax = mean.asd + se.asd, ymin = mean.asd - se.asd),
-                position = position_dodge(width = 1), width = 0.3) +
-  facet_wrap(~period, scales ="free_x") +
+algae_plot <- diversity_keytimes %>% filter(date %in% c("2020-03-15", "2021-02-24"))
+algae_plot_summary <- diversity_plots %>% filter(season == "Winter")
+
+FigS11c <- ggplot(algae_plot, aes(x = treatment, y = shannon.algae, shape = treatment,
+                                         col = treatment)) +
+  geom_point(data = algae_plot_summary, aes(x = treatment, y = mean.asd),
+             size = 2, stroke = 1, alpha = 0.9) +
+  geom_errorbar(data = algae_plot_summary, 
+                aes(y = mean.asd, 
+                    ymax = mean.asd + se.asd, 
+                    ymin = mean.asd - se.asd),
+                width = 0.15, color = "grey20") +
+  geom_jitter(alpha = 0.2, height = 0, width = 0.2) +
+  facet_grid(cols = vars(period), scales = "free_x") +
   theme_classic() +
-  scale_color_manual(values = pal.trt) +
-  scale_fill_manual(values = pal.trt.time, guide = "none") +
-  scale_alpha_manual(values = c(0.1,1), guide = "none") +
-  scale_shape_manual(values = c(21,24), guide = "none") +
-  labs(x = "Treatment", pch = "Time of year", 
-       col = "Treatment", y = "Algal Shannon diversity") +
-  theme(plot.tag = element_text(face = "bold")) +
-  geom_text(data = labels.S9c, 
-            aes(x = x, y = mean.asd, label = label), 
-            col = "black", fontface = "bold", inherit.aes = FALSE)
-FigS9c
+  scale_color_manual(values = pal.trt, guide = "none") +
+  scale_shape_manual(values = c(2,2,17,17,17,17), guide = "none") +
+  labs(x = "Treatment", pch = "Season", col = "Treatment", y = "Algal Shannon diversity") +
+  theme(plot.tag = element_text(face = "bold", size = 10),
+        strip.text = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)) +
+  scale_y_continuous(limits = c(0,1.1), breaks = c(0,0.2,0.4,0.6,0.8,1)) +
+  geom_text(data = labels.S11c, aes(x = treatment, y = mean.asd, label = label),
+            col = "black", size = 3, fontface = "bold")
+FigS11c
 
-FigS9 <- ((FigS9a | FigS9b)/FigS9c) + plot_annotation(tag_levels = "a",
-                                                tag_prefix = "(",
-                                                tag_suffix = ")") + 
-  plot_layout(guides = "collect")
 
-png("./figures/FigS9.png", res = 700, width = 7.5, height = 6,
-    units = "in")
-FigS9
+layout <- "
+AABBB
+CCCCC
+"
+
+FigS11 <- (FigS11a + FigS11b + FigS11c) +
+  plot_annotation(tag_levels = "a", tag_prefix = "(", tag_suffix = ")") +
+  plot_layout(guides = "collect", design = layout) & theme(plot.tag = element_text(size = 14, face = "bold")) 
+FigS11
+
+# save plot
+png("./figures/FigS11.png", res = 700, width = 9, height = 7, units = "in")
+FigS11
 dev.off()
 
 
@@ -691,46 +809,69 @@ epi.rich <- summer.epi.rich %>% full_join(winter.epi.rich) %>%
 
 ## Generalized linear models of richness (Poisson distribution) with treatments
 # and date of sampling (period; post-summer or winter)
+
 # Block is included as a random intercept effect
-destructive.rich <- glmmTMB(richness ~ trt_y1*trt_y2 + period + (1|block),
+destructive.rich.ps <- glmmTMB(richness ~ trt_y1*trt_y2 + (1|block),
                            family = poisson(),
-                             data = epi.rich)
-plot(simulateResiduals(destructive.rich))
-summary(destructive.rich)
-Anova(destructive.rich,type=3)
+                             data = epi.rich %>% filter(period == "Post-summer"))
+plot(simulateResiduals(destructive.rich.ps))
+summary(destructive.rich.ps)
+Anova(destructive.rich.ps,type=3,contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
 # Post-hoc comparisons between treatments
-emm.rich <- emmeans(destructive.rich, specs = c("trt_y1","trt_y2"))
-contrast(emm.rich, method = "pairwise", adjust = "tukey")
+emm.rich.ps <- emmeans(destructive.rich.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm.rich.ps, method = "pairwise", adjust = "tukey")
+
+destructive.rich.w <- glmmTMB(richness ~ trt_y1*trt_y2 + (1|block),
+                               family = poisson(),
+                               data = epi.rich %>% filter(period == "Winter"))
+plot(simulateResiduals(destructive.rich.w))
+summary(destructive.rich.w)
+Anova(destructive.rich.w,type=3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+# Post-hoc comparisons between treatments
+emm.rich.w <- emmeans(destructive.rich.w, specs = c("trt_y1","trt_y2"))
+contrast(emm.rich.w, method = "pairwise", adjust = "tukey")
 
 # Create dataframe with label values
-labels.S10a <- as.data.frame(cbind(
-  c("CC", "CW", "WC","WW"),
-  c(12.65,9,10,6.9),
-  c("a","bc","ab","c"))
+labels.S12a <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
+  c(rep(c("CC", "CW", "WC","WW"),times = 2)),
+  c(16,16,16,10,19,19,19,11),
+  c("a","ab","ab","b","a","ab","a","b"))
 )
 
-colnames(labels.S10a) <- c("treatment", "mean_rich","label")
-labels.S10a <- labels.S10a %>% mutate(mean_rich = as.numeric(mean_rich))
+colnames(labels.S12a) <- c("period", "treatment", "mean_rich", "label")
+labels.S12a <- labels.S12a %>% mutate(mean_rich = as.numeric(mean_rich))
 
 # Generalized linear model of Shannon diversity of epifauna with same model structure
-destructive.sd <- glmmTMB(shannon ~ trt_y1*trt_y2 + period + (1|block),
-                            data = epi.rich)
-plot(simulateResiduals(destructive.sd))
-summary(destructive.sd)
-Anova(destructive.sd,type=3)
+destructive.sd.ps <- glmmTMB(shannon ~ trt_y1*trt_y2 + (1|block),
+                            data = epi.rich %>%  filter(period == "Post-summer"))
+plot(simulateResiduals(destructive.sd.ps))
+summary(destructive.sd.ps)
+Anova(destructive.sd.ps,type=3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
 
-emm.sd <- emmeans(destructive.sd, specs = c("trt_y1","trt_y2"))
-contrast(emm.sd, method = "pairwise", adjust = "tukey")
+emm.sd.ps <- emmeans(destructive.sd.ps, specs = c("trt_y1","trt_y2"))
+contrast(emm.sd.ps, method = "pairwise", adjust = "tukey")
 
-labels.S10b <- as.data.frame(cbind(
-  c("CC", "CW", "WC","WW"),
-  c(1.8, 1.5,1.5,0.98),
-  c("a","a","a","b"))
+destructive.sd.w <- glmmTMB(shannon ~ trt_y1*trt_y2 + (1|block),
+                             data = epi.rich %>%  filter(period == "Winter"))
+plot(simulateResiduals(destructive.sd.w))
+summary(destructive.sd.w)
+Anova(destructive.sd.w,type=3, contrasts=list(trt_y1 = "contr.sum", trt_y2 = "contr.sum"))
+
+emm.sd.w <- emmeans(destructive.sd.w, specs = c("trt_y1","trt_y2"))
+contrast(emm.sd.w, method = "pairwise", adjust = "tukey")
+
+labels.S12b <- as.data.frame(cbind(
+  c(rep("Post-summer", times = 4), rep("Winter", times = 4)),
+  c(rep(c("CC", "CW", "WC","WW"),times = 2)),
+  c(2,2,2,1.5,2.45,2.45,2.45,1.95),
+  c("a","ab","a","b","a","a","a","b"))
 )
 
-colnames(labels.S10b) <- c("treatment", "mean_sd","label")
-labels.S10b <- labels.S10b %>% mutate(mean_sd = as.numeric(mean_sd))
+colnames(labels.S12b) <- c("period","treatment", "mean_sd","label")
+labels.S12b <- labels.S12b %>% mutate(mean_sd = as.numeric(mean_sd))
 
 # Create a plotting dataframe
 epi.plot <- epi.rich %>% 
@@ -739,46 +880,56 @@ epi.plot <- epi.rich %>%
             mean_shannon = mean(shannon), se_shannon = std.error(shannon))
 
 # Species richness of epifauna community
-FigS10a <- ggplot(aes(x = treatment, y = mean_rich, col = treatment, pch = period), 
+FigS12a <- ggplot(aes(x = treatment, y = mean_rich, col = treatment, pch = period), 
                   data = epi.plot) + 
-  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
   geom_errorbar(aes(ymin = mean_rich - se_rich, 
-                    ymax = mean_rich + se_rich), width = 0.5,
+                    ymax = mean_rich + se_rich), width = 0.2,
+                color = "grey20",
                 position = position_dodge(width = 1)) +
+  facet_wrap(~period) +
+  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
+  geom_jitter(data = epi.rich, aes(y = richness), alpha = 0.2, height = 0, width = 0.2) +
   scale_colour_manual(values = pal.trt.y2) +
   theme_classic() +
   theme(plot.tag = element_text(face = "bold"))+
-  labs(x = "Treatment", y = "Species richness", col = "Treatment", pch = "Time of year") +
-  geom_text(data = labels.S10a, 
+  labs(x = "Treatment", y = "Species richness", col = "Treatment", pch = "Season") +
+  scale_y_continuous(limits = c(4,19), breaks = c(4,6,8,10,12,14,16,18)) +
+  geom_text(data = labels.S12a, 
             aes(x = treatment, y = mean_rich, label = label), 
             col = "black", fontface = "bold", inherit.aes = FALSE)
-FigS10a
+FigS12a
 
 # Shannon diversity of epifauna community
-FigS10b <- ggplot(aes(x = treatment, y = mean_shannon, col = treatment, pch = period,), data = epi.plot) + 
-  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
+FigS12b <- ggplot(aes(x = treatment, y = mean_shannon, col = treatment, pch = period,), data = epi.plot) + 
+  facet_wrap(~period)+
   geom_errorbar(aes(ymin = mean_shannon - se_shannon, 
-                    ymax = mean_shannon + se_shannon), width = 0.5,
+                    ymax = mean_shannon + se_shannon), width = 0.2,
+                color = "grey20",
                 position = position_dodge(width = 1)) +
+  geom_point(position = position_dodge(width = 1), size = 3, alpha = 0.8) +
+  geom_jitter(data = epi.rich, aes(y = shannon), alpha = 0.2, height = 0, width = 0.2) +
   scale_colour_manual(values = pal.trt.y2) +
   theme_classic() +
-  theme(plot.tag = element_text(face = "bold"))+
-  labs(x = "Treatment", y = "Shannon diversity", pch = "Time of year", 
+  theme(plot.tag = element_text(face = "bold"),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))+
+  labs(x = "Treatment", y = "Shannon diversity", pch = "Season", 
        color = "Treatment") +
-  geom_text(data = labels.S10b, 
+  scale_y_continuous(limits = c(0,2.5), breaks = c(0,0.5,1,1.5,2,2.5)) +
+  geom_text(data = labels.S12b, 
             aes(x = treatment, y = mean_sd, label = label), 
             col = "black", fontface = "bold", inherit.aes = FALSE)
-FigS10b
+FigS12b
 
 # stitch together plot
-FigS10 <- (FigS10a | FigS10b) + 
+FigS12 <- (FigS12a | FigS12b) + 
   plot_layout(guides = "collect") + 
   plot_annotation(tag_levels = "a", tag_prefix = "(",
                   tag_suffix = ")")
-FigS10
+FigS12
 
 # save plot
-png("./figures/FigS10.png", res = 700, width = 8, height = 4.5,
+png("./figures/FigS12.png", res = 700, width = 8, height = 4.5,
     units = "in")
-FigS10
+FigS12
 dev.off()

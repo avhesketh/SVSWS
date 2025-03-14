@@ -112,7 +112,8 @@ survey_join <- cbind(survey_list, survey_no)
 surveys_clean2 <- surveys_clean %>% left_join(survey_join)
 
 tile_info <- surveys_clean2 %>% select(tile_id, survey_no, block, 
-                                       original_herb_trt, angle, 
+                                       first_herb_trt,
+                                      second_herb_trt, angle, 
                                        new_compass,shore_level,treatment,
                                        trt_y1, trt_y2, notes) %>% 
   unique() %>% write_csv("./clean_data/SVSWS_tile_treatments.csv")
@@ -212,12 +213,14 @@ tile_numbers <- tile_numbers %>% full_join(tiles_extrapts) %>%
   mutate(treatment = factor(treatment, levels = c("C","W","CC","CW","WC","WW")))
 
 # create plot of changes in treatment sample sizes (tile numbers) over time
-tile.time <- ggplot(tile_numbers %>% filter(date > "2019-08-14"), 
+tile.time <- ggplot(tile_numbers, 
                     aes(x=date, y = number_tiles, col = treatment)) +
   geom_line(lwd = 0.8) +
   theme_classic() +
   scale_color_manual(values = pal.trt) +
-  geom_vline(aes(xintercept = as.Date("2020-04-03")), linetype = "dashed", col = "grey30", lwd = 0.4) +
+  geom_vline(aes(xintercept = as.Date("2020-04-03")), col = "grey50", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey60", lty = "dashed", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-06-06")), col = "grey70", lty = "dotdash", lwd = 0.8) +
   labs(x = "Date", y = "Sample size", col = "Treatment", lty = "Treatment") +
   annotate("segment", x=as.Date("2020-09-14"), lwd = 0.8, xend = as.Date("2020-09-14"),
            y = 33, yend = 28, arrow = arrow(length = unit(0.08, "inches"))) +

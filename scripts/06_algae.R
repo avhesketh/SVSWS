@@ -20,19 +20,23 @@ algae <- read_csv("./clean_data/SVSWS_survey_clean.csv") %>%
 algae_y1 <- algae %>% 
   filter(date <= as.Date("2020-03-15")) %>% 
   mutate(treatment = trt_y1) %>% 
-  group_by(date, block, tile_id, trt_y1, trt_y2, treatment, original_herb_trt) %>% 
+  group_by(date, block, tile_id, trt_y1, trt_y2, treatment, second_herb_trt) %>% 
   summarize(algal_cover = sum(percent_cover)) %>% 
   mutate(
          day = yday(date),
          block = factor(block),
          treatment = factor(treatment, levels = c("C","W")),
          tile_id = factor(tile_id),
-         period = "Year 1") %>% ungroup()
+         period = "Year 1",
+         herb_trt = if_else(is.na(second_herb_trt), "control", "grazer")) %>% ungroup()
+
+algae_y1_reduced <- algae_y1 %>% 
+  filter(date > as.Date("2019-08-27"))
 
 # Retain Year 2 data only
 algae_y2 <- algae %>% 
   filter(date >= "2020-03-15" & (treatment %in% c("W","C"))==F) %>% 
-  group_by(date, block, tile_id, trt_y1, trt_y2, treatment ,original_herb_trt) %>% 
+  group_by(date, block, tile_id, trt_y1, trt_y2, treatment ,second_herb_trt) %>% 
   summarize(algal_cover = sum(percent_cover)) %>%
   mutate(
          block = factor(block),
@@ -41,7 +45,8 @@ algae_y2 <- algae %>%
          tile_id = factor(tile_id),
          day = yday(date),
          treatment = factor(treatment),
-         period = "Year 2") %>% ungroup()
+         period = "Year 2",
+         herb_trt = if_else(is.na(second_herb_trt), "control", "grazer")) %>% ungroup()
 
 algae_all <- algae_y1 %>% full_join(algae_y2) %>% 
   mutate(original_herb_trt = if_else(is.na(original_herb_trt), "control",original_herb_trt))
@@ -66,7 +71,7 @@ breaks <- c(ymd("2019-05-01"), ymd("2019-09-01"),ymd("2020-01-01"),
             ymd("2020-05-01"),ymd("2020-09-01"),ymd("2021-01-01"))
 
 # Panel 4a: Algal cover in each treatment over the course of the experiment
-Fig4a <- ggplot(aes(x = date, y = mean_cover, col = treatment, pch = treatment, lty=treatment), data = algae_summ) +
+Fig5a <- ggplot(aes(x = date, y = mean_cover, col = treatment, pch = treatment, lty=treatment), data = algae_summ) +
   theme_classic()+
   geom_point() +
   geom_line(lwd = 0.8 ,aes(group = treatment)) +
@@ -83,11 +88,13 @@ Fig4a <- ggplot(aes(x = date, y = mean_cover, col = treatment, pch = treatment, 
         legend.title = element_text(size = 10)) +
   scale_x_date(date_labels = "%Y-%m", breaks=breaks, 
                limits = c(ymd("2019-05-03"),ymd("2021-02-24"))) +
-  geom_vline(aes(xintercept = ymd("2020-04-03")), linetype = "dotted", col = "grey30", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey60", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey70", lty = "dashed", lwd = 0.8) +
   theme(plot.tag = element_text(face = "bold", size = 10),
         strip.text = element_text(size = 10),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8))
+Fig5a
 
 #########################
 # GAM of algal cover over time in each treatment #
@@ -96,53 +103,88 @@ Fig4a <- ggplot(aes(x = date, y = mean_cover, col = treatment, pch = treatment, 
 algae_gam_y1 <- algae_y1 %>% mutate(days.since.start = as.numeric(difftime(date, ymd("2019-04-12"), units = "days")),
                                     oTreatment = ordered(treatment, levels = c("C","W")))
 
-algae.y1.gam <- gamm(algal_cover ~ treatment + s(days.since.start) +
-                       s(days.since.start, by = oTreatment) + s(block, bs = "re"),
-                     data = algae_gam_y1, method = "REML")
-algae.y1.gam.herb <- gamm(algal_cover ~ treatment + original_herb_trt + s(days.since.start) +
-                       s(days.since.start, by = oTreatment) + s(block, bs = "re"),
-                     data = algae_gam_y1, method = "REML")
+# reduced dataframe = remove data from period during which herbivore community was manipulated
+algae_gam_y1_red <- algae_y1_reduced %>% mutate(days.since.start = as.numeric(difftime(date, ymd("2019-04-12"), units = "days")),
+                                    oTreatment = ordered(treatment, levels = c("C","W")))
 
-summary(algae.y1.gam$gam) 
-summary(algae.y1.gam.herb$gam) 
+# model of algal cover in year 1: include smooth terms for time, time x treatment, and a random effect
+# of block. Include AR1 correlation structure to account for autocorrelation through time.
 
-# can't compare herbivore term by AIC for gamm models, 
-# but R^2 does not substantially improve (< 1% explanatory power to add term).
-# take this as evidence to leave out
+# herbivore treatment is significant: do not use this model, only model of reduced data
+algae.y1.gam.herb <- gamm(algal_cover ~ treatment + herb_trt + s(days.since.start) +
+                            s(days.since.start, by = oTreatment) + s(block, bs = "re"),
+                          correlation = corAR1(),
+                          data = algae_gam_y1, method = "REML")
+
+# this is the final y1 model of algal cover
+algae.y1.gam.red <- gamm(algal_cover ~ treatment + s(days.since.start, k =3) +
+                       s(days.since.start, by = oTreatment, k =3) + s(block, bs = "re"),
+                     correlation = corAR1(),
+                     data = algae_gam_y1_red, method = "REML")
+
+summary(algae.y1.gam.herb$gam)
 plot(algae.y1.gam$gam, pages = 1, scale = 0 , seWithMean = TRUE)
 
+# look at autocorrelation
+acf(residuals(algae.y1.gam.red$gam)) # raw residuals
+acf(residuals(algae.y1.gam.red$lme, type = "normalized")) # standardized residuals with AR1 process
 
+summary(algae.y1.gam.red$gam) 
+summary(algae.y1.gam.red$lme) 
+plot(algae.y1.gam.red$gam)
+
+# Create dataframe for generating model predictions
+pdat.red <- expand.grid(days.since.start = seq(137, 338, by = 1),
+                    treatment = c("C","W"),
+                    block = c("A","B","C","D","E","F")) %>% mutate(oTreatment = treatment)
+
+# Find differences between smoothers from reduced y1 model
+comp1.red <- smooth_diff(algae.y1.gam.red$gam, pdat, 'W', 'C', 'treatment')
+# Add columns for the days since experiment start and actual date for plotting purposes
+comp.red <- cbind(days.since.start = seq(137, 338, by = 1),
+              rbind(comp1.red)) %>% 
+  mutate(date = ymd("2019-04-12") + days.since.start)
+
+# full gamm for putting on plot
 
 # Create dataframe for generating model predictions
 pdat <- expand.grid(days.since.start = seq(27, 338, by = 1),
-                    treatment = c("C","W"),
-                    block = c("A","B","C","D","E","F")) %>% mutate(oTreatment = treatment)
+                        treatment = c("C","W"),
+                        block = c("A","B","C","D","E","F")) %>% mutate(oTreatment = treatment)
 
 # Find differences between smoothers from model
 comp1 <- smooth_diff(algae.y1.gam$gam, pdat, 'W', 'C', 'treatment')
 # Add columns for the days since experiment start and actual date for plotting purposes
 comp <- cbind(days.since.start = seq(27, 338, by = 1),
-              rbind(comp1)) %>% 
-  mutate(date = ymd("2019-04-12") + days.since.start)
-
+                  rbind(comp1)) %>% 
+  mutate(date = ymd("2019-04-12") + days.since.start,
+         pair = "W-C")
 
 # GAM for algal cover in year 2
 algae_gam_y2 <- algae_y2 %>% mutate(days.since.start = as.numeric(difftime(date, ymd("2019-04-12"), units = "days")),
                                     oTreatment = ordered(treatment, levels = c("CC","CW","WC","WW")),
                                     treatment = factor(treatment, levels = c("CC","CW","WC","WW")))
 
-algae.y2.gam <- gamm(algal_cover ~ treatment + s(days.since.start,k=5) + 
-                       s(days.since.start, by = oTreatment, k=5) + 
-                       s(block, bs = "re"),
-                     data = algae_gam_y2, method = "REML")
-algae.y2.gam.herb <- gamm(algal_cover ~ treatment + original_herb_trt +
+
+algae.y2.gam.herb <- gamm(algal_cover ~ trt_y1*trt_y2 + herb_trt +
                        s(days.since.start,k=5) + 
                        s(days.since.start, by = oTreatment, k=5) + 
                        s(block, bs = "re"),
+                       correlation = corAR1(),
+                     data = algae_gam_y2, method = "REML")
+summary(algae.y2.gam.herb$gam) # herbivore term is not significant; drop this
+
+algae.y2.gam <- gamm(algal_cover ~ trt_y1*trt_y2 + s(days.since.start,k=5) + 
+                       s(days.since.start, by = oTreatment, k=5) + 
+                       s(block, bs = "re"),
+                     correlation = corAR1(),
                      data = algae_gam_y2, method = "REML")
 
+# Autocorrelation is corrected
+acf(residuals(algae.y2.gam$gam)) # raw residuals
+acf(residuals(algae.y2.gam$lme, type = "normalized")) # standardized residuals with AR1 process
+
 summary(algae.y2.gam$gam)
-summary(algae.y2.gam.herb$gam) # also add < 1% explanatory power, so leave out herbivore term
 plot(algae.y2.gam$gam)
 
 # Dataframe for generating model predictions for Year 2 GAM
@@ -165,7 +207,7 @@ y2.comp <- y2.comp1 %>% full_join(y2.comp2) %>%
                 full_join(y2.comp3) %>% 
                 mutate(date = ymd("2019-04-12") + days.since.start)
 # Join with Year 1 also
-all.comp <- comp %>% full_join(y2.comp) %>% 
+all.comp <- comp %>% full_join(y2.comp) %>%
   mutate(pair = factor(pair, levels = c("W-C","CW-CC","WC-CC","WW-CC")))
 
 # Define palettes
@@ -173,7 +215,11 @@ pal.gam <- c("#EE4B2B","#7985CB", "#9C0098", "#EE4B2B")
 lty.gam <- c("dotdash","solid","solid","solid")
 
 # Panel B: plot of differences between gam smooths for algal cover in Y1 and Y2
-Fig4b <- ggplot(all.comp, aes(x = date, y = diff, group = pair, lty = pair, col = pair, fill = pair)) +
+Fig5b <- ggplot(all.comp, aes(x = date, y = diff, group = pair, lty = pair, col = pair, fill = pair)) +
+  geom_vline(aes(xintercept = ymd("2020-04-03")), col = "grey60", lwd = 0.8) +
+  geom_vline(aes(xintercept = ymd("2019-08-27")), col = "grey70", lty = "dashed", lwd = 0.8) +
+  geom_line(data = comp, col = "grey70")+
+  geom_ribbon(data = comp, aes(ymin = lower, ymax = upper), col = NA, fill = "grey80",alpha = 0.2)+
   geom_ribbon(aes(ymin = lower, ymax = upper), col = NA, alpha = 0.2) +
   scale_color_manual(values = pal.gam) +
   scale_fill_manual(values = pal.gam) +
@@ -183,20 +229,19 @@ Fig4b <- ggplot(all.comp, aes(x = date, y = diff, group = pair, lty = pair, col 
        lty = "Comparison", col = "Comparison") +
   theme_classic() +
   geom_hline(aes(yintercept = 0)) +
-  geom_vline(aes(xintercept = ymd("2020-04-03")), lty = "dotted", col = "grey30", lwd = 0.8) +
   scale_x_date(date_labels = "%Y-%m", breaks=breaks, 
                limits = c(ymd("2019-05-03"),ymd("2021-02-24"))) +
   theme(plot.tag = element_text(face = "bold", size = 10),
         strip.text = element_text(size = 10),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8))
-Fig4b
+Fig5b
 
 # Assemble multipanel figure with raw cover and difference smoothers
-Fig4 <- (Fig4a / Fig4b) + plot_annotation(tag_levels = "a", tag_prefix = "(",
+Fig5 <- (Fig5a / Fig5b) + plot_annotation(tag_levels = "a", tag_prefix = "(",
                                           tag_suffix = ")")
-Fig4
+Fig5
 
 # save figure
-ggsave(Fig4, filename = "./figures/Fig4.pdf", device = cairo_pdf, 
+ggsave(Fig5, filename = "./figures/Fig5.pdf", device = cairo_pdf, 
        width = 16, height = 13, units = "cm")
