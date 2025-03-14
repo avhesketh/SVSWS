@@ -6,7 +6,9 @@ We expected that:
 
 1.  Barnacle bed communities that are exposed to hotter temperatures during summer, even for a single year, will have lower organism abundances and diversity (species richness, Shannon diversity) than those that are exposed to ambient/cooler conditions during the same period.
 
-2.  There will be an interactive effect between the temperature treatments of the first and second summer on the same response metrics. Previously 'cool' communities, since they have more established, larger barnacle beds with a more diverse array of microhabitats and thermal refugia, will be less perturbed by warming than previously 'warm' communities that have less structurally complex biogenic habitat. 
+2.  There will be carryover effects of warming from the first year to the second, mediated by reductions in foundation species (barnacle) cover.
+
+3.  There will be an interactive effect between the temperature treatments of the first and second summer on the same response metrics. Previously 'cool' communities, since they have more established, larger barnacle beds with a more diverse array of microhabitats and thermal refugia, will be less perturbed by warming than previously 'warm' communities that have less structurally complex biogenic habitat. 
 
 # Data types (in raw_data and clean_data folders)
 - Temperature: hourly temperature collected for experimental tiles and adjacent bedrock
@@ -17,10 +19,10 @@ We expected that:
 For a full data dictionary, please see the project_summary.pdf file within the metadata folder.
 
 # Analyses conducted (in scripts folders)
-1) Temperature differences between treatments, in terms of maximum daily temperature and mean temperature -- 03_temperature.R 
-2) Barnacle abundance (recruits and adults) differences between treatments -- 04_barnacles.R
-3) Grazer (littorine snail and limpet) abundance differences between treatments -- 05_grazers.R
-4) Algal cover differences between treatments -- 06_algae.R
-5) Alpha diversity differences between treatments -- 07_diversity.R
-6) Community composition and beta diversity between treatments -- 07_diversity.R
-7) Trajectory of community structure through time -- 08_cta.R
+1) Temperature differences between treatments, in terms of maximum daily temperature and mean temperature -- 02_temperature.R 
+2) Barnacle abundance (recruits and adults) differences between treatments -- 03_barnacles.R
+3) Grazer (littorine snail and limpet) abundance differences between treatments -- 04_grazers.R
+4) Algal cover differences between treatments -- 05_algae.R
+5) Alpha diversity differences between treatments -- 06_diversity.R
+6) Community composition and beta diversity between treatments -- 06_diversity.R
+7) Trajectory of community structure through time (supplemental analysis) -- 07_cta.R
